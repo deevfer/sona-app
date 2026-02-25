@@ -1,0 +1,220 @@
+.container{
+    width: 100%;
+    height: 100vh;
+    padding: 40px;
+    position: relative;
+}
+.backButton button{
+    background-color: transparent;
+    border: none;
+}
+.backButton svg {
+    width: 25px;
+    height: 25px;
+}
+.backButton svg .st0 {
+    fill: #fff;
+}
+.login {
+    width: 100%;
+    height: 100vh;
+    background: #121212;
+    position: relative;
+    overflow-x: hidden;
+}
+.loginForm {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.material-form {
+    background: white;
+    padding: 10px 40px;
+    border-radius: 40px;
+    width: 100%;
+    max-width: 400px;
+    margin: 30px auto 130px;
+    z-index: 999;
+}
+.material-form .input-field {
+    position: relative;
+    margin: 2rem 0;
+}
+
+.material-form input {
+    width: 100%;
+    padding: 0.8rem 0;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    outline: none;
+    transition: 0.2s;
+    background: transparent;
+}
+.material-form label {
+    position: absolute;
+    top: 0.8rem;
+    left: 0;
+    transition: 0.2s;
+    color: #000;
+    opacity: 0.4;
+    font-weight: 200;
+    font-size: 12px;
+}
+.material-form .bar {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+.material-form .bar:before {
+    content: '';
+    height: 1px;
+    width: 0;
+    bottom: 0;
+    position: absolute;
+    background: #121212;
+    transition: 0.2s;
+    left: 50%;
+}
+
+.material-form input:focus ~ .bar:before {
+    width: 100%;
+    left: 0;
+}
+
+.material-form input:focus ~ label,
+.material-form input:valid ~ label {
+    top: -1.2rem;
+    font-size: 0.8rem;
+    color: #121212;
+}
+.material-form button {
+    width: 70%;
+    padding: 10px 20px;
+    background: #121212;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 300;
+    margin: 20px auto 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.material-form button img{
+    width: 20px;
+}
+.material-form button:hover {
+    transform: translateY(-1px);
+}
+.loginForm h1 {
+    font-size: 26px;
+    font-family: inherit;
+    font-weight: 500;
+}
+.loginForm p {
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 300;
+}
+.loginForm span {
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 100;
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+}
+.backButton {
+    position: relative;
+    z-index: 9999;
+}
+.vinylBottom {
+    position: absolute;
+    bottom: 0px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+}
+.leftVinyl {
+    position: relative;
+    left: 70px;
+    animation: slideInVinylTop 0.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.centerVinyl {
+    position: relative;
+    z-index: 9;
+    animation: slideInVinylTop 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.rightVinyl {
+    position: relative;
+    right: 70px;
+    animation: slideInVinylTop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes slideInVinylTop {
+    from {
+        transform: translateY(200px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+.vinylBottom img{
+    display: block;
+}
+.alreadyHave {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 10px 0;
+    justify-content: center;
+}
+.alreadyHave p {
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 300;
+    color: #121212;
+}
+.material-form .alreadyHave button {
+    width: auto;
+    padding: 0.8rem;
+    background: transparent;
+    color: #121212;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 600;
+    margin: 0;
+    display: contents;
+}
+span.price {
+    color: #121212;
+    font-size: 10px;
+    font-weight: 200;
+    text-align: center;
+    width: 100%;
+    display: block;
+}
+.error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 0.2rem;
+    display: block;
+}

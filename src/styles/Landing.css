@@ -1,0 +1,205 @@
+.landing {
+    width: 100%;
+    height: 100vh;
+    background: #121212;
+    position: relative;
+    
+}
+.contentLanding {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.contentLanding > div{
+    flex:1;
+}
+.titleContentLeft {
+    margin-bottom: 50px;
+}
+.titleContentLeft h1 {
+    font-size: 46px;
+    font-weight: 600;
+    line-height: 40px;
+    width: 490px;
+    padding: 0 0 0 40px;
+}
+.vinylLanding {
+    position: relative;
+    width: 100%;
+    transform: translateX(200px); 
+    opacity: 0;
+    animation: slideInVinyl 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.vinylLanding img{
+    width: 140%;
+}
+@keyframes slideInVinyl {
+    from {
+        transform: translateX(200px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+.btnsContentLeft {
+    position: relative;
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    padding: 0 110px 0 40px;
+}
+
+.btnPrimary button {
+    background: #fff;
+    padding: 15px 30px;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    color: #121212;
+}
+.btnSecondary button {
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    font-family: inherit;
+    color: #fff;
+    padding: 15px 30px;
+    font-weight: 200;
+    cursor: pointer;
+}
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+    z-index: 999;
+
+    animation: fadeIn 0.3s ease forwards;
+}
+.modalContent {
+    background: #f9f9f9;
+    color: #121212;
+    padding: 80px 30px;
+    border-radius: 50px;
+    width: 70%;
+    height: 70%;
+    max-width: 90%;
+    text-align: center;
+    animation: scaleIn 0.3sease forwards;
+    position: relative;
+    overflow: scroll;
+}
+.closeModal {
+    margin-top: 20px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    font-size: 30px;
+    font-family: inherit;
+    width: 50px;
+    color: #121212;
+    background: #fff;
+    height: 50px;
+    transform: rotate(45deg);
+    font-weight: 400;
+    position: absolute;
+    left: 20px;
+    top: 0px;
+    -webkit-box-shadow: 3px 3px 30px -2px rgba(0, 0, 0, 0.34);
+    box-shadow: 3px 3px 30px -2px rgba(0, 0, 0, 0.34);
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from { 
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to { 
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+.requirementsList {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+    line-height: 1.6;
+    width: 60%;
+    margin: 20px auto 0;
+}
+.noteRequirement {
+    margin-top: 20px;
+    font-size: 12px;
+    opacity: 0.7;
+}
+.rights {
+    width: 30%;
+    margin: auto;
+}
+.rights p {
+    font-size: 14px;
+    font-family: inherit;
+    color: #cecece;
+    font-weight: 200;
+}
+.rights span {
+    font-size: 12px;
+    font-family: inherit;
+    color: #cecece;
+    font-weight: 200;
+}
+.requirementsContent {
+    margin: 70px 0;
+}
+.lifetimeAccess, .spotifyConection, .appleMusic, .permission {
+    width: 100%;
+    height: 140px;
+    background: #fff;
+    padding: 30px 10px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    border: 0.5px solid #f2f2f2;
+    margin: 15px 0;
+    justify-content: space-around;
+}
+.iconRequirement {
+    width: 50px;
+    height: 50px;
+}
+.iconRequirement img{
+    width: 100%;
+}
+.lifetimeAccess {
+    background: #121212;
+    color: #fff;
+    overflow: hidden;
+}
+.requirementsList p {
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: 200;
+    width: 50%;
+}
+.lifetimeAccess .iconRequirement {
+    width: 220px;
+    height: 180px;
+    position: relative;
+    right: -80px;
+}
