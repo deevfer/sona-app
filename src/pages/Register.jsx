@@ -2,16 +2,19 @@ import '../styles/Register.css'
 import { useNavigate } from "react-router-dom"
 import BackIcon from "../assets/back.svg?react"
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next"
+import LanguageSwitcher from "../components/LanguageSwitcher"
 
 function Register() {
   const navigate = useNavigate();
   const paypalRef = useRef();
+  const { t } = useTranslation()
 
   // Estado del formulario
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
-    password: "",
-    password_confirmation: ""
+    password: ""
   });
 
   // Ref para tener siempre la data más reciente dentro de onApprove
@@ -48,7 +51,7 @@ function Register() {
               body: JSON.stringify({
                 ...formDataRef.current, // se obtienen siempre los datos más recientes
                 orderID: data.orderID,
-                paypalDetails: order
+                // paypalDetails: order
               })
             });
 
@@ -78,6 +81,9 @@ function Register() {
 
   return (
     <div className="login">
+        <div className="container-lang">
+            <LanguageSwitcher />
+        </div>
       <div className="container">
         <div className="backButton">
           <button onClick={() => navigate("/login")}>
@@ -86,8 +92,8 @@ function Register() {
         </div>
 
         <div className="loginForm">
-          <h1>Crear una cuenta</h1>
-          <span>Completa tus datos para crear tu cuenta y comenzar a disfrutar la experiencia completa de Sona.</span>
+          <h1>{t("register.title")}</h1>
+          <span>{t("register.subtitle")}</span>
           <form className="material-form" onSubmit={(e) => e.preventDefault()}>
           <div className="input-field">
             <input
@@ -96,7 +102,7 @@ function Register() {
                 value={formData.name || ""}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />
-            <label>Nombre</label>
+            <label>{t("register.name")}</label>
             </div>
             <div className="input-field">
               <input
@@ -105,7 +111,7 @@ function Register() {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               />
-              <label>Email</label>
+              <label>{t("register.email")}</label>
             </div>
 
             <div className="input-field">
@@ -115,17 +121,17 @@ function Register() {
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               />
-              <label>Password</label>
+              <label>{t("register.password")}</label>
             </div>
 
             <span className="price">
-              Pago único de USD 1.99 para acceso de por vida.
+                {t("register.price")}
             </span>
 
             <div ref={paypalRef}></div>
 
             <div className="alreadyHave">
-              <p>¿Ya tienes cuenta? <button type="button" onClick={() => navigate("/login")}>Inicia sesión</button></p>
+              <p>{t("register.haveAccount")} <button type="button" onClick={() => navigate("/login")}>{t("register.login")}</button></p>
             </div>
           </form>
         </div>

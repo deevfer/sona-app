@@ -1,0 +1,43 @@
+{
+    "landing": {
+      "title": "Redescubre tu música favorita en vinilo.",
+      "start": "Toca para empezar",
+      "requirements": "Ver requisitos",
+      "modalTitle": "Requisitos",
+      "intro": "Para disfrutar de toda la experiencia de la app necesitas:",
+      "lifetime": "Pago único de USD 1.99 para desbloquear acceso de por vida.",
+      "premium": "Cuenta Premium activa en tu plataforma de streaming.",
+      "permission": "Permitir acceso a tu cuenta de Spotify para sincronizar tu música.",
+      "appleMusic": "Próximamente podrás conectar tu cuenta de Apple Music.",
+      "note": "La app no incluye música propia. Todo el contenido se reproduce directamente desde tu cuenta de streaming favorita.",
+      "developed": "Desarrollado por Devfer",
+      "version": "Versión 1.0.1"
+    },
+    "login":{
+        "title": "Inicia sesión",
+        "subtitle": "Completa tus datos para iniciar sesión en tu cuenta y comenzar a disfrutar la experiencia completa de Sona.",
+        "button": "Iniciar",
+        "loading": "Cargando...",
+        "email": "Correo",
+        "password": "Contraseña",
+        "error": "Correo o contraseña incorrectos.",
+        "notYet": "¿Todavía no tienes cuenta?",
+        "register": "Regístrate"
+    },
+    "register":{
+        "title": "Crear una cuenta",
+        "subtitle": "Completa tus datos para crear tu cuenta y comenzar a disfrutar la experiencia completa de Sona.",
+        "name": "Nombre",
+        "email": "Correo",
+        "password": "Contraseña",
+        "price": "Pago único de USD 1.99 para acceso de por vida.",
+        "haveAccount": "¿Ya tienes cuenta?",
+        "login": "Inicia sesión"
+    },
+    "connect":{
+        "title": "Conecta tu música",
+        "subtitle": "Permite que Sona acceda a tu biblioteca para controlar la pista actual en la aplicación.",
+        "comingSoon": "Muy pronto"
+    }
+    
+  }

@@ -1,0 +1,42 @@
+{
+    "landing": {
+        "title": "Rediscover your favorite music on vinyl.",
+        "start": "Tap to start",
+        "requirements": "View requirements",
+        "modalTitle": "Requirements",
+        "intro": "To enjoy the full app experience you need:",
+        "lifetime": "One-time payment of USD 1.99 to unlock lifetime access.",
+        "premium": "Active Premium account on your streaming platform.",
+        "permission": "Allow access to your Spotify account to sync your music.",
+        "appleMusic": "Apple Music connection coming soon.",
+        "note": "The app does not include its own music. All content is played directly from your streaming account.",
+        "developed": "Developed by Devfer",
+        "version": "Version 1.0.1"
+    },
+    "login":{
+        "title": "Login",
+        "subtitle": "Fill your details to access your account and start enjoying the full Sona experience.",
+        "loading": "Loading...",
+        "button": "Start",
+        "email": "Email",
+        "password": "Password",
+        "error": "Incorrect email or password.",
+        "notYet": "Don't have an account yet?",
+        "register": "Sign up"
+    },
+    "register":{
+        "title": "Create an account",
+        "subtitle": "Fill your details to create your account and start enjoying the full Sona experience.",
+        "name": "Name",
+        "email": "Email",
+        "password": "Password",
+        "price": "One-time payment of $1.99 for lifetime access.",
+        "haveAccount": "Do you already have an account?",
+        "login": "Login"
+    },
+    "connect":{
+        "title": "Connect your music",
+        "subtitle": "Allow Sona to access your library to control the current track in the app.",
+        "comingSoon": "Coming soon"
+    }
+  }

@@ -5,6 +5,7 @@ import Landing from "./pages/Landing"
 import Register from "./pages/Register"
 import Login from "./pages/Login"
 import Home from "./pages/Home"
+import Sona from "./pages/Sona"
 
 function AnimatedRoutes() {
   const location = useLocation()
@@ -42,6 +43,16 @@ function AnimatedRoutes() {
             <PageTransition>
               <ProtectedRoute>
                 <Home />
+              </ProtectedRoute>
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/sona"
+          element={
+            <PageTransition>
+              <ProtectedRoute>
+                <Sona />
               </ProtectedRoute>
             </PageTransition>
           }

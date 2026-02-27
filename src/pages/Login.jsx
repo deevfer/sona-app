@@ -2,9 +2,12 @@ import '../styles/Login.css'
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import BackIcon from "../assets/back.svg?react"
+import { useTranslation } from "react-i18next"
+import LanguageSwitcher from "../components/LanguageSwitcher"
 
 function Login() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -34,17 +37,20 @@ function Login() {
 
         navigate("/home")
       } else {
-        setError(data.message || "Email o contraseña incorrectos.")
+        setError(data.message || t("login.error") )
       }
     } catch (err) {
       setLoading(false)
-      setError("Email o contraseña incorrectos.")
+      setError(t("login.error"))
       console.error(err)
     }
   }
 
   return (
     <div className="login">
+        <div className="container-lang">
+            <LanguageSwitcher />
+        </div>
       <div className="container">
         <div className="backButton">
           <button onClick={() => navigate("/")}>
@@ -52,8 +58,8 @@ function Login() {
           </button>
         </div>
         <div className="loginForm">
-          <h1>Inicia sesión</h1>
-          <span>Completa tus datos para iniciar sesión en tu cuenta y comenzar a disfrutar la experiencia completa de Sona.</span>
+          <h1>{t("login.title")}</h1>
+          <span>{t("login.subtitle")}</span>
           <form className="material-form" onSubmit={handleSubmit}>
             <div className="input-field">
               <input 
@@ -62,7 +68,7 @@ function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 required 
               />
-              <label>Email</label>
+              <label>{t("login.email")}</label>
               <span className="bar"></span>
             </div>
             <div className="input-field">
@@ -72,19 +78,19 @@ function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required 
               />
-              <label>Password</label>
+              <label>{t("login.password")}</label>
               <span className="bar"></span>
             </div>
 
             {error && <p className="error">{error}</p>}
 
             <button type="submit" disabled={loading}>
-              {loading ? "Cargando..." : "Iniciar"}
+                {loading ? t("login.loading") : t("login.button")}
             </button>
 
 
             <div className="alreadyHave">
-              <p>¿Todavía no tienes cuenta? <button type="button" onClick={() => navigate("/register")}>Regístrate</button></p>
+              <p>{t("login.notYet")} <button type="button" onClick={() => navigate("/register")}>{t("login.register")}</button></p>
             </div>
           </form>
         </div>

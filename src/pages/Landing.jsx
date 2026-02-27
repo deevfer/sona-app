@@ -1,27 +1,34 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import '../styles/Landing.css'
+import { useTranslation } from "react-i18next"
+import LanguageSwitcher from "../components/LanguageSwitcher"
 
 function Landing() {
 
   const [openModal, setOpenModal] = useState(false)  
   const navigate = useNavigate()
-
+  const { t } = useTranslation()
   return (
     <div className="landing">
+        <div className="container-lang">
+            <LanguageSwitcher />
+        </div>
         <div className="contentLanding">
             <div className="contentLeft">
                 <div className="titleContentLeft">
-                    <h1>Redescubre tu música favorita en vinilo.</h1>
+                <   h1>{t("landing.title")}</h1>
                 </div>
                 <div className="btnsContentLeft">
                     <div className="btnPrimary">
                         <button onClick={() => navigate("/login")}>
-                            Toca para empezar
+                            {t("landing.start")}
                         </button>
                     </div>
                     <div className="btnSecondary">
-                        <button id="requisitos" onClick={() => setOpenModal(true)}>Ver requisitos</button>
+                        <button id="requisitos" onClick={() => setOpenModal(true)}>
+                            {t("landing.requirements")}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -35,44 +42,46 @@ function Landing() {
           <div className="modalOverlay" onClick={() => setOpenModal(false)}>
               <div className="modalContent" onClick={(e) => e.stopPropagation()}>
                 <button className="closeModal" onClick={() => setOpenModal(false)}>+</button>
-                <h2>Requisitos</h2>
+                <h2>{t("landing.modalTitle")}</h2>
                 <div className="requirementsContent">
-                    <p>Para disfrutar de toda la experiencia de la app necesitas:</p>
+                    <p>{t("landing.intro")}</p>
 
                     <ul className="requirementsList">
                         <div className="lifetimeAccess">
-                            <p>Pago único de <strong>USD 2.99</strong> para desbloquear acceso de por vida.</p>
+                            <p>{t("landing.lifetime")}</p>
                             <div className="iconRequirement">
                                 <img src="/tocadiscos.png" alt="" />
                             </div>
                         </div>
                         <div className="spotifyConection">
-                            <p>Cuenta <strong>Premium</strong> de tus plataformas de streaming activa.</p>
+                            <p>{t("landing.premium")}</p>
                             <div className="iconRequirement">
                                 <img src="/premium.png" alt="" />
                             </div>
                         </div>
                         <div className="permission">
-                            <p>Permitir acceso a tu cuenta de Spotify para sincronizar tu música.</p>
+                            <p>{t("landing.permission")}</p>
                             <div className="iconRequirement">
                                 <img src="/spotify.png" alt="" />
                             </div>
                         </div>
                         <div className="appleMusic">
-                            <p>Próximamente podrás conectar tu cuenta de Apple Music.</p>
+                            <p>{t("landing.appleMusic")}</p>
                             <div className="iconRequirement">
                                 <img src="/AppleMusic.png" alt="" />
                             </div>
                         </div>
                     </ul>
 
-                    <p className="noteRequirement">La app no incluye música propia. Todo el contenido se reproduce directamente desde tu cuenta de streaming favorita.</p>
+                    <p className="noteRequirement">
+                        {t("landing.note")}
+                    </p>
                 </div>
 
                 <div className="rights">
                     <p><strong>Sona</strong></p>
-                    <p>Desarrollado por Devfer</p>
-                    <span>Versión 1.0.1</span>
+                    <p>{t("landing.developed")}</p>
+                    <span>{t("landing.version")}</span>
                 </div>
                 
               </div>
