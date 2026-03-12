@@ -45,7 +45,7 @@
   }
   .container-lang {
       position: absolute;
-      width: 210px;
+      width: auto;
       height: 115px;
       padding: 40px;
       z-index: 99999;

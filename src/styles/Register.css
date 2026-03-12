@@ -218,3 +218,60 @@ span.price {
     margin-top: 0.2rem;
     display: block;
 }
+/* =========================
+   FIX: Mobile Landscape
+   ========================= */
+   @media (orientation: landscape) and (max-height: 520px) {
+
+    /* Evita el bug de 100vh en mobile landscape */
+    .login, .container {
+        height: 100svh;
+        overflow: auto;
+    }
+  
+    .container {
+      padding: 16px;           /* 40px rompe en landscape */
+    }
+  
+    /* Deja de forzar el form al centro exacto con absolute */
+    .loginForm {
+      position: relative;
+      height: auto;
+      min-height: 100%;
+      padding-top: 10px;
+      padding-bottom: 90px;    /* espacio para los vinilos */
+    }
+  
+    /* Quita el margin-bottom gigante que empuja todo */
+    .material-form {
+      margin: 14px auto 0;
+      padding: 10px 24px;
+      border-radius: 28px;
+      max-width: 360px;
+    }
+  
+    .loginForm h1 {
+      font-size: 20px;
+    }
+  
+    .loginForm span {
+      font-size: 11px;
+    }
+  
+    .material-form .input-field {
+      margin: 1.2rem 0;
+    }
+  
+    /* Vinilos más pequeños y menos invasivos */
+    .vinylBottom {
+      pointer-events: none;
+    }
+  
+    .vinylBottom img {
+      max-height: 120px;
+      width: auto;
+    }
+  
+    .leftVinyl { left: 30px; }
+    .rightVinyl { right: 30px; }
+  }

@@ -6,7 +6,7 @@
 }
   
 body {
-    background-color: #0f0f0f;
+    background-color: #2d2d2d;
     font-family: 'Poppins', sans-serif;
     color: white;
     margin: 0!important;
@@ -14,3 +14,149 @@ body {
 html, body {
     touch-action: manipulation;
   }
+
+
+/* backgrounds por clase */
+.sonaBody.bg-white { background: #fff; }
+.sonaBody.bg-gray  { background: #B2B1A9; }
+.sonaBody.bg-yellow{ background: #fca519; }
+.sonaBody.bg-black { background: #121212; }
+
+/* cover: el background se setea por style inline */
+.sonaBody.bg-cover { background-color: #121212; }
+
+/* texto */
+.sonaBody.text-light .musicInfo h1,
+.sonaBody.text-light .musicInfo p {
+  color: #fff;
+}
+
+.sonaBody.text-dark .musicInfo h1,
+.sonaBody.text-dark .musicInfo p {
+  color: #2D2D2D;
+}
+.overlayBackground {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgb(255 255 255 / 27%), rgb(0 0 0 / 24%));
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35), inset 0 0 15px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* regla actual (oscura) */
+.menuTopOptions button svg path { fill: #2d2d2d; }
+
+/* Si fondo es negro: iconos blancos */
+.sonaBody.bg-black .menuTopOptions button svg path {
+  fill: #fff;
+}
+
+.sonaBody.bg-white .menuItem.active button svg path {
+  fill: #2d2d2d;
+}
+.sonaBody.bg-white .menuTopOptions button svg path {
+    fill: #2d2d2d;
+}
+.sonaBody.bg-cover .menuTopOptions button svg path {
+    fill: #fff;
+}
+.sonaBody.text-light .musicInfo h1,
+.sonaBody.text-light .musicInfo p { 
+    color: #fff; 
+}
+.sonaBody.bg-white .backgrounds button.active {
+    border: 1px solid #000000;
+}
+/* Skeleton container */
+.coverItem.skeleton {
+  width: 160px;
+}
+
+/* Skeleton box */
+.skeletonBox {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+
+  background: linear-gradient(
+      90deg,
+      #ffffff15 25%,
+      #ffffff35 50%,
+      #ffffff15 75%
+  );
+
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+/* Shimmer animation */
+@keyframes shimmer {
+  0% {
+      background-position: 200% 0;
+  }
+  100% {
+      background-position: -200% 0;
+  }
+}
+.musicInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Skeleton base */
+.skeletonText {
+  border-radius: 8px;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.15) 25%,
+    rgba(255,255,255,0.35) 50%,
+    rgba(255,255,255,0.15) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+/* tamaños */
+.skeletonText.title {
+  width: 70%;
+  height: 28px;
+}
+
+.skeletonText.artist {
+  width: 45%;
+  height: 18px;
+}
+:root {
+  --skeleton-base: rgba(255,255,255,0.15);
+  --skeleton-highlight: rgba(255,255,255,0.35);
+}
+
+/* ============================= */
+/* Override para fondo blanco    */
+/* ============================= */
+
+.sonaBody.bg-white {
+  --skeleton-base: #e8e8e8;
+  --skeleton-highlight: #d5d5d5;
+}
+
+/* ============================= */
+/* Skeleton global               */
+/* ============================= */
+
+.skeletonBox,
+.skeletonText,
+.skeletonLine {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base) 25%,
+    var(--skeleton-highlight) 50%,
+    var(--skeleton-base) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}

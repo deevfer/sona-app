@@ -1,0 +1,516 @@
+.menuContent {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.menuTopOptions {
+    display: flex;
+    width: 90px;
+    justify-content: space-between;
+    height: 30px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.menuBottom {
+    position: relative;
+    width: 30px;
+    left: 60px;
+    top: 0;
+}
+.menuBottom button img{
+    width: 100%;
+}
+.menuTop {
+    position: absolute;
+    right: 50px;
+    top: 30px;
+    height: 90px;
+    width: 90px;
+    z-index: 99999;
+}
+.share, .options {
+    display: flex;
+}
+.menuBottom button {
+    border: none;
+    padding: 4px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35), inset 0 0 15px rgba(255, 255, 255, 0.1);
+    transition: all 0.3sease;
+    border-radius: 10px;
+    display: flex;
+}
+.menuTopOptions button {
+    background: transparent;
+    border: none;
+    padding: 4px;
+}
+.menuDropdown {
+    position: absolute;
+    top: 30px;
+    left: -110px;
+    transform: translateX(-50%) translateY(10px);
+    width: 280px;
+    display: none;
+    transition: all 0.2s ease;
+}
+  /* visible */
+  .menuDropdown.open {
+    display: block;
+    pointer-events: auto;
+    transition: all 0.2sease;
+}
+  .menuDropdown button {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 10px 12px;
+    border-radius: 12px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    backdrop-filter: none;
+}
+  .menuDropdown button:hover {
+    background: rgba(0,0,0,0.06);
+  }
+  
+  .menuDropdown .divider {
+    height: 1px;
+    background: rgba(0,0,0,0.12);
+    margin: 8px 4px;
+  }
+  
+  .menuDropdown .danger {
+    color: #d11a2a;
+  }
+.vinilosButtons {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin: 15px 0px;
+}
+.vinilos .vinilosButtons button {
+    width: 30px;
+    padding: 0;
+}
+.backgroundsButtons {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin: 15px 0px;
+}
+.backgrounds button {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    position: relative;
+}
+button.white {
+    background: #fff;
+    border-radius: 8px;
+}
+button.gray {
+    background: #B2B1A9;
+    border-radius: 8px;
+}
+button.yellow {
+    background: #fca519;
+    border-radius: 8px;
+}
+button.black {
+    background: #121212;
+    border-radius: 8px;
+}
+button.cover .overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35), inset 0 0 15px rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+button.cover img{
+    border-radius: 5px;
+}
+.backgrounds button.active {
+    border: 1px solid #fff;
+}
+.vinilos button.active {
+    border: 1px solid #fff;
+    border-radius: 50px;
+}
+.backgrounds  button.cover.active {
+    border: 1px solid #fff;
+    border-radius: 6px;
+}
+.vinilosText p{
+    font-size: 12px;
+    text-align: right;
+    font-weight: 400;
+}
+.sonaBody.bg-white .vinilosText p{
+    color: #2d2d2d;
+}
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+    z-index: 999;
+    animation: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from { 
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to { 
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+.optionsItem {
+    margin: 40px;
+    padding: 0;
+}
+.optionsItem .title p{
+    font-size: 12px;
+    text-align: left;
+    font-family: inherit;
+    font-weight: 200;
+    color: #c5c5c5;
+}
+.optionsItemContent {
+    background: #fff;
+    margin: 15px 0;
+    padding: 20px;
+    border-radius: 20px;
+}
+.rights {
+    width: 30%;
+    margin: auto;
+}
+.rights p {
+    font-size: 12px;
+    font-family: inherit;
+    color: #cecece;
+    font-weight: 200;
+}
+.rights span {
+    font-size: 12px;
+    font-family: inherit;
+    color: #cecece;
+    font-weight: 200;
+}
+.optionsItem .title {
+    margin: 0 40px;
+}
+.optionsItem .item {
+    font-size: 12px;
+    color: #2d2d2d;
+    text-align: left;
+    margin: 20px 20px;
+}
+.item.clickable {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .itemValue {
+    font-size: 12px;
+    opacity: 0.5;
+    font-weight: 400;
+  }
+  
+  .backModal {
+    position: absolute;
+    left: 20px;
+    top: 25px;
+    background: transparent;
+    border: none;
+    border-radius: 30px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .backModal svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .providerList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 30px;
+    padding: 0 20px;
+  }
+  
+  .providerItem {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: rgba(0, 0, 0, 0.04);
+    transition: background 0.2s;
+  }
+  
+  .providerItem.active {
+    background: rgba(30, 215, 96, 0.12);
+    border: 1px solid rgba(30, 215, 96, 0.3);
+  }
+  
+  .providerItem.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .providerItem img {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+  }
+  
+  .providerItem span {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .providerBadge {
+    margin-left: auto;
+    font-size: 11px !important;
+    font-weight: 400 !important;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(30, 215, 96, 0.2);
+    color: #1db954;
+  }
+  
+  .providerBadge.comingSoon {
+    color: #2d2d2d;
+    background: #FD9A19;
+    right: 40px;
+    opacity: 1 !important;
+}
+  .item span {
+    font-family: inherit;
+    font-weight: 200;
+}
+.modalViewMain {
+    animation: slideInLeft 0.3s ease forwards;
+  }
+  
+  .modalViewSub {
+    animation: slideInRight 0.3s ease forwards;
+  }
+  
+  @keyframes slideInRight {
+    from {
+      transform: translateX(50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideInLeft {
+    from {
+      transform: translateX(-50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  .langItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .langItem .languageSwitcher {
+    transform: scale(0.85);
+  }
+  .langItem .languageSwitcher {
+    width: 100px;
+    height: 32px;
+    background: #02ba21;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    transition: background 0.3s ease;
+    right: -10px;
+    position: relative;
+}
+.langItem .languageSwitcher .switch span {
+  font-family: inherit;
+  font-weight: 600;
+}
+.item {
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  user-select: none;
+}
+.shareModal .modalContent {
+  background: #000000;
+  color: #121212;
+  padding: 80px 30px;
+  border-radius: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  text-align: center;
+  animation: scaleIn 0.3s ease forwards;
+  position: absolute;
+  overflow: scroll;
+  scrollbar-width: none;
+  left: 0;
+}
+.shareModal .closeModal {
+  margin-top: -40px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  font-size: 30px;
+  font-family: inherit;
+  width: 50px;
+  color: #ffffff;
+  background: #ffffff1c;
+  height: 50px;
+  transform: rotate(45deg);
+  font-weight: 400;
+  position: absolute;
+  left: 20px;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  user-select: none;
+  top: 60px;
+  -webkit-box-shadow: 3px 3px 30px -2px rgba(0, 0, 0, 0.34);
+  box-shadow: 3px 3px 30px -2px rgba(0, 0, 0, 0.34);
+}
+/* NO uses display:none ni visibility:hidden */
+.shareExportHidden {
+  position: fixed;
+  left: -200vw;      /* fuera de pantalla */
+  top: 0;
+  width: 1080px;
+  height: 1920px;
+  opacity: 0;        /* invisible */
+  pointer-events: none;
+  z-index: -1;
+}
+.cardPreview{
+  transform: scale(0.3); 
+  transform-origin: top center;
+  border-radius: 70px;
+}
+.storyPrev {
+  width: 100%;
+  height: 100%;
+}
+.shareBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  margin: 0 20px;
+}
+.shareIcon {
+  width: 100%;
+  height: 100%;
+  padding: 1px;
+}
+.imgButton {
+  background: #00000029;
+  border-radius: 50px;
+  padding: 10px;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(255,255,255,0.15);
+}
+.imgButton.video {
+  border: none;
+}
+.shareButtoms span {
+  font-size: 12px;
+  color: #fff;
+  font-family: inherit;
+  font-weight: 500;
+}
+.progressWrapper {
+  position: relative;
+}
+
+.progressRing {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  transform: rotate(-90deg);
+}
+
+.progressBg {
+  fill: none;
+  stroke: rgba(255,255,255,0.15);
+  stroke-width: 2;
+}
+
+.progressBar {
+  fill: none;
+  stroke: white;
+  stroke-width: 2;
+  stroke-dasharray: 113;
+  stroke-dashoffset: 113;
+  transition: stroke-dashoffset 0.2s linear;
+}
+
+
+@media(orientation: portrait){
+  .menuTop {
+    position: absolute;
+    right: 20px;
+    top: 30px;
+}
+.optionsItem {
+  margin: 40px 10px;
+}
+}
+@media(orientation: landscape){
+
+}

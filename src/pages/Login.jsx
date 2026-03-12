@@ -1,9 +1,11 @@
 import '../styles/Login.css'
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import BackIcon from "../assets/back.svg?react"
 import { useTranslation } from "react-i18next"
 import LanguageSwitcher from "../components/LanguageSwitcher"
+
+const API_BASE = import.meta.env.VITE_API_BASE
 
 function Login() {
   const navigate = useNavigate()
@@ -14,13 +16,19 @@ function Login() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
+  // 🔎 Confirmar que el .env se está leyendo al cargar la vista
+  useEffect(() => {
+    console.log("API_BASE desde .env →", API_BASE)
+    console.log("Endpoint login →", `${API_BASE}/api/login`)
+  }, [])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
     setLoading(true)
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/login", { 
+      const res = await fetch(`${API_BASE}/api/login`, { 
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -34,11 +42,11 @@ function Login() {
       if (res.ok) {
         localStorage.setItem("token", data.token)
         localStorage.setItem("user", JSON.stringify(data.user))
-
         navigate("/home")
       } else {
-        setError(data.message || t("login.error") )
+        setError(data.message || t("login.error"))
       }
+
     } catch (err) {
       setLoading(false)
       setError(t("login.error"))
@@ -48,19 +56,24 @@ function Login() {
 
   return (
     <div className="login">
-        <div className="container-lang">
-            <LanguageSwitcher />
-        </div>
+      
+      <div className="container-lang">
+        <LanguageSwitcher />
+      </div>
+
       <div className="container">
         <div className="backButton">
           <button onClick={() => navigate("/")}>
             <BackIcon />
           </button>
         </div>
+
         <div className="loginForm">
           <h1>{t("login.title")}</h1>
           <span>{t("login.subtitle")}</span>
+
           <form className="material-form" onSubmit={handleSubmit}>
+
             <div className="input-field">
               <input 
                 type="email" 
@@ -71,6 +84,7 @@ function Login() {
               <label>{t("login.email")}</label>
               <span className="bar"></span>
             </div>
+
             <div className="input-field">
               <input 
                 type="password" 
@@ -85,16 +99,22 @@ function Login() {
             {error && <p className="error">{error}</p>}
 
             <button type="submit" disabled={loading}>
-                {loading ? t("login.loading") : t("login.button")}
+              {loading ? t("login.loading") : t("login.button")}
             </button>
 
-
             <div className="alreadyHave">
-              <p>{t("login.notYet")} <button type="button" onClick={() => navigate("/register")}>{t("login.register")}</button></p>
+              <p>
+                {t("login.notYet")}{" "}
+                <button type="button" onClick={() => navigate("/register")}>
+                  {t("login.register")}
+                </button>
+              </p>
             </div>
+
           </form>
         </div>
       </div>
+
       <div className="vinylBottom">
         <div className="leftVinyl">
           <img src="/leftVinyl.svg" alt="" />
@@ -106,6 +126,7 @@ function Login() {
           <img src="/rightVinyl.svg" alt="" />
         </div>
       </div>
+
     </div>
   )
 }

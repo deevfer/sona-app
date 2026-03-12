@@ -1,0 +1,131 @@
+.titleQueue h1 {
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: 600;
+    text-align: center;
+  }
+  
+  .queueTracks {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 0;
+    overflow-y: auto;
+  }
+  
+  .queueItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .queueItem:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .queueItem img {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  
+  .queueItemInfo {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .queueItemInfo h2 {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .queueItemInfo p {
+    font-size: 11px;
+    margin: 2px 0 0;
+    opacity: 0.6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .queueDuration {
+    font-size: 11px;
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+  
+  .nowPlaying {
+    background: rgba(255, 255, 255, 0.08);
+    border-left: 3px solid currentColor;
+  }
+  .titleQueue h1 {
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .queueArtistName {
+    font-size: 12px;
+    opacity: 0.6;
+    text-align: center;
+    margin-top: 4px;
+  }
+  .skippingOverlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    border-radius: 0px;
+    z-index: 10;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .sonaBody.bg-white .titleQueue h1 {
+    color: #2d2d2d;
+}
+.warn {
+    padding: 30px;
+}
+.warn p{
+    font-size: 10px;
+    text-align: center;
+    color: #fff;
+}
+.skippingOverlay{
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  
+  /* Si ya tienes blur/overlay, déjalo y solo agrega flex */
+  .skippingLogoWrap{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Ajusta tamaño del SVG */
+  .skippingLogoWrap svg{
+    width: 140px;
+    height: 140px;
+  }
+  

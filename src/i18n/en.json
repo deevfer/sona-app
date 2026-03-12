@@ -38,5 +38,43 @@
         "title": "Connect your music",
         "subtitle": "Allow Sona to access your library to control the current track in the app.",
         "comingSoon": "Coming soon"
+    },
+    "stylesMenu":{
+        "vinyl": "Vinyl Styles",
+        "background": "Background"
+    },
+    "menuAlbums":{
+        "album": "Albums",
+        "lists": "Playlist",
+        "loading": "Loading...",
+        "search": "Search"
+    },
+    "Queue":{
+        "QueueTitle": "Queue",
+        "Skipping": "Playing",
+        "Warn": "Playing music with Spotify will only display 20 songs in the queue. To view all of them, open your Spotify app."
+    },
+    "options": {
+        "title": "Options",
+        "general": "General",
+        "lang": "Language",
+        "connected": "Connected",
+        "provider": "Music Provider",
+        "support": "Support us",
+        "donation": "Buy us a coffee",
+        "share": "Share with your friends",
+        "faq": "FAQ",
+        "account": "Account",
+        "session": "Logout",
+        "developed": "Developed by Devfer",
+        "version": "Version 1.0.1"
+    },
+    "connectDevice": {
+        "noDevice": "Open Spotify on your phone or computer and try again"
+    },
+    "share":{
+        "png": "Share image",
+        "downloadMp4": "Download video",
+        "exporting": "Exporting video"
     }
   }

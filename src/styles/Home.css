@@ -1,7 +1,8 @@
 .btnsConect {
     position: relative;
     margin: 10px 0 100px;
-    width: 25%;
+    width: 100%;
+    max-width: 320px;   /* controla el tamaño real del botón */
 }
 .btnsConect .btnPrimary {
     margin: 15px 0;
@@ -40,7 +41,7 @@
     border-radius: 50px;
     bottom: -20px;
     right: 10px;
-    z-index: 9999;
+    z-index: 1000;
 }
 .loginForm .comingSoon span {
     font-size: 8px;
@@ -52,3 +53,33 @@
     top: -2px;
     position: relative;
 }
+@media (orientation: landscape) and (max-height: 520px) {
+
+    .btnsConect {
+        width: 100%;
+        max-width: 260px;
+        margin: 10px auto 60px;
+    }
+  
+    .btnsConect .btnPrimary button {
+        padding: 12px 20px;
+        font-size: 13px;
+    }
+  
+    .btnsConect .btnPrimary button img {
+        width: 20px;
+    }
+  
+    .comingSoon {
+        bottom: -16px;
+        right: 0;
+        padding: 0 18px;
+    }
+    .loginForm {
+        position: relative;
+        height: auto;
+        min-height: 100%;
+        padding-top: 10px;
+        padding-bottom: 0px;
+    }
+  }

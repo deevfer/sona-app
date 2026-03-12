@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react"
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom"
 import { AnimatePresence, motion } from "framer-motion"
 import { ProtectedRoute, AuthRoute } from "./ProtectedRoutes"
@@ -6,72 +7,135 @@ import Register from "./pages/Register"
 import Login from "./pages/Login"
 import Home from "./pages/Home"
 import Sona from "./pages/Sona"
+import Albums from "./pages/Albums"
+import Queue from "./pages/Queue"
+import MenuBottomComponent from "./components/MenuBottomComponent"
+import SonaLogo from "./assets/sonaAnimated.svg?react"
+
+const SONA_ROUTES = ["/sona", "/sona-albums", "/sona-queue"]
 
 function AnimatedRoutes() {
   const location = useLocation()
+  const showBottom = SONA_ROUTES.includes(location.pathname)
+  const [showSplash, setShowSplash] = useState(false)
+
+  useEffect(() => {
+    setShowSplash(true)
+    const timer = setTimeout(() => setShowSplash(false), 800)
+    return () => clearTimeout(timer)
+  }, [location.pathname])
+
+  const isSonaRoute = SONA_ROUTES.includes(location.pathname)
+  const splashBg = isSonaRoute ? "rgb(15 15 15 / 33%)" : "#0f0f0f"
 
   return (
-    <AnimatePresence mode="wait">
-     <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<PageTransition><Landing /></PageTransition>} />
+    <>
+      <AnimatePresence>
+        {showSplash && (
+          <motion.div
+            key="splash"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 9999,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: splashBg,
+            }}
+          >
+            <SonaLogo style={{ width: "200px", height: "auto" }} />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        <Route
-          path="/register"
-          element={
-            <PageTransition>
-              <AuthRoute>
-                <Register />
-              </AuthRoute>
-            </PageTransition>
-          }
-        />
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<PageTransition><Landing /></PageTransition>} />
 
-        <Route
-          path="/login"
-          element={
-            <PageTransition>
-              <AuthRoute>
-                <Login />
-              </AuthRoute>
-            </PageTransition>
-          }
-        />
+          <Route
+            path="/register"
+            element={
+              <PageTransition>
+                <AuthRoute>
+                  <Register />
+                </AuthRoute>
+              </PageTransition>
+            }
+          />
 
-        <Route
-          path="/home"
-          element={
-            <PageTransition>
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/sona"
-          element={
-            <PageTransition>
-              <ProtectedRoute>
-                <Sona />
-              </ProtectedRoute>
-            </PageTransition>
-          }
-        />
-      </Routes>
-    </AnimatePresence>
+          <Route
+            path="/login"
+            element={
+              <PageTransition>
+                <AuthRoute>
+                  <Login />
+                </AuthRoute>
+              </PageTransition>
+            }
+          />
+
+          <Route
+            path="/home"
+            element={
+              <PageTransition>
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/sona"
+            element={
+              <PageTransition>
+                <ProtectedRoute>
+                  <Sona />
+                </ProtectedRoute>
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/sona-albums"
+            element={
+              <PageTransition>
+                <ProtectedRoute>
+                  <Albums />
+                </ProtectedRoute>
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/sona-queue"
+            element={
+              <PageTransition>
+                <ProtectedRoute>
+                  <Queue />
+                </ProtectedRoute>
+              </PageTransition>
+            }
+          />
+        </Routes>
+      </AnimatePresence>
+
+      {showBottom && <MenuBottomComponent />}
+    </>
   )
 }
 
 function PageTransition({ children }) {
   return (
     <motion.div
-      initial={{ x: 100, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      exit={{ x: -100, opacity: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       transition={{
-        type: "spring",
-        stiffness: 120,
-        damping: 20
+        duration: 0.4,
+        ease: "easeInOut"
       }}
       style={{
         width: "100%",

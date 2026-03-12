@@ -1,14 +1,54 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import '../styles/Landing.css'
 import { useTranslation } from "react-i18next"
 import LanguageSwitcher from "../components/LanguageSwitcher"
+import SonaLogo from "../assets/sonaAnimated.svg?react"
+
+const API_BASE = import.meta.env.VITE_API_BASE
 
 function Landing() {
-
-  const [openModal, setOpenModal] = useState(false)  
+  const [openModal, setOpenModal] = useState(false)
+  const [checking, setChecking] = useState(true)
   const navigate = useNavigate()
   const { t } = useTranslation()
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const token = localStorage.getItem("token")
+        if (!token) {
+          setChecking(false)
+          return
+        }
+
+        // Verificar si tiene conexión con proveedor de música
+        const res = await fetch(`${API_BASE}/api/spotify/status`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        })
+
+        if (res.ok) {
+          const data = await res.json()
+          if (data.connected) {
+            navigate("/sona", { replace: true })
+            return
+          }
+          // Tiene token pero no spotify → ir a home
+          navigate("/home", { replace: true })
+          return
+        }
+      } catch {}
+      setChecking(false)
+    }
+
+    checkAuth()
+  }, [navigate])
+
+  if (checking) return null
+
   return (
     <div className="landing">
         <div className="container-lang">
@@ -17,7 +57,7 @@ function Landing() {
         <div className="contentLanding">
             <div className="contentLeft">
                 <div className="titleContentLeft">
-                <   h1>{t("landing.title")}</h1>
+                    <h1>{t("landing.title")}</h1>
                 </div>
                 <div className="btnsContentLeft">
                     <div className="btnPrimary">
@@ -79,14 +119,13 @@ function Landing() {
                 </div>
 
                 <div className="rights">
-                    <p><strong>Sona</strong></p>
+                    <SonaLogo/>
                     <p>{t("landing.developed")}</p>
                     <span>{t("landing.version")}</span>
                 </div>
-                
               </div>
           </div>
-        )}     
+        )}
     </div>
   )
 }

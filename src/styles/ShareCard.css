@@ -1,0 +1,193 @@
+.shareCard{
+    width:1080px;
+    height:1920px;
+    position:relative;
+    overflow:hidden; /* <- recorta cover y vinilo al salirse */
+    border-radius: 0;
+    background-size: cover;
+    background-position: center;
+    border-radius: 70px;
+  }
+  
+  /* Backgrounds heredados */
+  .share-bg-white{ background: #ffffff; }
+  .share-bg-gray{ background: #cfcfcf; }
+  .share-bg-yellow{ background: #f3d36a; }
+  .share-bg-black{ background: #0b0b0b; }
+  
+  /* Overlay para que todo se vea pro */
+  .shareOverlay{
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(900px 900px at 75% 70%, rgba(0,0,0,.25), rgba(0,0,0,.75)),
+      linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.55));
+    pointer-events:none;
+  }
+  
+  /* COVER top-left */
+  .shareCoverWrap{
+    position:absolute;
+    top:-180px;
+    left:-370px;
+    width:1350px;
+    height:1350px;
+    transform: rotate(11deg);
+    border-radius: 28px;
+  
+    /* ❌ QUITAR */
+    overflow: visible;
+  
+    /* opcional: para que se vea más pro */
+    box-shadow: 0 24px 70px rgba(0,0,0,.45);
+  }
+  
+  .shareCover{
+    width:100%;
+    height:100%;
+    object-fit: cover;
+    display:block;
+  }
+  
+  /* VINYL bottom-right */
+  .shareVinylWrap {
+    position: absolute;
+    right: -320px;
+    bottom: -230px;
+    width: 1200px;
+    height: 1200px;
+    pointer-events: none;
+}
+  
+  /* leve rotación general */
+  .shareVinylTilt{
+    width:100%;
+    height:100%;
+    transform: rotate(10deg);
+  }
+  
+  /* girar suave */
+  .shareVinylSpin{
+    width:100%;
+    height:100%;
+    position:relative;
+    animation: sonaSpin 8s linear infinite;
+    transform-origin: center;
+  }
+  
+  @keyframes sonaSpin{
+    to{ transform: rotate(360deg); }
+  }
+  
+  .shareVinyl{
+    width:100%;
+    height:100%;
+    display:block;
+  }
+  
+  .shareVinylSpin{
+    width:100%;
+    height:100%;
+    position:relative;
+    animation: sonaSpin 8s linear infinite;
+    transform-origin: center;
+  }
+  
+  .shareVinyl{
+    width:100%;
+    height:100%;
+    display:block;
+  }
+  
+  /* ✅ Nuevo wrapper centrador */
+  .shareVinylLabelWrap{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transform: translate(var(--label-offset-x, 0px), var(--label-offset-y, 0px));
+  }
+  
+  .shareVinylLabel{
+    width: 420px;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 999px;
+  }
+  /* INFO */
+  .shareInfo{
+    position:absolute;
+    left: 70px;
+    bottom: 60px;
+    width: 820px;
+    color: rgba(255,255,255,.92);
+    text-align:left;
+  }
+  
+  .shareNow{
+    font-size: 28px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    opacity: .75;
+    margin-bottom: 10px;
+  }
+  
+  .shareTitle{
+    font-size: 64px;
+    line-height: 1.05;
+    font-weight: 700;
+    margin-bottom: 14px;
+    word-break: break-word;
+  }
+  
+  .shareArtist{
+    font-size: 30px;
+    opacity: .8;
+    margin-bottom: 22px;
+  }
+  
+  .shareBrand{
+    font-size: 34px;
+    letter-spacing: .22em;
+    opacity: .9;
+  }
+  .shareBrand svg{
+    width: 115px;
+}
+.shareBrand svg .st0 {
+    fill: #ffffff;
+}
+.shareContentPrev {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: 70vh;
+    flex-direction: column;
+}
+.shareButtoms {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top: 70px;
+    display: flex;
+    justify-content: center;
+}
+.export-video-hide-vinyl .shareVinylWrap {
+    display: none !important;
+  }
+
+  @media(orientation:portrait){
+    .shareCard {
+      width: 1080px;
+      height: 1920px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 0;
+      background-size: cover;
+      background-position: center;
+      border-radius: 70px;
+      right: 370px;
+      top: 150px;
+  }
+  }

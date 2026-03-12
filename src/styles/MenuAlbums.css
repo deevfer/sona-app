@@ -1,0 +1,113 @@
+.menuAlbumItem {
+    width: 210px;
+    height: 38px;
+    border-radius: 60px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    transition: background 0.3s ease;
+    margin: auto;
+}
+.menuAlbumItem button.label {
+    background: transparent;
+    border: none;
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 400;
+}
+.menuAlbumItem .switch {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #ffffff54;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2D2D2D;
+    z-index: 999;
+    cursor: pointer;
+  }
+  
+  .menuAlbumItem .switch::before {
+    content: "";
+    position: absolute;
+    width: 114px;
+    height: 32px;
+    background: white;
+    border-radius: 50px;
+    left: 6px;
+    transition: transform 0.3s ease;
+}
+.menuAlbumItem .switch.active::before {
+    transform: translateX(105px);
+    width: 94px;
+    transition: transform 0.3s ease;
+  }
+  
+  .label {
+    z-index: 1;
+  }
+  .container-lang {
+      position: absolute;
+      width: auto;
+      height: 115px;
+      padding: 40px;
+      z-index: 99999;
+      right: 0;
+  }
+.sonaBody.bg-white  .switch {
+    background: #0000001a;
+}
+@media (orientation: landscape) and (max-height: 520px) {
+
+  .menuAlbumItem {
+    margin: 0;
+}
+.searchMenuTop {
+  top: 20px;
+  height: auto;
+  width: 30%;
+}
+.album3D {
+  flex: 0 0 auto;
+  width: 450px;
+  height: 240px;
+}
+.tracksBackFloating {
+  position: absolute;
+  top: -40px;
+}
+.albumColumn {
+  width: 150px;
+}
+
+.albumCoverLarge img {
+  border-radius: 10px;
+}
+.albumTitleLarge {
+  font-size: 12px;
+}
+.splitLayout {
+  padding: 0px 40px;
+  gap: 70px;
+  top: 120px;
+  height: 50vh;
+}
+}
+@media (orientation: portrait) {
+  .menuAlbumItem {
+    top: 70px;
+    position: relative;
+}
+.listCovers {
+  height: 80%;
+  max-height: 100vh;
+  gap: 5px;
+  top: 10%;
+}
+}

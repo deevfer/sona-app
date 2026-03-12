@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next"
 import LanguageSwitcher from "../components/LanguageSwitcher"
 
+const API_BASE = import.meta.env.VITE_API_BASE
+
 function Register() {
   const navigate = useNavigate();
   const paypalRef = useRef();
@@ -42,7 +44,7 @@ function Register() {
           const order = await actions.order.capture();
 
           if (order.status === "COMPLETED") {
-            const response = await fetch("http://127.0.0.1:8000/api/register-with-payment", {
+            const response = await fetch(`${API_BASE}/api/register-with-payment`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

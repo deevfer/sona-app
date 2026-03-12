@@ -22,7 +22,8 @@
     font-size: 46px;
     font-weight: 600;
     line-height: 40px;
-    width: 490px;
+    max-width: 490px;
+    width: 100%;
     padding: 0 0 0 40px;
 }
 .vinylLanding {
@@ -78,7 +79,7 @@
 .modalOverlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.65);
+    background: rgba(0, 0, 0, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -96,9 +97,11 @@
     height: 70%;
     max-width: 90%;
     text-align: center;
-    animation: scaleIn 0.3sease forwards;
+    animation: scaleIn 0.3s ease forwards;
     position: relative;
     overflow: scroll;
+
+    scrollbar-width: none;
 }
 .closeModal {
     margin-top: 20px;
@@ -152,7 +155,7 @@
     margin: auto;
 }
 .rights p {
-    font-size: 14px;
+    font-size: 12px;
     font-family: inherit;
     color: #cecece;
     font-weight: 200;
@@ -203,3 +206,181 @@
     position: relative;
     right: -80px;
 }
+.rights svg {
+    width: 65px;
+}
+@media (max-width: 768px) {
+
+    .contentLanding{
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .contentLanding > div{
+        flex: unset;
+        width: 100%;
+    }
+    
+    .titleContentLeft h1{
+        font-size: 32px;
+        line-height: 34px;
+        width: 100%;
+        padding: 0 20px;
+    }
+    
+    .btnsContentLeft{
+        padding: 0;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .btnPrimary button,
+    .btnSecondary button{
+        width: 220px;
+    }
+    
+    .vinylLanding{
+        transform: translateX(0);
+        margin-top: 40px;
+    }
+    
+    .vinylLanding img{
+        width: 110%;
+    }
+    
+    .modalContent{
+        width: 90%;
+        height: 85%;
+        padding: 60px 20px;
+        border-radius: 35px;
+    }
+    
+    .requirementsList{
+        width: 100%;
+    }
+    
+    .rights{
+        width: 70%;
+    }
+    
+    }
+@media (min-width: 1200px){
+
+.titleContentLeft h1{
+    font-size: 56px;
+    line-height: 48px;
+    width: 560px;
+}
+
+.btnsContentLeft{
+    padding: 0 160px 0 40px;
+}
+
+.vinylLanding img{
+    width: 160%;
+}
+
+.modalContent{
+    width: 60%;
+    height: 65%;
+}
+
+.rights{
+    width: 25%;
+}
+
+}
+
+/* =========================
+   RESPONSIVE (Tablet-first)
+   Base = tu CSS actual (landscape / 2 columnas)
+   ========================= */
+
+/* ---------- LANDSCAPE: reducir texto, mantener botones ---------- */
+@media (orientation: landscape) {
+    .titleContentLeft h1 {
+      font-size: 38px;          /* más pequeño */
+      line-height: 36px;
+      width: 420px;             /* evita que se haga gigante */
+      padding-left: 40px;       /* igual */
+    }
+  
+    /* Botones mantienen tamaño: NO tocamos padding/font-size */
+    .btnsContentLeft {
+      padding: 0 40px 0 40px;  /* igual que tu base */
+    }
+  
+    .vinylLanding img {
+      width: 140%;
+    }
+  }
+  
+  /* ---------- PORTRAIT: centro + vinyl abajo cortado ---------- */
+  @media (orientation: portrait) {
+    .landing {
+      overflow: hidden; /* necesario para “cortar” el vinyl */
+    }
+  
+    .contentLanding {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0 24px;
+    }
+  
+    .contentLeft {
+      width: 100%;
+      text-align: center;
+      z-index: 2;
+    }
+  
+    .titleContentLeft {
+      margin-bottom: 24px;
+    }
+  
+    .titleContentLeft h1 {
+      width: 100%;
+      padding: 0;
+      font-size: 40px;
+      line-height: 38px;
+      margin: 0 auto;
+    }
+  
+    .btnsContentLeft {
+      justify-content: center;
+      padding: 0;
+      gap: 12px;
+      flex-direction: column; /* se ve como tu screenshot vertical */
+      align-items: center;
+    }
+  
+    .contentRight {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -28vh;   /* sube/baja el “corte” (ajústalo si quieres más/menos) */
+      height: 60vh;    /* controla cuánto se ve del vinyl */
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      z-index: 1;
+      pointer-events: none;
+    }
+  
+    .vinylLanding {
+      transform: none;
+      opacity: 1;
+      animation: none; /* si quieres mantener animación en portrait, lo reactivamos */
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+  
+    .vinylLanding img {
+      width: 130vw;   /* grande para que llene y se recorte */
+      max-width: none;
+    }
+  }

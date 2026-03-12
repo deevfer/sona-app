@@ -38,6 +38,44 @@
         "title": "Conecta tu música",
         "subtitle": "Permite que Sona acceda a tu biblioteca para controlar la pista actual en la aplicación.",
         "comingSoon": "Muy pronto"
+    },
+    "stylesMenu":{
+        "vinyl": "Estilo del vinilo",
+        "background": "Fondo"
+    },
+    "menuAlbums":{
+        "album": "Álbumes",
+        "lists": "Playlist",
+        "loading": "Cargando...",
+        "search": "Buscar"
+    },
+    "Queue":{
+        "QueueTitle": "Cola",
+        "Skipping": "Reproduciendo",
+        "Warn": "Reproducir la música con Spotify únicamente mostrará 20 canciones de la cola. Para visualizar todas, abre tu aplicación de Spotify."
+    },
+    "options": {
+        "title": "Ajustes",
+        "general": "General",
+        "lang": "Idioma",
+        "connected": "Conectado",
+        "provider": "Proveedor de música",
+        "support": "Apóyanos",
+        "donation": "Invítanos a un café",
+        "share": "Comparte Sona con tus amigos",
+        "faq": "Preguntas frecuentes",
+        "account": "Cuenta",
+        "session": "Cerrar sesión",
+        "developed": "Desarrollado por Devfer",
+        "version": "Versión 1.0.1"
+    },
+    "connectDevice": {
+        "noDevice": "Abre Spotify en tu teléfono o computadora e intenta de nuevo"
+    },
+    "share":{
+        "png": "Compartir imagen",
+        "downloadMp4": "Descargar video",
+        "exporting": "Exportando video"
     }
     
   }

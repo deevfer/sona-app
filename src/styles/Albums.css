@@ -1,0 +1,459 @@
+.listCovers {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    height: 100%;
+    max-height: 100vh;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    gap: 5px;
+
+    position: absolute;
+    inset: 0; 
+
+    align-content: flex-start;
+    justify-content: center;
+    scrollbar-width: none;
+}
+.coverItem {
+    width: 250px;
+    flex-shrink: 0;
+}
+
+.coverItem img {
+    width: 100%;
+    aspect-ratio: 1 / 1; 
+    object-fit: cover;
+    border-radius: 12px;
+}
+.listCovers::-webkit-scrollbar {
+    height: 6px;
+}
+
+.listCovers::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+}
+.listCovers::after {
+    content: "";
+    flex-basis: 100%;
+    width: 0;
+}
+button.tracksBack {
+    background-color: transparent;
+    border: none;
+}
+.tracksBackFloating svg {
+    width: 25px;
+    height: 25px;
+}
+.tracksBackFloating svg .st0{
+    fill: #fff;
+}
+.sonaBody.bg-white .tracksBackFloating svg .st0{
+    fill: #2d2d2d;
+}
+.sonaBody.bg-gray .tracksBackFloating svg .st0{
+    fill: #2d2d2d;
+}
+.sonaBody.bg-yellow .tracksBackFloating svg .st0{
+    fill: #2d2d2d;
+}
+/* Layout principal */
+.splitLayout {
+    display: flex;
+    position: absolute;
+    inset: 0;
+    padding: 40px;
+    gap: 60px;
+    top: 80px;
+    height: 80vh;
+}
+  .albumColumn {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+  }
+  
+  .albumCoverLarge img {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  }
+  
+  .albumTitleLarge {
+    margin-top: 20px;
+    font-size: 22px;
+    font-weight: 600;
+  }
+  
+.tracksBackFloating {
+    position: absolute;
+    top: -80px;
+    left: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+  
+  /* ---------------- RIGHT COLUMN ---------------- */
+  
+  .tracksColumn {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    scrollbar-width: none;
+  }
+  
+  .tracksList {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .trackRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+  }
+  
+  .trackLeft {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+  }
+  
+  .trackIndex {
+    opacity: 0.5;
+    font-variant-numeric: tabular-nums;
+    width: 40px;
+    font-size: 12px;
+  }
+  
+  .trackName {
+    font-weight: 500;
+    font-size: 12px;
+  }
+  
+  .trackDuration {
+    opacity: 0.6;
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+  }
+  
+  /* ---------------- Skeleton tracks ---------------- */
+  
+  .trackRow.skeleton {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .skeletonLine {
+    height: 16px;
+    border-radius: 6px;
+    background: linear-gradient(
+      90deg,
+      rgba(255,255,255,0.15) 25%,
+      rgba(255,255,255,0.35) 50%,
+      rgba(255,255,255,0.15) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite linear;
+  }
+  
+  .skeletonLine.short {
+    width: 200px;
+  }
+  
+  .skeletonLine.tiny {
+    width: 40px;
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+.sonaBody.bg-white .tracksList {
+    color: #2d2d2d;
+}
+.sonaBody.bg-white .albumTitleLarge{
+    color: #2d2d2d;
+}
+.sonaBody.bg-gray .tracksList {
+    color: #2d2d2d;
+}
+.sonaBody.bg-gray .albumTitleLarge{
+    color: #2d2d2d;
+}
+.sonaBody.bg-white .skeletonBox,
+.sonaBody.bg-white .skeletonLine {
+  background: linear-gradient(
+    90deg,
+    #e8e8e8 25%,
+    #d5d5d5 50%,
+    #e8e8e8 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+.sonaBody.bg-yellow .tracksList {
+    color: #2d2d2d;
+}
+.sonaBody.bg-yellow .albumTitleLarge{
+    color: #2d2d2d;
+}
+.albumsStage {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .fadeOut {
+    animation: fadeOut 0.22s ease forwards;
+  }
+  
+  .fadeIn {
+    animation: fadeIn 0.22s ease forwards;
+  }
+  
+  @keyframes fadeOut {
+    from { opacity: 1; transform: scale(1); }
+    to   { opacity: 0; transform: scale(0.98); }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(1.02); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .albumsContent.fadeIn {
+    opacity: 1;
+    transform: translateY(0);
+    animation: fadeIn .22s ease forwards;
+  }
+  
+  .albumsContent.fadeOut {
+    animation: fadeOut .22s ease forwards;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(8px); }
+  }
+  
+  .trackRow.clickable { cursor: pointer; transition: transform .15s ease, opacity .15s ease; }
+  .trackRow.clickable:hover { opacity: .85; transform: translateY(-1px); }
+  .trackRow.clickable:active { transform: translateY(0); }
+  .listVertical {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .listRow {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  
+  .listRow img {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .listRow:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(4px);
+  }
+
+ 
+  .stack3D {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 80vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0;
+    gap: 0;
+    scrollbar-width: none;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+  }
+  .stack3D::-webkit-scrollbar {
+    display: none;
+  }  
+
+.stack3D::-webkit-scrollbar {
+  display: none;
+}
+
+.album3D {
+    flex: 0 0 auto;
+    width: 450px;
+    height: 450px;
+    position: relative;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    margin-left: -360px;
+    perspective: 860px;
+    pointer-events: none;
+  }
+  
+  .albumFront,
+  .albumBack,
+  .albumSpine {
+    pointer-events: auto;
+  }
+
+.album3D:first-child {
+  margin-left: 0;
+}
+
+.albumBox {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateY(var(--rot, 65deg));
+  }
+  
+  .albumFront {
+    position: absolute;
+    inset: 0;
+    transform: translateZ(7px);
+    overflow: hidden;
+  }
+  
+  .albumFront img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .albumBack {
+    position: absolute;
+    inset: 0;
+    transform: translateZ(-6px);
+    overflow: hidden;
+  }
+  
+  .albumBack img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: scaleX(-1);
+}
+  .albumSpine {
+    position: absolute;
+    width: 15px;
+    height: 100%;
+    left: -18px;
+    background: var(--spine-bg, rgb(30, 30, 30));
+    transform: rotateY(-90deg) translateZ(-10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+  }
+  
+  .albumSpine span {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 8px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 90%;
+    letter-spacing: 0.4px;
+    color: var(--spine-text, rgba(255, 255, 255, 0.4));
+    text-transform: uppercase;
+  }
+  /* ====== ANIMACIÓN GRID: flip aleatorio ====== */
+.listCovers.fadeIn .coverItem {
+    opacity: 0;
+    animation: coverFlipIn 0.6s ease forwards;
+  }
+  
+  /* Delays aleatorios con nth-child */
+  .listCovers.fadeIn .coverItem:nth-child(5n+1) { animation-delay: 0.05s; }
+  .listCovers.fadeIn .coverItem:nth-child(5n+2) { animation-delay: 0.15s; }
+  .listCovers.fadeIn .coverItem:nth-child(5n+3) { animation-delay: 0.08s; }
+  .listCovers.fadeIn .coverItem:nth-child(5n+4) { animation-delay: 0.22s; }
+  .listCovers.fadeIn .coverItem:nth-child(5n+5) { animation-delay: 0.12s; }
+  
+  .listCovers.fadeIn .coverItem:nth-child(7n+1) { --flip: rotateY(180deg); }
+  .listCovers.fadeIn .coverItem:nth-child(7n+2) { --flip: rotateX(180deg); }
+  .listCovers.fadeIn .coverItem:nth-child(7n+3) { --flip: rotateY(-180deg); }
+  .listCovers.fadeIn .coverItem:nth-child(7n+4) { --flip: rotateX(-180deg) rotateZ(20deg); }
+  .listCovers.fadeIn .coverItem:nth-child(7n+5) { --flip: rotateY(180deg) rotateZ(-15deg); }
+  .listCovers.fadeIn .coverItem:nth-child(7n+6) { --flip: rotateX(180deg) rotateZ(10deg); }
+  .listCovers.fadeIn .coverItem:nth-child(7n+7) { --flip: rotateY(-180deg) rotateZ(-20deg); }
+  
+  @keyframes coverFlipIn {
+    0% {
+      opacity: 0;
+      transform: perspective(800px) var(--flip, rotateY(180deg)) scale(0.8);
+    }
+    60% {
+      opacity: 1;
+      transform: perspective(800px) rotateY(-8deg) scale(1.02);
+    }
+    100% {
+      opacity: 1;
+      transform: perspective(800px) rotateY(0deg) scale(1);
+    }
+  }
+  
+  /* ====== ANIMACIÓN STACK3D: entrada de derecha a izquierda ====== */
+  .stack3D.fadeIn .album3D {
+    opacity: 0;
+    animation: vinylSlideIn 0.5s ease forwards;
+  }
+  
+  .stack3D.fadeIn .album3D:nth-child(1)  { animation-delay: 0.03s; }
+  .stack3D.fadeIn .album3D:nth-child(2)  { animation-delay: 0.07s; }
+  .stack3D.fadeIn .album3D:nth-child(3)  { animation-delay: 0.11s; }
+  .stack3D.fadeIn .album3D:nth-child(4)  { animation-delay: 0.15s; }
+  .stack3D.fadeIn .album3D:nth-child(5)  { animation-delay: 0.19s; }
+  .stack3D.fadeIn .album3D:nth-child(6)  { animation-delay: 0.23s; }
+  .stack3D.fadeIn .album3D:nth-child(7)  { animation-delay: 0.27s; }
+  .stack3D.fadeIn .album3D:nth-child(8)  { animation-delay: 0.31s; }
+  .stack3D.fadeIn .album3D:nth-child(9)  { animation-delay: 0.35s; }
+  .stack3D.fadeIn .album3D:nth-child(10) { animation-delay: 0.39s; }
+  .stack3D.fadeIn .album3D:nth-child(n+11) { animation-delay: 0.43s; }
+  
+  @keyframes vinylSlideIn {
+    0% {
+      opacity: 0;
+      transform: translateX(200px);
+    }
+    70% {
+      opacity: 1;
+      transform: translateX(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }

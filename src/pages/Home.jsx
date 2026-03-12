@@ -1,30 +1,66 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import '../styles/Home.css'
 import { useTranslation } from "react-i18next"
 import LanguageSwitcher from "../components/LanguageSwitcher"
+
+const API_BASE = import.meta.env.VITE_API_BASE
 
 function Home() {
   const navigate = useNavigate()
   const { t } = useTranslation()
 
   const [loading, setLoading] = useState(false)
+  const [checking, setChecking] = useState(true)
   const [error, setError] = useState("")
+
+  useEffect(() => {
+    const checkConnection = async () => {
+      try {
+        const token = localStorage.getItem("token")
+        if (!token) {
+          setChecking(false)
+          return
+        }
+
+        const res = await fetch(`${API_BASE}/api/spotify/status`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        })
+
+        if (res.ok) {
+          const data = await res.json()
+          if (data.connected) {
+            navigate("/sona", { replace: true })
+            return
+          }
+        }
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setChecking(false)
+      }
+    }
+
+    checkConnection()
+  }, [navigate])
 
   const handleSpotifyConnect = async () => {
     setLoading(true)
     setError("")
-  
+
     try {
-      const token = localStorage.getItem("token"); // tu token de login
-      const res = await fetch(`http://127.0.0.1:8000/api/spotify/redirect?token=${token}`, {
+      const token = localStorage.getItem("token")
+      const res = await fetch(`${API_BASE}/api/spotify/redirect?token=${token}`, {
         method: "GET"
       })
-  
+
       if (!res.ok) throw new Error("Error al conectar con Spotify")
-  
+
       const data = await res.json()
-  
+
       if (data.url) {
         window.location.href = data.url
       } else {
@@ -36,6 +72,9 @@ function Home() {
       setLoading(false)
     }
   }
+
+  if (checking) return null
+
   return (
     <div className="landing">
       <div className="container-lang">
