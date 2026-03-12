@@ -141,3 +141,36 @@
     z-index: 9999;
 }
 }
+.viewToggle {
+  transition: opacity 0.28s ease, transform 0.28s ease, visibility 0.28s ease;
+  opacity: 1;
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.viewToggle.fadeOut {
+  opacity: 0;
+  transform: translateX(8px);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.viewToggle.fadeIn {
+  opacity: 1;
+  transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
+}
+.searchMenuTop {
+  transition: opacity 0.28s ease;
+}
+
+.searchMenuVisible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.searchMenuHidden {
+  opacity: 0;
+  pointer-events: none;
+}

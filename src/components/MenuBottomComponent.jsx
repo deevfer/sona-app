@@ -6,7 +6,7 @@ import AlbumsIcon from "../assets/albums.svg?react"
 import MusicIcon from "../assets/music.svg?react"
 import QueueIcon from "../assets/queue.svg?react"
 
-function MenuBottomComponent() {
+function MenuBottomComponent({ visible = true }) {
   const location = useLocation()
   const navigate = useNavigate()
   const path = location.pathname
@@ -19,11 +19,11 @@ function MenuBottomComponent() {
     setTimeout(() => {
       setZoom(false)
       navigate(route)
-    }, 180) // duración del zoom
+    }, 180)
   }
 
   return (
-    <div className="menuBottomContent">
+    <div className={`menuBottomContent ${visible ? "visible" : "hidden"}`}>
       <div className={`menuBottomElements ${zoom ? "menuZoom" : ""}`}>
 
         {/* ALBUMS */}

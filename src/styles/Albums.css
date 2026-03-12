@@ -252,7 +252,9 @@ button.tracksBack {
     to   { opacity: 0; transform: translateY(8px); }
   }
   
-  .trackRow.clickable { cursor: pointer; transition: transform .15s ease, opacity .15s ease; }
+  .trackRow.clickable { cursor: pointer; transition: transform .15s ease, opacity .15s ease;
+    user-select: none;
+  }
   .trackRow.clickable:hover { opacity: .85; transform: translateY(-1px); }
   .trackRow.clickable:active { transform: translateY(0); }
   .listVertical {

@@ -8,7 +8,7 @@
         "lifetime": "One-time payment of USD 1.99 to unlock lifetime access.",
         "premium": "Active Premium account on your streaming platform.",
         "permission": "Allow access to your Spotify account to sync your music.",
-        "appleMusic": "Apple Music connection coming soon.",
+        "appleMusic": "Allow access to your Apple Music account to play your music from Sona.",
         "note": "The app does not include its own music. All content is played directly from your streaming account.",
         "developed": "Developed by Devfer",
         "version": "Version 1.0.1"
@@ -37,7 +37,8 @@
     "connect":{
         "title": "Connect your music",
         "subtitle": "Allow Sona to access your library to control the current track in the app.",
-        "comingSoon": "Coming soon"
+        "comingSoon": "Coming soon",
+        "loading": "Connecting"
     },
     "stylesMenu":{
         "vinyl": "Vinyl Styles",
@@ -52,7 +53,9 @@
     "Queue":{
         "QueueTitle": "Queue",
         "Skipping": "Playing",
-        "Warn": "Playing music with Spotify will only display 20 songs in the queue. To view all of them, open your Spotify app."
+        "Warn": "Playing music with Spotify will only display 20 songs in the queue. To view all of them, open your Spotify app.",
+        "AppleMusicNoQueue": "Apple Music does not support viewing the playback queue",
+        "NoProvider": "No music service connected"
     },
     "options": {
         "title": "Options",
@@ -66,6 +69,7 @@
         "faq": "FAQ",
         "account": "Account",
         "session": "Logout",
+        "comingSoon": "Coming soon",
         "developed": "Developed by Devfer",
         "version": "Version 1.0.1"
     },

@@ -384,7 +384,7 @@ button.cover img{
   user-select: none;
 }
 .shareModal .modalContent {
-  background: #000000;
+  background: #000000c7;
   color: #121212;
   padding: 80px 30px;
   border-radius: 0;

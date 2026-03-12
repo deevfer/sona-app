@@ -1,27 +1,63 @@
-.container{
+.container {
     width: 100%;
     height: 100vh;
     padding: 40px;
     position: relative;
 }
-.backButton button{
+
+.backButton button {
     background-color: transparent;
     border: none;
 }
+
 .backButton svg {
     width: 25px;
     height: 25px;
 }
+
 .backButton svg .st0 {
     fill: #fff;
 }
+
 .login {
     width: 100%;
-    height: 100vh;
-    background: #121212;
+    min-height: 100vh;
     position: relative;
-    overflow-x: hidden;
+    overflow: hidden;
+    background-color: #000;
+    isolation: isolate;
 }
+
+.overlayBackgroundLogin {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.88) 0%,
+            rgba(0, 0, 0, 0.8) 20%,
+            rgba(0, 0, 0, 0.62) 45%,
+            rgba(0, 0, 0, 0.74) 72%,
+            rgba(0, 0, 0, 0.9) 100%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.34) 0%,
+            rgba(0, 0, 0, 0.12) 22%,
+            rgba(0, 0, 0, 0.08) 50%,
+            rgba(0, 0, 0, 0.18) 78%,
+            rgba(0, 0, 0, 0.36) 100%
+        );
+    backdrop-filter: blur(16px) saturate(1.05);
+}
+
+.container-lang,
+.container,
+.loginArtworksBottom {
+    position: relative;
+}
+
 .loginForm {
     position: absolute;
     top: 0;
@@ -33,15 +69,17 @@
     align-items: center;
     justify-content: center;
 }
+
 .material-form {
     background: white;
     padding: 10px 40px;
     border-radius: 40px;
     width: 100%;
     max-width: 400px;
-    margin: 30px auto 130px;
+    margin: 30px auto;
     z-index: 999;
 }
+
 .material-form .input-field {
     position: relative;
     margin: 2rem 0;
@@ -56,6 +94,7 @@
     transition: 0.2s;
     background: transparent;
 }
+
 .material-form label {
     position: absolute;
     top: 0.8rem;
@@ -66,6 +105,7 @@
     font-weight: 200;
     font-size: 12px;
 }
+
 .material-form .bar {
     position: relative;
     display: block;
@@ -73,7 +113,7 @@
 }
 
 .material-form .bar:before {
-    content: '';
+    content: "";
     height: 1px;
     width: 0;
     bottom: 0;
@@ -94,6 +134,7 @@
     font-size: 0.8rem;
     color: #121212;
 }
+
 .material-form button {
     width: 70%;
     padding: 10px 20px;
@@ -111,70 +152,36 @@
     flex-direction: row;
     justify-content: space-around;
 }
-.material-form button img{
-    width: 20px;
-}
+
 .material-form button:hover {
     transform: translateY(-1px);
 }
+
 .loginForm h1 {
     font-size: 26px;
     font-family: inherit;
     font-weight: 500;
 }
+
 .loginForm p {
     font-size: 12px;
     font-family: inherit;
     font-weight: 300;
 }
+
 .loginForm span {
     font-size: 12px;
     font-family: inherit;
     font-weight: 100;
-    /* width: 45%; */
     margin: 0 auto;
     text-align: center;
 }
+
 .backButton {
     position: relative;
     z-index: 9999;
 }
-.vinylBottom {
-    position: absolute;
-    bottom: 0px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    width: 100%;
-}
-.leftVinyl {
-    position: relative;
-    left: 70px;
-    animation: slideInVinylTop 0.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-.centerVinyl {
-    position: relative;
-    z-index: 9;
-    animation: slideInVinylTop 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-.rightVinyl {
-    position: relative;
-    right: 70px;
-    animation: slideInVinylTop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-@keyframes slideInVinylTop {
-    from {
-        transform: translateY(200px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-.vinylBottom img{
-    display: block;
-}
+
 .alreadyHave {
     position: relative;
     display: flex;
@@ -183,12 +190,14 @@
     margin: 10px 0;
     justify-content: center;
 }
+
 .alreadyHave p {
     font-size: 12px;
     font-family: inherit;
     font-weight: 300;
     color: #121212;
 }
+
 .material-form .alreadyHave button {
     width: auto;
     padding: 0.8rem;
@@ -204,74 +213,175 @@
     margin: 0;
     display: contents;
 }
-span.price {
-    color: #121212;
-    font-size: 10px;
-    font-weight: 200;
-    text-align: center;
-    width: 100%;
-    display: block;
-}
+
 .error {
     color: red;
     font-size: 0.9rem;
     margin-top: 0.2rem;
     display: block;
 }
-/* =========================
-   FIX: Mobile Landscape
-   ========================= */
-   @media (orientation: landscape) and (max-height: 520px) {
 
-    /* Evita el bug de 100vh en mobile landscape */
-    .login, .container {
-        height: 100svh;
-        overflow: auto;
+/* =========================
+   Blur sutil en bordes
+   ========================= */
+
+/* .login::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    background:
+        linear-gradient(
+            to right,
+            rgba(0, 0, 0, 0.93) 0%,
+            transparent 12%,
+            transparent 88%,
+            rgba(0, 0, 0, 0.93) 100%
+        ),
+        linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.81) 0%,
+            transparent 10%,
+            transparent 90%,
+            rgba(0, 0, 0, 0.81) 100%
+        );
+}
+
+.login::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    box-shadow:
+        inset 0 0 60px rgba(0, 0, 0, 0.35),
+        inset 0 0 120px rgba(0, 0, 0, 0.22);
+} */
+
+/* =========================
+   2 FILAS BOTTOM CON FLIP
+   ========================= */
+
+   .loginArtworksBottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -50px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0px;
+    pointer-events: none;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.loginArtworkRowFixed {
+    display: grid;
+    grid-template-columns: repeat(12, 100px);
+    justify-content: center;
+    gap: 12px;
+}
+
+.loginArtworkCard {
+    width: 110px;
+    height: 110px;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.02);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    will-change: transform;
+    transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.loginArtworkCard img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* FLIP VERTICAL */
+.loginArtworkCard.isFlipping {
+    transform: rotateX(180deg);
+}
+
+/* Skeleton */
+.loginArtworkCard.skeleton {
+    background: transparent;
+}
+
+.loginArtworkCard .skeletonBox {
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.shimmer .skeletonBox {
+    position: relative;
+    overflow: hidden;
+}
+
+.shimmer .skeletonBox::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.12),
+        transparent
+    );
+    animation: shimmerMove 1.8s infinite;
+}
+
+@keyframes shimmerMove {
+    100% {
+        transform: translateX(100%);
     }
-  
-    .container {
-      padding: 16px;           /* 40px rompe en landscape */
+}
+@media (max-width: 768px) {
+    .loginArtworkRowFixed {
+        grid-template-columns: repeat(4, 78px);
+        justify-content: center;
+        gap: 10px;
     }
-  
-    /* Deja de forzar el form al centro exacto con absolute */
-    .loginForm {
-      position: relative;
-      height: auto;
-      min-height: 100%;
-      padding-top: 10px;
-      padding-bottom: 90px;    /* espacio para los vinilos */
+
+    .loginArtworkCard {
+        width: 78px;
+        height: 78px;
     }
-  
-    /* Quita el margin-bottom gigante que empuja todo */
+
+    .loginArtworksBottom {
+        gap: 10px;
+        padding: 0 12px 14px;
+    }
+
     .material-form {
-      margin: 14px auto 0;
-      padding: 10px 24px;
-      border-radius: 28px;
-      max-width: 360px;
+        max-width: 360px;
+        margin: 30px auto 120px;
+        border-radius: 30px;
+        padding: 10px 24px;
     }
-  
-    .loginForm h1 {
-      font-size: 20px;
+}
+
+@media (max-width: 520px) {
+    .loginArtworkRowFixed {
+        grid-template-columns: repeat(4, 64px);
+        gap: 8px;
     }
-  
-    .loginForm span {
-      font-size: 11px;
+
+    .loginArtworkCard {
+        width: 64px;
+        height: 64px;
     }
-  
-    .material-form .input-field {
-      margin: 1.2rem 0;
+
+    .loginArtworksBottom {
+        padding: 0 10px 12px;
+        gap: 8px;
     }
-  
-    /* Vinilos más pequeños y menos invasivos */
-    .vinylBottom {
-      pointer-events: none;
-    }
-  
-    .vinylBottom img {
-      max-height: 120px;
-      width: auto;
-    }
-  
-    .leftVinyl { left: 30px; }
-    .rightVinyl { right: 30px; }
-  }
+}

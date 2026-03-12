@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import "../styles/MenuComponent.css"
 
 import ShareIcon from "../assets/share.svg?react"
@@ -10,6 +11,10 @@ import { useTranslation } from "react-i18next"
 import ShareCard from "./ShareCard"
 
 import { exportStoryVideo } from "../utils/exportStoryVideo"
+import { useProvider } from "../hooks/useProvider"
+
+const API_BASE = import.meta.env.VITE_API_BASE
+const APPLE_DEV_NAME = "Sona"
 
 function MenuComponent({
   selectedVinyl,
@@ -19,24 +24,26 @@ function MenuComponent({
   cover,
   shareTrack,
 }) {
+  const navigate = useNavigate()
+  const { t } = useTranslation()
+  const { provider } = useProvider()
+
   const [open, setOpen] = useState(false)
   const [openModal, setOpenModal] = useState(false)
   const [modalView, setModalView] = useState("main")
-
   const [openSharePreview, setOpenSharePreview] = useState(false)
 
-  // ✅ refs separados
   const sharePreviewRef = useRef(null)
   const shareExportRef = useRef(null)
   const shareExportContainerRef = useRef(null)
 
   const [isExporting, setIsExporting] = useState(false)
   const [exportError, setExportError] = useState("")
-
-  const [provider, setProvider] = useState(null)
-  const dropdownRef = useRef(null)
-  const { t } = useTranslation()
   const [downloadProgress, setDownloadProgress] = useState(0)
+  const [switchingProvider, setSwitchingProvider] = useState("")
+
+  const dropdownRef = useRef(null)
+
   const vinyls = [
     "/vinyl-1.svg",
     "/vinyl-2.png",
@@ -45,22 +52,6 @@ function MenuComponent({
     "/vinyl-5.png",
     "/vinyl-6.png",
   ]
-
-  useEffect(() => {
-    const fetchProvider = async () => {
-      try {
-        const token = localStorage.getItem("token")
-        if (!token) return
-        const res = await fetch("/api/spotify/status", {
-          headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
-        })
-        if (!res.ok) return
-        const data = await res.json()
-        setProvider(data.provider || null)
-      } catch {}
-    }
-    fetchProvider()
-  }, [])
 
   useEffect(() => {
     const onClickOutside = (e) => {
@@ -79,11 +70,234 @@ function MenuComponent({
 
     document.addEventListener("mousedown", onClickOutside)
     document.addEventListener("keydown", onEsc)
+
     return () => {
       document.removeEventListener("mousedown", onClickOutside)
       document.removeEventListener("keydown", onEsc)
     }
   }, [])
+
+  const apiFetch = async (url, options = {}) => {
+    const token = localStorage.getItem("token")
+    if (!token) throw new Error("No hay token")
+
+    const res = await fetch(`${API_BASE}${url}`, {
+      ...options,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        ...(options.headers || {}),
+      },
+    })
+
+    const data = await res.json().catch(() => ({}))
+
+    if (!res.ok) {
+      throw data
+    }
+
+    return data
+  }
+
+  const waitForMusicKit = () =>
+    new Promise((resolve, reject) => {
+      if (window.MusicKit && typeof window.MusicKit.configure === "function") {
+        resolve(window.MusicKit)
+        return
+      }
+
+      const timeout = setTimeout(() => {
+        reject(new Error("MusicKit JS no terminó de cargar"))
+      }, 8000)
+
+      const onLoaded = () => {
+        clearTimeout(timeout)
+
+        if (window.MusicKit && typeof window.MusicKit.configure === "function") {
+          resolve(window.MusicKit)
+        } else {
+          reject(new Error("MusicKit no está disponible"))
+        }
+      }
+
+      window.addEventListener("musickitloaded", onLoaded, { once: true })
+    })
+
+  const getConnectionStatuses = async () => {
+    const [spotifyResult, appleResult] = await Promise.allSettled([
+      apiFetch("/api/spotify/status"),
+      apiFetch("/api/apple-music/status"),
+    ])
+
+    return {
+      spotify:
+        spotifyResult.status === "fulfilled" && !!spotifyResult.value?.connected,
+      apple_music:
+        appleResult.status === "fulfilled" && !!appleResult.value?.connected,
+    }
+  }
+
+  const reloadWithConnectedProvider = async (preferredProvider = "") => {
+    const statuses = await getConnectionStatuses()
+
+    let nextProvider = ""
+
+    if (preferredProvider === "spotify" && statuses.spotify) {
+      nextProvider = "spotify"
+    } else if (preferredProvider === "apple_music" && statuses.apple_music) {
+      nextProvider = "apple_music"
+    } else if (provider === "spotify" && statuses.spotify) {
+      nextProvider = "spotify"
+    } else if (provider === "apple_music" && statuses.apple_music) {
+      nextProvider = "apple_music"
+    } else if (statuses.apple_music) {
+      nextProvider = "apple_music"
+    } else if (statuses.spotify) {
+      nextProvider = "spotify"
+    }
+
+    if (nextProvider) {
+      localStorage.setItem("musicProvider", nextProvider)
+    } else {
+      localStorage.removeItem("musicProvider")
+    }
+
+    if (!statuses.apple_music) {
+      localStorage.removeItem("appleMusicConnected")
+      localStorage.removeItem("appleMusicUserToken")
+    }
+
+    window.location.reload()
+  }
+
+  const switchToSpotify = async () => {
+    const status = await apiFetch("/api/spotify/status")
+
+    if (status?.connected) {
+      await reloadWithConnectedProvider("spotify")
+      return
+    }
+
+    const token = localStorage.getItem("token")
+    const res = await fetch(`${API_BASE}/api/spotify/redirect?token=${token}`, {
+      method: "GET",
+    })
+
+    if (!res.ok) {
+      throw new Error("Error al conectar con Spotify")
+    }
+
+    const data = await res.json()
+
+    if (!data?.url) {
+      throw new Error("No se recibió URL de Spotify")
+    }
+
+    window.location.href = data.url
+  }
+
+  const switchToAppleMusic = async () => {
+    const status = await apiFetch("/api/apple-music/status")
+
+    if (status?.connected) {
+      await reloadWithConnectedProvider("apple_music")
+      return
+    }
+
+    const MusicKit = await waitForMusicKit()
+
+    const tokenData = await apiFetch("/api/apple-music/token")
+    const developerToken = tokenData?.token
+
+    if (!developerToken) {
+      throw new Error("No se recibió el developer token")
+    }
+
+    try {
+      MusicKit.configure({
+        developerToken,
+        app: {
+          name: APPLE_DEV_NAME,
+          build: "1.0.0",
+        },
+      })
+    } catch {
+      // ya configurado
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 350))
+
+    let music = null
+
+    try {
+      music = MusicKit.getInstance()
+    } catch {
+      music = null
+    }
+
+    if (!music) {
+      throw new Error("No se pudo inicializar la instancia de Apple Music")
+    }
+
+    const musicUserToken = await music.authorize()
+
+    if (!musicUserToken) {
+      throw new Error("No se recibió el Music User Token")
+    }
+
+    await apiFetch("/api/apple-music/connect", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        music_user_token: musicUserToken,
+        scopes: ["musickit_web"],
+      }),
+    })
+
+    localStorage.setItem("appleMusicConnected", "true")
+    localStorage.setItem("appleMusicUserToken", musicUserToken)
+
+    await reloadWithConnectedProvider("apple_music")
+  }
+
+  const handleProviderSelect = async (targetProvider) => {
+    if (!targetProvider) return
+    if (provider === targetProvider) return
+
+    setExportError("")
+    setSwitchingProvider(targetProvider)
+
+    try {
+      if (targetProvider === "spotify") {
+        await switchToSpotify()
+        return
+      }
+
+      if (targetProvider === "apple_music") {
+        await switchToAppleMusic()
+        return
+      }
+    } catch (e) {
+      console.error(e)
+
+      try {
+        await reloadWithConnectedProvider(provider || "")
+        return
+      } catch {
+        // si también falla, mostramos alerta
+      }
+
+      alert(
+        e?.message ||
+          t("connect.error") ||
+          "No se pudo cambiar el proveedor de música."
+      )
+    } finally {
+      setSwitchingProvider("")
+    }
+  }
 
   const toggleDropdown = () => setOpen((v) => !v)
 
@@ -102,9 +316,11 @@ function MenuComponent({
     setModalView("main")
   }
 
-  const providerLabel = provider
-    ? provider.charAt(0).toUpperCase() + provider.slice(1)
-    : "—"
+  const providerLabel = (() => {
+    if (provider === "spotify") return "Spotify"
+    if (provider === "apple_music") return "Apple Music"
+    return "—"
+  })()
 
   const handleOpenSharePreview = () => {
     setExportError("")
@@ -116,46 +332,44 @@ function MenuComponent({
     setIsExporting(true)
     setExportError("")
     setDownloadProgress(0)
-  
+
     try {
       const root = shareExportContainerRef.current
       const el = root?.querySelector?.(".shareCard")
-  
+
       if (!el) {
         throw new Error("No se encontró el ShareCard para exportar.")
       }
-  
-      // 1️⃣ Grabar WebM
+
       const webmBlob = await exportStoryVideo({
         element: el,
         seconds: 10,
         fps: 30,
       })
-  
+
       const fd = new FormData()
       fd.append(
         "video",
         new File([webmBlob], "sona-story.webm", { type: "video/webm" })
       )
-  
+
       const token = localStorage.getItem("token")
-  
-      // 2️⃣ Upload con progreso
       const xhr = new XMLHttpRequest()
-  
+
       const response = await new Promise((resolve, reject) => {
-  
-        xhr.open("POST", "/api/story/upload-webm")
-  
-        xhr.setRequestHeader("Authorization", `Bearer ${token}`)
-  
+        xhr.open("POST", `${API_BASE}/api/story/upload-webm`)
+
+        if (token) {
+          xhr.setRequestHeader("Authorization", `Bearer ${token}`)
+        }
+
         xhr.upload.onprogress = (event) => {
           if (event.lengthComputable) {
             const percent = Math.round((event.loaded / event.total) * 100)
             setDownloadProgress(percent)
           }
         }
-  
+
         xhr.onload = () => {
           if (xhr.status >= 200 && xhr.status < 300) {
             resolve(JSON.parse(xhr.responseText))
@@ -163,22 +377,19 @@ function MenuComponent({
             reject(new Error("Upload failed"))
           }
         }
-  
+
         xhr.onerror = () => reject(new Error("Network error"))
-  
+
         xhr.send(fd)
       })
-  
+
       if (!response?.id) {
         throw new Error("Upload failed")
       }
-  
-      // progreso completo
+
       setDownloadProgress(100)
-  
-      // 3️⃣ Descargar MP4
-      window.location.href = `/api/story/${response.id}/download-mp4`
-  
+
+      window.location.href = `${API_BASE}/api/story/${response.id}/download-mp4`
     } catch (e) {
       console.error(e)
       setExportError(e?.message || "No se pudo exportar el MP4.")
@@ -213,6 +424,29 @@ function MenuComponent({
       }
     } catch (e) {
       console.error(e)
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("token")
+
+      if (token) {
+        await fetch(`${API_BASE}/api/logout`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        })
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      localStorage.removeItem("token")
+      localStorage.removeItem("user")
+      localStorage.removeItem("isLoggedIn")
+      navigate("/login")
     }
   }
 
@@ -301,7 +535,6 @@ function MenuComponent({
         </div>
       </div>
 
-      {/* ========================= SHARE PREVIEW MODAL ========================= */}
       {openSharePreview && (
         <div
           className="modalOverlay shareModal"
@@ -330,58 +563,48 @@ function MenuComponent({
               </div>
 
               <div className="shareButtoms">
+                <button
+                  type="button"
+                  className="primaryBtn shareBtn"
+                  onClick={shareImageNative}
+                  disabled={isExporting}
+                >
+                  <div className="imgButton">
+                    <img src="/send.png" alt="share" className="shareIcon" />
+                  </div>
+                  <span>{t("share.png")}</span>
+                </button>
 
-                  <button
-                    type="button"
-                    className="primaryBtn shareBtn"
-                    onClick={shareImageNative}
-                    disabled={isExporting}
-                  >
-                    <div className="imgButton">
-                      <img src="/send.png" alt="share" className="shareIcon" />
-                    </div>
-                    <span>{t("share.png")}</span>
-                  </button>
+                <button
+                  type="button"
+                  className="secondaryBtn shareBtn"
+                  onClick={downloadShareMP4}
+                  disabled={isExporting}
+                >
+                  <div className="imgButton video progressWrapper">
+                    <svg className="progressRing" viewBox="0 0 40 40">
+                      <circle className="progressBg" cx="20" cy="20" r="18" />
+                      <circle
+                        className="progressBar"
+                        cx="20"
+                        cy="20"
+                        r="18"
+                        style={{
+                          strokeDashoffset: 113 - (113 * downloadProgress) / 100,
+                        }}
+                      />
+                    </svg>
 
-                  <button
-                    type="button"
-                    className="secondaryBtn shareBtn"
-                    onClick={downloadShareMP4}
-                    disabled={isExporting}
-                  >
-                    <div className="imgButton video progressWrapper">
+                    <img src="/download.png" alt="download" className="shareIcon" />
+                  </div>
 
-                      <svg className="progressRing" viewBox="0 0 40 40">
-                        <circle
-                          className="progressBg"
-                          cx="20"
-                          cy="20"
-                          r="18"
-                        />
-
-                        <circle
-                          className="progressBar"
-                          cx="20"
-                          cy="20"
-                          r="18"
-                          style={{
-                            strokeDashoffset: 113 - (113 * downloadProgress) / 100
-                          }}
-                        />
-                      </svg>
-
-                      <img src="/download.png" alt="download" className="shareIcon" />
-
-                    </div>
-
-                    <span>
-                      {isExporting
-                        ? (t("share.exporting") || "Exportando...")
-                        : (t("share.downloadMp4") || "Download MP4")}
-                    </span>
-                  </button>
-
-                </div>
+                  <span>
+                    {isExporting
+                      ? t("share.exporting") || "Exportando..."
+                      : t("share.downloadMp4") || "Download MP4"}
+                  </span>
+                </button>
+              </div>
 
               {exportError ? (
                 <p className="error" style={{ marginTop: 10 }}>
@@ -389,7 +612,6 @@ function MenuComponent({
                 </p>
               ) : null}
 
-              {/* ✅ Export oculto (tamaño real) */}
               <div className="shareExportHidden" ref={shareExportContainerRef}>
                 <ShareCard
                   ref={shareExportRef}
@@ -405,7 +627,6 @@ function MenuComponent({
         </div>
       )}
 
-      {/* ========================= OPTIONS MODAL ========================= */}
       {openModal && (
         <div className="modalOverlay" onClick={handleCloseModal}>
           <div className="modalContent" onClick={(e) => e.stopPropagation()}>
@@ -442,7 +663,9 @@ function MenuComponent({
 
                     <div
                       className="item clickable"
-                      onClick={() => window.open("https://sona.fernandovasquez.tech/faq", "_blank")}
+                      onClick={() =>
+                        window.open("https://sona.fernandovasquez.tech/faq", "_blank")
+                      }
                     >
                       <span>{t("options.faq")}</span>
                     </div>
@@ -456,7 +679,12 @@ function MenuComponent({
                   <div className="optionsItemContent">
                     <div
                       className="item clickable"
-                      onClick={() => window.open("https://www.paypal.com/paypalme/mindsguatemala", "_blank")}
+                      onClick={() =>
+                        window.open(
+                          "https://www.paypal.com/paypalme/mindsguatemala",
+                          "_blank"
+                        )
+                      }
                     >
                       <span>{t("options.donation")}</span>
                     </div>
@@ -469,9 +697,11 @@ function MenuComponent({
                           text: t("options.shareText"),
                           url: "https://sona.fernandovasquez.tech",
                         }
+
                         try {
-                          if (navigator.share) await navigator.share(shareData)
-                          else {
+                          if (navigator.share) {
+                            await navigator.share(shareData)
+                          } else {
                             await navigator.clipboard.writeText(shareData.url)
                             alert(t("options.linkCopied"))
                           }
@@ -483,34 +713,16 @@ function MenuComponent({
                   </div>
                 </div>
 
-                <div className="optionsItem">
+                {/* <div className="optionsItem">
                   <div className="title">
                     <p>{t("options.account")}</p>
                   </div>
                   <div className="optionsItemContent">
-                    <div
-                      className="item clickable"
-                      onClick={async () => {
-                        try {
-                          const token = localStorage.getItem("token")
-                          if (token) {
-                            await fetch("http://127.0.0.1:8000/api/logout", {
-                              method: "POST",
-                              headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
-                            })
-                          }
-                          localStorage.clear()
-                          window.location.href = "/login"
-                        } catch {
-                          localStorage.clear()
-                          window.location.href = "/login"
-                        }
-                      }}
-                    >
+                    <div className="item clickable" onClick={handleLogout}>
                       <span>{t("options.session")}</span>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="rights">
                   <SonaLogo />
@@ -523,20 +735,47 @@ function MenuComponent({
             {modalView === "provider" && (
               <div className="modalViewSub">
                 <h2>{t("options.provider")}</h2>
-
                 <div className="providerList">
-                  <div className={`providerItem ${provider === "spotify" ? "active" : ""}`}>
-                    <img src="/spotify.png" alt="Spotify" />
-                    <span>Spotify</span>
-                    {provider === "spotify" && (
+                  <div
+                    className={`providerItem ${provider === "apple_music" ? "active" : ""} ${
+                      switchingProvider === "apple_music" ? "loading" : ""
+                    }`}
+                    onClick={() => handleProviderSelect("apple_music")}
+                  >
+                    <img src="/AppleMusic.png" alt="Apple Music" />
+                    <span>Apple Music</span>
+                    {provider === "apple_music" && (
                       <span className="providerBadge">{t("options.connected")}</span>
+                    )}
+                    {switchingProvider === "apple_music" && (
+                      <span className="providerBadge">...</span>
                     )}
                   </div>
 
-                  <div className="providerItem disabled">
-                    <img src="/AppleMusic.png" alt="Apple Music" />
-                    <span>Apple Music</span>
-                    <span className="providerBadge comingSoon">{t("connect.comingSoon")}</span>
+                  <div
+                    className={`providerItem ${provider === "spotify" ? "active" : ""} ${
+                      switchingProvider === "spotify" ? "loading" : ""
+                    } disabled`}
+                    onClick={() => {
+                      if (true) return
+                      handleProviderSelect("spotify")
+                    }}
+                    aria-disabled="true"
+                    title="Spotify próximamente"
+                  >
+                    <img src="/spotify.png" alt="Spotify" />
+                    <span>Spotify</span>
+
+                    <span className="providerBadge comingSoon">
+                    {t("options.comingSoon")}
+                    </span>
+
+                    {provider === "spotify" && (
+                      <span className="providerBadge">{t("options.connected")}</span>
+                    )}
+                    {switchingProvider === "spotify" && (
+                      <span className="providerBadge">...</span>
+                    )}
                   </div>
                 </div>
               </div>

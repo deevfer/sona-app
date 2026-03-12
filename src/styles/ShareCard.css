@@ -123,6 +123,7 @@
     width: 820px;
     color: rgba(255,255,255,.92);
     text-align:left;
+    z-index: 9999999999;
   }
   
   .shareNow{
@@ -191,3 +192,20 @@
       top: 150px;
   }
   }
+
+.shareData {
+    position: relative;
+    top: -70px;
+    z-index: 9999999999;
+}
+.shareData h1 {
+    font-size: 64px;
+    font-family: inherit;
+    font-weight: 700;
+    margin: 0;
+}
+.shareData p {
+  font-size: 30px;
+  font-family: inherit;
+  font-weight: 400;
+}

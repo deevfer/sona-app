@@ -5,17 +5,41 @@ import SquaresIcon from "../assets/squares.svg?react"
 import ListIcon from "../assets/albums.svg?react"
 import { useTranslation } from "react-i18next"
 
-function SearchMenu({ view = "grid", onToggleView, searchQuery = "", onSearchChange }) {
-
+function SearchMenu({
+  view = "grid",
+  onToggleView,
+  searchQuery = "",
+  onSearchChange,
+  hidden = false,
+}) {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
+
   const inputRef = useRef(null)
+  const containerRef = useRef(null)
 
   useEffect(() => {
     if (open && inputRef.current) {
       inputRef.current.focus()
     }
   }, [open])
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!containerRef.current) return
+
+      if (!containerRef.current.contains(event.target)) {
+        setOpen(false)
+        onSearchChange("")
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [onSearchChange])
 
   const handleToggle = () => {
     if (open) {
@@ -29,13 +53,16 @@ function SearchMenu({ view = "grid", onToggleView, searchQuery = "", onSearchCha
   const isGrid = view === "grid"
 
   return (
-    <div className="searchMenuTop">
+    <div
+      className={`searchMenuTop ${hidden ? "searchMenuHidden" : "searchMenuVisible"}`}
+      ref={containerRef}
+    >
       <div className="searchMenuTopContent">
-
         <div className={`searchMenuItem searchExpandable ${open ? "searchOpen" : ""}`}>
           <button className="search" onClick={handleToggle}>
             <SearchIcon />
           </button>
+
           <input
             ref={inputRef}
             type="text"
@@ -46,7 +73,7 @@ function SearchMenu({ view = "grid", onToggleView, searchQuery = "", onSearchCha
           />
         </div>
 
-        <div className="searchMenuItem">
+        <div className={`searchMenuItem viewToggle ${open ? "fadeOut" : "fadeIn"}`}>
           <button
             className={`listView ${isGrid ? "gridMode" : "listMode"}`}
             onClick={onToggleView}
@@ -59,7 +86,6 @@ function SearchMenu({ view = "grid", onToggleView, searchQuery = "", onSearchCha
             </span>
           </button>
         </div>
-
       </div>
     </div>
   )

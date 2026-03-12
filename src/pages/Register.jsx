@@ -139,11 +139,11 @@ function Register() {
         </div>
       </div>
 
-      <div className="vinylBottom">
+      {/* <div className="vinylBottom">
         <div className="leftVinyl"><img src="/leftVinyl.svg" alt="" /></div>
         <div className="centerVinyl"><img src="/centerVinyl.svg" alt="" /></div>
         <div className="rightVinyl"><img src="/rightVinyl.svg" alt="" /></div>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -10,8 +10,7 @@ const ShareCard = forwardRef(function ShareCard(
     selectedBg,
     bgCoverUrl,
     vinylSrc = "/vinyl-1.svg",
-    // ✅ NUEVO: offsets para centrar el label en el “agujero real”
-    labelOffset = { x: 0, y: 0 }, // en px
+    labelOffset = { x: 0, y: 0 },
   },
   ref
 ) {
@@ -29,6 +28,14 @@ const ShareCard = forwardRef(function ShareCard(
   useImperativeHandle(ref, () => ({ exportImage }))
 
   const image = track?.image || "/sonaDefault.png"
+
+  // 👇 nombre de canción
+  const trackName = track?.name || "Unknown Track"
+
+  // 👇 artistas
+  const artists = Array.isArray(track?.artists)
+    ? track.artists.join(", ")
+    : track?.artists || "Unknown Artist"
 
   const bgClass = selectedBg && selectedBg !== "cover" ? `share-bg-${selectedBg}` : ""
   const bgStyle =
@@ -49,7 +56,6 @@ const ShareCard = forwardRef(function ShareCard(
           <div className="shareVinylSpin">
             <img className="shareVinyl" src={vinylSrc} alt="" />
 
-            {/* ✅ label centrado por flex + offsets */}
             <div
               className="shareVinylLabelWrap"
               style={{
@@ -57,13 +63,23 @@ const ShareCard = forwardRef(function ShareCard(
                 "--label-offset-y": `${labelOffset.y}px`,
               }}
             >
-              <img className="shareVinylLabel" src={image} alt="" crossOrigin="anonymous" />
+              <img
+                className="shareVinylLabel"
+                src={image}
+                alt=""
+                crossOrigin="anonymous"
+              />
             </div>
           </div>
         </div>
       </div>
 
       <div className="shareInfo">
+        {/* <div className="shareData">
+          <h1>{trackName}</h1>
+          <p>{artists}</p>
+        </div> */}
+
         <div className="shareBrand">
           <SonaLogo />
         </div>

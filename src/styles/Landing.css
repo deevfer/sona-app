@@ -1,9 +1,54 @@
 .landing {
     width: 100%;
     height: 100vh;
-    background: #121212;
+    background-color: #000000;
     position: relative;
-    
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.overlayBackgroundLanding {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.88) 0%,
+            rgba(0, 0, 0, 0.78) 22%,
+            rgba(0, 0, 0, 0.55) 45%,
+            rgba(0, 0, 0, 0.72) 72%,
+            rgba(0, 0, 0, 0.9) 100%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.38) 0%,
+            rgba(0, 0, 0, 0.15) 20%,
+            rgba(0, 0, 0, 0.1) 50%,
+            rgba(0, 0, 0, 0.22) 80%,
+            rgba(0, 0, 0, 0.42) 100%
+        );
+    backdrop-filter: blur(16px) saturate(1.05);
+}
+
+.contentLanding,
+.container-lang,
+.modalOverlay {
+    position: relative;
+    z-index: 1;
+}
+
+
+.contentRight::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    background:
+        linear-gradient(to left, rgba(0,0,0,0.38) 0%, transparent 22%),
+        linear-gradient(to top, rgba(0,0,0,0.22) 0%, transparent 18%),
+        linear-gradient(to bottom, rgba(0,0,0,0.22) 0%, transparent 18%);
 }
 .contentLanding {
     position: relative;
@@ -382,5 +427,128 @@
     .vinylLanding img {
       width: 130vw;   /* grande para que llene y se recorte */
       max-width: none;
+    }
+  }
+  .contentRight {
+    position: relative;
+    width: 50%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+  }
+  
+  .chartsGrid {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(140px, 180px));
+    gap: 18px;
+    justify-content: end;
+    align-items: start;
+    overflow: hidden;
+    padding: 0 30px;
+  }
+  
+  .chartsColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    will-change: transform;
+  }
+  
+  .albumArtwork {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 0;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  
+  .albumArtwork img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* Animaciones */
+  .scrollUp {
+    animation: landingScrollUp 48s linear infinite;
+  }
+  
+  .scrollDown {
+    animation: landingScrollDown 50s linear infinite;
+  }
+  
+  .scrollUpSlow {
+    animation: landingScrollUp 54s linear infinite;
+  }
+  
+  @keyframes landingScrollUp {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-50%);
+    }
+  }
+  
+  @keyframes landingScrollDown {
+    0% {
+      transform: translateY(-50%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .chartsGrid {
+      /* grid-template-columns: repeat(3, minmax(110px, 140px)); */
+      gap: 14px;
+      padding: 0;
+    }
+  
+    .albumArtwork {
+      border-radius: 0px;
+    }
+  }
+  .albumArtwork.skeleton {
+    background: transparent;
+    overflow: hidden;
+  }
+  
+  .albumArtwork .skeletonBox {
+    width: 100%;
+    height: 100%;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+  
+  .shimmer .skeletonBox {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .shimmer .skeletonBox::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,0.12),
+      transparent
+    );
+    animation: shimmerMove 1.8s infinite;
+  }
+  
+  @keyframes shimmerMove {
+    100% {
+      transform: translateX(100%);
     }
   }
