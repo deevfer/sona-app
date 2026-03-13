@@ -29,10 +29,10 @@ const ShareCard = forwardRef(function ShareCard(
 
   const image = track?.image || "/sonaDefault.png"
 
-  // 👇 nombre de canción
+  // nombre de canción
   const trackName = track?.name || "Unknown Track"
 
-  // 👇 artistas
+  // artistas
   const artists = Array.isArray(track?.artists)
     ? track.artists.join(", ")
     : track?.artists || "Unknown Artist"
