@@ -203,27 +203,27 @@ function Login() {
 
       const data = await res.json().catch(() => ({}))
 
-      if (!res.ok) {
-        if (data?.error === "SESSION_ACTIVE") {
-          setError(t("login.sessionActive"))
-          return
-        }
-
-        if (data?.error === "INVALID_CREDENTIALS") {
-          setError(t("login.invalidCredentials"))
-          return
-        }
-
-        setError(data?.message || t("login.error"))
+      if (res.ok) {
+        localStorage.setItem("token", data.token)
+        localStorage.setItem("user", JSON.stringify(data.user))
+        navigate("/home")
         return
       }
 
-      localStorage.setItem("token", data.token)
-      localStorage.setItem("user", JSON.stringify(data.user))
-      navigate("/home")
+      if (data?.error === "SESSION_ACTIVE") {
+        setError(t("login.sessionActive"))
+        return
+      }
+
+      if (data?.error === "INVALID_CREDENTIALS") {
+        setError(t("login.invalidCredentials"))
+        return
+      }
+
+      setError(data?.message || t("login.errorS"))
     } catch (err) {
       console.error(err)
-      setError(t("login.error"))
+      setError(t("login.errorS"))
     } finally {
       setLoading(false)
     }
