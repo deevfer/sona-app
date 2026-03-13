@@ -22,8 +22,8 @@ export default defineConfig({
         theme_color: "#0f0f0f",
         background_color: "#0f0f0f",
         display: "standalone",
-        start_url: "/",
-        scope: "/",
+        start_url: "/studio/",
+        scope: "/studio/",
         icons: [
           {
             src: "/icon-192.png",
