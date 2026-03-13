@@ -31,7 +31,6 @@ function Home() {
           Accept: "application/json",
         }
 
-        // 1. Spotify
         try {
           const spotifyRes = await fetch(`${API_BASE}/api/spotify/status`, {
             headers,
@@ -49,7 +48,6 @@ function Home() {
           console.error("Spotify status error:", err)
         }
 
-        // 2. Apple Music
         try {
           const appleRes = await fetch(`${API_BASE}/api/apple-music/status`, {
             headers,
@@ -261,7 +259,6 @@ function Home() {
           {error && <p className="error">{error}</p>}
 
           <div className="btnsConect">
-
             <div className="btnPrimary">
               <button
                 onClick={handleAppleMusicConnect}
@@ -271,13 +268,17 @@ function Home() {
                 {loadingApple ? t("connect.loading") : "Apple Music"}
               </button>
             </div>
+
             <div className="btnPrimary">
               <button
                 onClick={handleSpotifyConnect}
-                disabled={loadingSpotify || loadingApple}
+                disabled={true}
+                className="disabledProviderBtn"
+                title="Coming soon"
               >
                 <img src="/spotify.png" alt="Spotify" />
-                {loadingSpotify ? t("connect.loading") : "Spotify"}
+                <span>Spotify</span>
+                <span className="comingSoonBadge">Coming soon</span>
               </button>
             </div>
           </div>
