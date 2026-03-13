@@ -24,7 +24,7 @@ function Register() {
 
     window.paypal
       .HostedButtons({
-        hostedButtonId: "QFKYNDTKY8HAN",
+        hostedButtonId: "STLPHTX95AMC2",
       })
       .render(paypalRef.current)
       .catch((err) => {
@@ -88,7 +88,7 @@ function Register() {
 
             <span className="price">{t("register.price")}</span>
 
-            <div ref={paypalRef} id="paypal-container-QFKYNDTKY8HAN"></div>
+            <div ref={paypalRef} id="paypal-container-STLPHTX95AMC2"></div>
 
             <div className="alreadyHave">
               <p>
