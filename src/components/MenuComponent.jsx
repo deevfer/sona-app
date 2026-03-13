@@ -431,6 +431,17 @@ function MenuComponent({
     try {
       const token = localStorage.getItem("token")
   
+      // detener Apple Music
+      if (window.MusicKit) {
+        try {
+          const music = window.MusicKit.getInstance?.()
+          if (music) {
+            await music.pause().catch(() => {})
+            await music.stop().catch(() => {})
+          }
+        } catch {}
+      }
+  
       if (token) {
         await fetch(`${API_BASE}/api/logout`, {
           method: "POST",
@@ -443,13 +454,10 @@ function MenuComponent({
     } catch (e) {
       console.error(e)
     } finally {
-      localStorage.removeItem("token")
-      localStorage.removeItem("user")
-      localStorage.removeItem("isLoggedIn")
-      localStorage.removeItem("musicProvider")
-      localStorage.removeItem("appleMusicConnected")
-      localStorage.removeItem("appleMusicUserToken")
-      navigate("/login")
+      localStorage.clear()
+  
+      // reload completo (funciona en PWA)
+      window.location.replace("/login")
     }
   }
 
