@@ -69,17 +69,17 @@
     align-items: center;
     justify-content: center;
 }
-
 .material-form {
-    background: white;
+    background: #fff;
     padding: 10px 40px;
     border-radius: 40px;
     width: 100%;
     max-width: 400px;
     margin: 30px auto;
     z-index: 999;
+    overflow: scroll;
+    scrollbar-width: none;
 }
-
 .material-form .input-field {
     position: relative;
     margin: 2rem 0;
