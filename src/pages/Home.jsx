@@ -278,7 +278,7 @@ function Home() {
               >
                 <img src="/spotify.png" alt="Spotify" />
                 Spotify
-                <span className="comingSoonBadge">Coming soon</span>
+                <span className="comingSoon">Coming soon</span>
               </button>
             </div>
           </div>
