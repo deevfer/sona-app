@@ -4,7 +4,6 @@ import { VitePWA } from "vite-plugin-pwa"
 import svgr from "vite-plugin-svgr"
 
 export default defineConfig({
-  base: "/studio/",
   plugins: [
     react(),
     svgr(),
@@ -22,8 +21,8 @@ export default defineConfig({
         theme_color: "#0f0f0f",
         background_color: "#0f0f0f",
         display: "standalone",
-        start_url: "/studio/",
-        scope: "/studio/",
+        start_url: "/",
+        scope: "/",
         icons: [
           {
             src: "/icon-192.png",
