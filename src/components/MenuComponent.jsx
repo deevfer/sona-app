@@ -430,7 +430,7 @@ function MenuComponent({
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem("token")
-
+  
       if (token) {
         await fetch(`${API_BASE}/api/logout`, {
           method: "POST",
@@ -446,6 +446,9 @@ function MenuComponent({
       localStorage.removeItem("token")
       localStorage.removeItem("user")
       localStorage.removeItem("isLoggedIn")
+      localStorage.removeItem("musicProvider")
+      localStorage.removeItem("appleMusicConnected")
+      localStorage.removeItem("appleMusicUserToken")
       navigate("/login")
     }
   }
@@ -713,7 +716,7 @@ function MenuComponent({
                   </div>
                 </div>
 
-                {/* <div className="optionsItem">
+                <div className="optionsItem">
                   <div className="title">
                     <p>{t("options.account")}</p>
                   </div>
@@ -722,7 +725,7 @@ function MenuComponent({
                       <span>{t("options.session")}</span>
                     </div>
                   </div>
-                </div> */}
+                </div>
 
                 <div className="rights">
                   <SonaLogo />
