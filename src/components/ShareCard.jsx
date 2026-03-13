@@ -1,8 +1,22 @@
 import html2canvas from "html2canvas"
-import { forwardRef, useImperativeHandle, useRef } from "react"
+import { forwardRef, useImperativeHandle, useMemo, useRef } from "react"
 import "../styles/ShareCard.css"
-
 import SonaLogo from "../assets/sonaLogo.svg?react"
+
+function normalizeAppleArtworkUrl(url, size = 2000) {
+  if (!url) return "/sonaDefault.png"
+
+  let finalUrl = url
+    .replace(/\{w\}/g, String(size))
+    .replace(/\{h\}/g, String(size))
+
+  finalUrl = finalUrl.replace(
+    /\/\d+x\d+(bb)?\./,
+    `/${size}x${size}bb.`
+  )
+
+  return finalUrl
+}
 
 const ShareCard = forwardRef(function ShareCard(
   {
@@ -27,20 +41,25 @@ const ShareCard = forwardRef(function ShareCard(
 
   useImperativeHandle(ref, () => ({ exportImage }))
 
-  const image = track?.image || "/sonaDefault.png"
+  const image = useMemo(() => {
+    return normalizeAppleArtworkUrl(track?.image, 2000)
+  }, [track?.image])
 
-  // nombre de canción
+  const safeBgCoverUrl = useMemo(() => {
+    return bgCoverUrl ? normalizeAppleArtworkUrl(bgCoverUrl, 2000) : ""
+  }, [bgCoverUrl])
+
   const trackName = track?.name || "Unknown Track"
-
-  // artistas
   const artists = Array.isArray(track?.artists)
     ? track.artists.join(", ")
     : track?.artists || "Unknown Artist"
 
-  const bgClass = selectedBg && selectedBg !== "cover" ? `share-bg-${selectedBg}` : ""
+  const bgClass =
+    selectedBg && selectedBg !== "cover" ? `share-bg-${selectedBg}` : ""
+
   const bgStyle =
-    selectedBg === "cover" && bgCoverUrl
-      ? { backgroundImage: `url(${bgCoverUrl})` }
+    selectedBg === "cover" && safeBgCoverUrl
+      ? { backgroundImage: `url(${safeBgCoverUrl})` }
       : {}
 
   return (
@@ -48,7 +67,13 @@ const ShareCard = forwardRef(function ShareCard(
       <div className="shareOverlay" />
 
       <div className="shareCoverWrap">
-        <img className="shareCover" src={image} alt="" crossOrigin="anonymous" />
+        <img
+          className="shareCover"
+          src={image}
+          alt={trackName}
+          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
+        />
       </div>
 
       <div className="shareVinylWrap">
@@ -66,8 +91,9 @@ const ShareCard = forwardRef(function ShareCard(
               <img
                 className="shareVinylLabel"
                 src={image}
-                alt=""
+                alt={trackName}
                 crossOrigin="anonymous"
+                referrerPolicy="no-referrer"
               />
             </div>
           </div>

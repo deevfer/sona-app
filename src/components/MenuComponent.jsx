@@ -466,9 +466,9 @@ function MenuComponent({
       <div className="menuContent" ref={dropdownRef}>
         <div className="menuTopOptions">
           <div className="share">
-            <button type="button" onClick={handleOpenSharePreview} aria-label="Share">
+            {/* <button type="button" onClick={handleOpenSharePreview} aria-label="Share">
               <ShareIcon />
-            </button>
+            </button> */}
           </div>
 
           <div className="options">
