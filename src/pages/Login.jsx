@@ -194,18 +194,33 @@ function Login() {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          email,
+          password,
+          device_name: "web",
+        }),
       })
 
-      const data = await res.json()
+      const data = await res.json().catch(() => ({}))
 
-      if (res.ok) {
-        localStorage.setItem("token", data.token)
-        localStorage.setItem("user", JSON.stringify(data.user))
-        navigate("/home")
-      } else {
-        setError(data.message || t("login.error"))
+      if (!res.ok) {
+        if (data?.error === "SESSION_ACTIVE") {
+          setError(t("login.sessionActive"))
+          return
+        }
+
+        if (data?.error === "INVALID_CREDENTIALS") {
+          setError(t("login.invalidCredentials"))
+          return
+        }
+
+        setError(data?.message || t("login.error"))
+        return
       }
+
+      localStorage.setItem("token", data.token)
+      localStorage.setItem("user", JSON.stringify(data.user))
+      navigate("/home")
     } catch (err) {
       console.error(err)
       setError(t("login.error"))

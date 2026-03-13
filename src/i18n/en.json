@@ -22,7 +22,10 @@
         "password": "Password",
         "error": "Incorrect email or password.",
         "notYet": "Don't have an account yet?",
-        "register": "Sign up"
+        "register": "Sign up",
+        "sessionActive": "This account is already active on another device.",
+        "invalidCredentials": "Invalid credentials",
+        "errorS": "An error occurred while logging in."
     },
     "register":{
         "title": "Create an account",

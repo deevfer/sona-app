@@ -22,7 +22,10 @@
         "password": "Contraseña",
         "error": "Correo o contraseña incorrectos.",
         "notYet": "¿Todavía no tienes cuenta?",
-        "register": "Regístrate"
+        "register": "Regístrate",
+        "sessionActive": "Esta cuenta ya tiene una sesión activa en otro dispositivo.",
+        "invalidCredentials": "Credenciales incorrectas.",
+        "errorS": "Ocurrió un error al iniciar sesión."
     },
     "register":{
         "title": "Crear una cuenta",
