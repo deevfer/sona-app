@@ -23,9 +23,15 @@
         "error": "Correo o contraseña incorrectos.",
         "notYet": "¿Todavía no tienes cuenta?",
         "register": "Regístrate",
-        "sessionActive": "Esta cuenta ya tiene una sesión activa en otro dispositivo.",
-        "invalidCredentials": "Credenciales incorrectas.",
-        "errorS": "Ocurrió un error al iniciar sesión."
+
+        "sessionActive": "Sesión activa",
+        "sessionActiveDesc": "Esta cuenta ya tiene una sesión activa en otro dispositivo.",
+
+        "invalidCredentials": "Credenciales incorrectas",
+        "invalidCredentialsDesc": "Verifica tu correo y contraseña e intenta nuevamente.",
+
+        "errorS": "Error al iniciar sesión",
+        "tryAgainLater": "Por favor intenta nuevamente más tarde."
     },
     "register":{
         "title": "Crear una cuenta",
@@ -33,9 +39,25 @@
         "name": "Nombre",
         "email": "Correo",
         "password": "Contraseña",
-        "price": "Pago único de USD 1.99 para acceso de por vida.",
+        "price": "Pago único de USD 2.99 para acceso de por vida.",
         "haveAccount": "¿Ya tienes cuenta?",
-        "login": "Inicia sesión"
+        "login": "Inicia sesión",
+
+        "paymentErrorTitle": "No se pudo completar el pago",
+        "paymentErrorDesc": "Por favor intenta nuevamente en un momento.",
+      
+        "paypalErrorTitle": "Error de PayPal",
+        "paypalErrorDesc": "Ocurrió un problema con PayPal. Intenta nuevamente.",
+      
+        "registerErrorTitle": "Error de registro",
+        "registerErrorDesc": "No pudimos completar tu registro. Intenta nuevamente.",
+      
+        "successTitle": "Cuenta creada correctamente",
+        "successDesc": "Tu acceso a Sona ya está activo."
+    },
+    "sona":{
+        "EmptyPlayerTitle":"Tu reproducción de música está en pausa",
+        "EmptyPlayer": "Reproduce una canción desde tus álbumes o playlist para visualizarla en esta sección."
     },
     "connect":{
         "title": "Conecta tu música",
@@ -58,7 +80,9 @@
         "Skipping": "Reproduciendo",
         "Warn": "Reproducir la música con Spotify únicamente mostrará 20 canciones de la cola. Para visualizar todas, abre tu aplicación de Spotify.",
         "AppleMusicNoQueue": "Apple Music no permite ver la cola de reproducción.",
-        "NoProvider": "No tienes ningún servicio de música conectado"
+        "NoProvider": "No tienes ningún servicio de música conectado",
+        "EmptyTitle": "Tu cola está vacía",
+        "EmptyText": "Las canciones de la cola no están disponibles al reproducir con Apple Music. Reproduce desde tus álbumes o playlist para ver tu cola aquí."
     },
     "options": {
         "title": "Ajustes",
@@ -74,7 +98,8 @@
         "comingSoon": "Próximamente",
         "session": "Cerrar sesión",
         "developed": "Desarrollado por Devfer",
-        "version": "Versión 1.0.1"
+        "version": "Versión 1.0.1",
+        "shareText": "🎧 La música se vive diferente en Sona. Descarga la app en: "
     },
     "connectDevice": {
         "noDevice": "Abre Spotify en tu teléfono o computadora e intenta de nuevo"

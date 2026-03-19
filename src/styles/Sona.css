@@ -130,7 +130,7 @@
     }
   }
   .vinylImg.active {
-    animation: rotating 8s linear infinite;
+    animation: rotating 20s linear infinite;
   }
   .controlers {
     display: flex;
@@ -185,29 +185,526 @@
     0%   { transform: translateX(0); }
     100% { transform: translateX(-100%); }
 }
+.sonaBody.bg-white .queueArtistName {
+    color: #2d2d2d;
+}
 
 
-@media(orientation: portrait){
-    .vinylContent {
+.emptyStatePlayer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0 6px;
+    flex-direction: column;
+    text-align: center;
+}
+  
+.emptyStatePlayer img {
+    width: 130px;
+    height: 130px;
+}
+.emptyStatePlayer p{
+    font-size: 12px!important;
+    color: #fff!important;
+}
+.emptyStatePlayer h1{
+    font-size: 18px!important;
+    color: #fff !important;
+}
+
+
+@media (orientation: portrait) and (min-width: 320px) and (max-width: 484px){
+
+    .sonaBody {
+        width: 100%;
+        height: 100vh;
         position: relative;
-        width: 170%;
+        display: flex;
+        align-items: center;
+    }
+    .container {
+        width: 100%;
+        padding: 40px;
+        position: relative;
     }
     .vinyl {
-        width: 670px;
+        width: 120vw;
+        position: relative;
+        transform-origin: 50% 50%;
+        left: -190px;
+        top: -80px;
+    }
+    .vinyl img {
+        width: 100%;
+        left: 0;
+        position: relative;
+    }
+    .vinylContent {
+        position: relative;
+        width: 120vw;
+        align-items: center;
+    }
+    .vinylPlay {
+        flex-direction: column;
+        height: 100%;
+        align-items: self-start;
+        max-width: 100%;
+        margin: auto;
+        max-height: 100vh;
+        justify-content: center;
     }
     .albumImg img {
-        width: 210px;
-        height: 210px;
+        width: 55vw;
+        height: 55vw;
+        border-radius: 300px;
+        overflow: hidden;
+    }
+    .pin {
+        position: absolute;
+        top: 24%;
+        width: 40%;
+        right: -5vw;
+        height: auto;
+    }
+    .pinTop {
+        position: absolute;
+        left: -7vw;
+        top: -30px;
+        width: 19vw;
+        height: 19vw;
     }
     .pinTop img {
         position: absolute;
-        width: 210px;
-        left: 0%;
+        width: 38vw;
+        left: 0;
         top: 0%;
-        transform: translate(-144px, -134px);
+        transform: translate(-18vw, -18vw);
         display: block;
     }
-}
-@media(orientation: landscape){
+    .basePin {
+        position: absolute;
+        width: 35%;
+        right: 0%;
+        top: 7%;
+    }
+    .musicInfoControlers {
+        position: relative;
+        right: 0;
+        display: flex;
+        width: 100%;
+        top: -70px;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .musicInfoControlers .musicInfo h1 {
+        font-size: 12px;
+        color: #2D2D2D;
+        font-weight: 600;
+        margin: 0;
+    }
+    .musicInfoControlers .musicInfo p {
+        font-size: 10px;
+        font-weight: 400;
+        color: #2d2d2d;
+    }
+    .musicInfo {
+        width: 290px;
+    }
+    .marquee {
+        width: 120px;
+        overflow: hidden;
+        white-space: nowrap;
+        position: relative;
+    }
+    .controlers {
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 0 0 10px;
+    }
+    .controlers div {
+        transform: translateY(0);
+        box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+        border-radius: 24px;
+        width: 45px;
+    }
+    .albumColumn {
+        width: 90% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        position: relative !important;
+        top: 5% !important;
+    }
+    .tracksColumn {
+        overflow-y: auto;
+        padding-right: 0;
+        scrollbar-width: none;
+        width: 80%;
+    }
+    .splitLayout {
+        flex-direction: column;
+        justify-content: center;
+        padding: 40px 10px!important;
+        align-items: center;
+    }
+    .emptyStatePlayer img {
+        display: none;
+    }
+    .emptyStatePlayer {
+        width: 100%;
+    }
 
+    .musicInfoControlers.emptyText {
+        position: relative;
+        right: 0;
+        display: flex;
+        width: 100%!important;
+        top: -70px;
+        justify-content: center!important;
+        align-items: center!important;
+    }
+    .albumCoverLarge {
+        width: 130px;
+    }
+    .menuDropdown.open {
+        display: block;
+        pointer-events: auto;
+        transition: all 0.2sease;
+        background: #ffffff1c;
+        padding: 10px 20px;
+        border-radius: 30px;
+    }
+    .albumImg {
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        z-index: 9;
+        left: 0px;
+    }
+    .tracksBackFloating {
+        position: absolute;
+        top: -120px!important;
+        left: 0px!important;
+    }
+    .albumTitleLarge {
+        margin-top: 20px;
+        font-size: 16px!important;
+        font-weight: 600;
+    }
+    .trackName {
+        font-weight: 500;
+        font-size: 10px!important;
+    }
+    .trackIndex {
+        width: 25px!important;
+        font-size: 8px!important;
+    }
+    .trackDuration {
+        font-size: 8px!important;;
+    }
+}
+
+
+@media (orientation: landscape) and (max-height: 520px){
+
+    .modalContent {
+        background: #f9f9f9;
+        color: #121212;
+        padding: 80px 30px;
+        border-radius: 50px;
+        width: 70%;
+        height: 90%;
+        max-width: 90%;
+        text-align: center;
+        animation: scaleIn 0.3s ease forwards;
+        position: relative;
+        overflow: scroll;
+        scrollbar-width: none;
+    }
+    .vinyl {
+        width: 40vw;
+        position: relative;
+        transform-origin: 50% 50%;
+        left: -10px;
+    }
+    .vinyl img {
+        width: 100%;
+    }
+    .albumImg img {
+        width: 15vw;
+        height: 15vw;
+        border-radius: 300px;
+        overflow: hidden;
+    }
+    .pin {
+        position: absolute;
+        top: -30px;
+        width: 40%;
+        right: 60px;
+        height: 100%;
+    }
+    .pinTop {
+        position: absolute;
+        left: 98px;
+        top: 73px;
+        width: 55px;
+        height: 55px;
+        transform-origin: 50% 50%;
+        transform: rotate(1deg);
+        transition: all 1.3s ease;
+    }
+    .pinTop img {
+        position: absolute;
+        width: 12vw;
+        left: 50%;
+        top: 50%;
+        transform: translate(-81px, -81px);
+        display: block;
+    }
+    .musicInfoControlers .musicInfo h1 {
+        font-size: 16px;
+    }
+    .musicInfoControlers .musicInfo p {
+        font-size: 12px;
+    }
+    .marquee {
+        width: 170px;
+    }
+    .queueArtistName {
+        font-size: 10px;
+        opacity: 0.6;
+        text-align: left;
+        margin-top: 4px;
+    }
+}
+
+@media (orientation: portrait) and (min-width: 768px) and (max-width: 1024px){
+    .sonaBody {
+        width: 100%;
+        height: 100vh;
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    .container {
+        width: 100%;
+        padding: 40px;
+        position: relative;
+    }
+    .vinyl {
+        width: 100%;
+        position: relative;
+        transform-origin: 50% 50%;
+        left: -180px;
+    }
+
+    .vinyl img {
+        width: 90vw;
+    }
+    .vinylContent {
+        position: relative;
+        width: 100%;
+        align-items: center;
+    }
+    .vinylPlay {
+        flex-direction: column;
+        height: 100%;
+        align-items: self-start;
+        max-width: 100%;
+        margin: auto;
+        max-height: 100vh;
+        justify-content: center;
+    }
+    .albumImg img {
+        width: 35vw;
+        height: 35vw;
+        border-radius: 300px;
+        overflow: hidden;
+    }
+    .pin {
+        position: absolute;
+        top: 15%;
+        width: 40%;
+        right: 0;
+        height: auto;
+    }
+    .pinTop {
+        position: absolute;
+        left: 20vw;
+        top: 70px;
+        width: 13vw;
+        height: 13vw;
+    }
+    .pinTop img {
+        position: absolute;
+        width: 28vw;
+        left: 0;
+        top: 0%;
+        transform: translate(-14vw, -14vw);
+        display: block;
+    }
+    .basePin {
+        position: absolute;
+        width: 35%;
+        right: 0%;
+        top: 7%;
+    }
+    .musicInfoControlers {
+        position: relative;
+        right: 0;
+        display: flex;
+        width: 100%;
+        top: -70px;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .musicInfoControlers .musicInfo h1 {
+        font-size: 22px;
+        color: #2D2D2D;
+        font-weight: 600;
+        margin: 0;
+    }
+    .controlers {
+        margin: 30px 0;
+        width: 290px;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .controlers div {
+        transform: translateY(0);
+        box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+        border-radius: 24px;
+        width: 75px;
+    }
+    .albumColumn {
+        width: 90% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        position: relative !important;
+        top: 5% !important;
+    }
+    .tracksColumn {
+        overflow-y: auto;
+        padding-right: 0;
+        scrollbar-width: none;
+        width: 80%;
+    }
+    .splitLayout {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .emptyStatePlayer img {
+        display: none;
+    }
+    .emptyStatePlayer {
+        width: 100%;
+    }
+    .albumCoverLarge {
+        width: 190px;
+    }
+    .menuDropdown.open {
+        display: block;
+        pointer-events: auto;
+        transition: all 0.2sease;
+        background: #ffffff1c;
+        padding: 10px 20px;
+        border-radius: 30px;
+    }
+    .musicInfoControlers.emptyText {
+        position: relative;
+        right: 0;
+        display: flex;
+        width: 100%!important;
+        top: -70px;
+        justify-content: center!important;
+        align-items: center!important;
+    }
+}
+@media (min-width: 1300px) and (max-width: 1400px){
+    .queueEmptyIcon {
+        width: 90px;
+        height: 90px;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+        margin-bottom: 18px;
+    }
+    .queueEmptyIcon img{
+        width: 100%;
+    }
+    .queueEmptyStateInner {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        max-width: 420px;
+        width: 100%;
+        padding: 20px;
+    }
+    .vinylPlay {
+        display: flex;
+        position: relative;
+        flex-direction: row;
+        height: 100%;
+        align-items: center;
+        max-width: 100%;
+        margin: auto;
+        max-height: 878px;
+        justify-content: center;
+    }
+    .vinylContent {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+        
+    .vinyl {
+        width: 730px;
+        position: relative;
+        transform-origin: 50% 50%;
+    }
+    .albumImg img {
+        width: 270px;
+        height: 270px;
+        border-radius: 150px;
+        overflow: hidden;
+    }
+    .basePin {
+        position: absolute;
+        width: 125px;
+        right: 32px;
+        top: 60px;
+    }
+    .pin {
+        position: absolute;
+        top: 80px;
+        width: 40%;
+        right: 70px;
+        height: 700px;
+    }
+    .pinTop {
+        position: absolute;
+        left: 310px;
+        top: 115px;
+        width: 15px;
+        height: 15px;
+        transform-origin: 50% 50%;
+        transform: rotate(1deg);
+        transition: all 1.3sease;
+    }
+    .pinTop img {
+        position: absolute;
+        width: 250px;
+        left: -50px;
+        top: -40px;
+        transform: translate(-124px, -116px);
+        display: block;
+    }
+    
 }

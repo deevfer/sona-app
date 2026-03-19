@@ -62,7 +62,7 @@
   .menuDropdown.open {
     display: block;
     pointer-events: auto;
-    transition: all 0.2sease;
+    transition: all 0.2s ease;
 }
   .menuDropdown button {
     width: 100%;
@@ -515,4 +515,43 @@ button.cover img{
 }
 @media(orientation: landscape){
 
+}
+
+@media (min-width: 768px) and (max-width: 800px){
+
+
+  .menuDropdown.open {
+    display: block;
+    pointer-events: auto;
+    transition: all 0.2s ease;
+    background: #ffffff1c;
+    padding: 10px 20px;
+    border-radius: 30px;
+  }
+  .sonaBody.bg-white .menuDropdown.open {
+    background: #0000001c;
+  }
+  .sonaBody.bg-white .vinilosText p {
+      color: #ffffff;
+  }
+}
+
+
+@media (orientation: landscape) and (max-height: 520px) {
+
+
+  .menuDropdown.open {
+    display: block;
+    pointer-events: auto;
+    transition: all 0.2s ease;
+    background: #ffffff1c;
+    padding: 10px 20px;
+    border-radius: 30px;
+  }
+  .sonaBody.bg-white .menuDropdown.open {
+    background: #0000001c;
+  }
+  .sonaBody.bg-white .vinilosText p {
+      color: #ffffff;
+  }
 }

@@ -71,12 +71,6 @@ function Albums() {
 
   const [spineColors, setSpineColors] = useState({})
 
-  const getSafeKey = (type, item, idx) => {
-    const id = item?.id || "no-id"
-    const name = item?.name || item?.attributes?.name || "no-name"
-    return `${type}-${id}-${name}-${idx}`
-  }
-
   const getItemCover = (item) => {
     if (!item) return "/sonaDefault.png"
 
@@ -568,7 +562,7 @@ function Albums() {
           <div className="albumsStage">
             <div className="listCovers fadeIn">
               {Array.from({ length: 9 }).map((_, i) => (
-                <div className="coverItem skeleton" key={`skeleton-${i}`}>
+                <div className="coverItem skeleton" key={i}>
                   <div className="skeletonBox shimmer" />
                 </div>
               ))}
@@ -604,16 +598,16 @@ function Albums() {
               <div className="listCovers fadeIn">
                 {loading
                   ? Array.from({ length: 9 }).map((_, i) => (
-                      <div className="coverItem skeleton" key={`grid-skeleton-${i}`}>
+                      <div className="coverItem skeleton" key={i}>
                         <div className="skeletonBox shimmer" />
                       </div>
                     ))
-                  : filteredItems.map((item, index) => {
+                  : filteredItems.map((item) => {
                       const cover = getItemCover(item)
 
                       return (
                         <div
-                          key={getSafeKey("grid-item", item, index)}
+                          key={item.id}
                           className="coverItem"
                           onClick={() => onOpenItem(item)}
                         >
@@ -626,7 +620,7 @@ function Albums() {
               <div className="stack3D fadeIn" ref={scrollRef} onScroll={handle3DScroll}>
                 {loading
                   ? Array.from({ length: 9 }).map((_, i) => (
-                      <div className="stackItem skeleton shimmer" key={`stack-skeleton-${i}`}>
+                      <div className="stackItem skeleton shimmer" key={i}>
                         <div className="skeletonBox" />
                       </div>
                     ))
@@ -635,7 +629,7 @@ function Albums() {
 
                       return (
                         <div
-                          key={getSafeKey("stack-item", item, index)}
+                          key={item.id}
                           className="album3D"
                           style={getAlbumStyle(index)}
                         >
@@ -701,7 +695,7 @@ function Albums() {
                 {loadingTracks ? (
                   <div className="tracksSkeleton">
                     {Array.from({ length: 10 }).map((_, i) => (
-                      <div className="trackRow skeleton shimmer" key={`track-skeleton-${i}`}>
+                      <div className="trackRow skeleton shimmer" key={i}>
                         <div className="skeletonLine short" />
                         <div className="skeletonLine tiny" />
                       </div>
@@ -719,7 +713,7 @@ function Albums() {
                       return (
                         <div
                           className="trackRow clickable"
-                          key={getSafeKey("track", track, idx)}
+                          key={track?.id || idx}
                           onClick={() => playTrack(idx)}
                         >
                           <div className="trackLeft">

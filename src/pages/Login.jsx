@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import BackIcon from "../assets/back.svg?react"
 import { useTranslation } from "react-i18next"
 import LanguageSwitcher from "../components/LanguageSwitcher"
+import { sileo } from "sileo"
 
 const API_BASE = import.meta.env.VITE_API_BASE
 
@@ -31,7 +32,6 @@ function Login() {
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
   const [loadingArtworks, setLoadingArtworks] = useState(true)
@@ -43,6 +43,21 @@ function Login() {
   const flipTimeoutRef = useRef(null)
   const replaceTimeoutRef = useRef(null)
   const releaseTimeoutRef = useRef(null)
+
+  const errorTitle = (text) => (
+    <span style={{ color: "#ff5a5f", fontWeight: 600 }}>{text}</span>
+  )
+
+  const toastDescription = (text) => (
+    <span style={{ color: "rgba(255,255,255,0.78)" }}>{text}</span>
+  )
+
+  const showErrorToast = ({ title, description }) => {
+    sileo.error({
+      title: errorTitle(title),
+      description: toastDescription(description),
+    })
+  }
 
   useEffect(() => {
     const fetchLoginArtworks = async () => {
@@ -184,7 +199,6 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setError("")
     setLoading(true)
 
     try {
@@ -211,19 +225,31 @@ function Login() {
       }
 
       if (data?.error === "SESSION_ACTIVE") {
-        setError(t("login.sessionActive"))
+        showErrorToast({
+          title: t("login.sessionActive"),
+          description: t("login.sessionActiveDesc"),
+        })
         return
       }
 
       if (data?.error === "INVALID_CREDENTIALS") {
-        setError(t("login.invalidCredentials"))
+        showErrorToast({
+          title: t("login.invalidCredentials"),
+          description: t("login.invalidCredentialsDesc"),
+        })
         return
       }
 
-      setError(data?.message || t("login.errorS"))
+      showErrorToast({
+        title: t("login.errorS"),
+        description: t("login.tryAgainLater"),
+      })
     } catch (err) {
       console.error(err)
-      setError(t("login.errorS"))
+      showErrorToast({
+        title: t("login.errorS"),
+        description: t("login.tryAgainLater"),
+      })
     } finally {
       setLoading(false)
     }
@@ -239,7 +265,7 @@ function Login() {
     : {}
 
   return (
-    <div className="login">
+    <div className="login" style={loginStyle}>
       <div className="overlayBackgroundLogin"></div>
 
       <div className="container-lang">
@@ -279,8 +305,6 @@ function Login() {
               <label>{t("login.password")}</label>
               <span className="bar"></span>
             </div>
-
-            {error && <p className="error">{error}</p>}
 
             <button type="submit" disabled={loading}>
               {loading ? t("login.loading") : t("login.button")}

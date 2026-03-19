@@ -13,8 +13,29 @@ function Landing() {
   const [loadingArtworks, setLoadingArtworks] = useState(true)
   const [artworks, setArtworks] = useState([])
   const [landingBg, setLandingBg] = useState("")
+  const [isPortrait, setIsPortrait] = useState(
+    typeof window !== "undefined"
+      ? window.matchMedia("(orientation: portrait)").matches
+      : false
+  )
+
   const navigate = useNavigate()
   const { t } = useTranslation()
+
+  useEffect(() => {
+    const media = window.matchMedia("(orientation: portrait)")
+
+    const handleChange = () => {
+      setIsPortrait(media.matches)
+    }
+
+    handleChange()
+    media.addEventListener("change", handleChange)
+
+    return () => {
+      media.removeEventListener("change", handleChange)
+    }
+  }, [])
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -121,6 +142,23 @@ function Landing() {
     ]
   }, [artworks])
 
+  const portraitRows = useMemo(() => {
+    if (!artworks.length) return [[], []]
+
+    const row1 = []
+    const row2 = []
+
+    artworks.forEach((item, index) => {
+      if (index % 2 === 0) row1.push(item)
+      else row2.push(item)
+    })
+
+    return [
+      [...row1, ...row1],
+      [...row2, ...row2],
+    ]
+  }, [artworks])
+
   const skeletonColumns = useMemo(() => {
     const placeholders = Array.from({ length: 18 }, (_, i) => ({
       id: `skeleton-${i}`,
@@ -143,6 +181,25 @@ function Landing() {
     ]
   }, [])
 
+  const portraitSkeletonRows = useMemo(() => {
+    const placeholders = Array.from({ length: 18 }, (_, i) => ({
+      id: `skeleton-${i}`,
+    }))
+
+    const row1 = []
+    const row2 = []
+
+    placeholders.forEach((item, index) => {
+      if (index % 2 === 0) row1.push(item)
+      else row2.push(item)
+    })
+
+    return [
+      [...row1, ...row1],
+      [...row2, ...row2],
+    ]
+  }, [])
+
   if (checking) return null
 
   const landingStyle = landingBg
@@ -162,7 +219,7 @@ function Landing() {
         <LanguageSwitcher />
       </div>
 
-      <div className="contentLanding">
+      <div className={`contentLanding ${isPortrait ? "portraitLayout" : ""}`}>
         <div className="contentLeft">
           <div className="titleContentLeft">
             <h1>{t("landing.title")}</h1>
@@ -184,79 +241,124 @@ function Landing() {
         </div>
 
         <div className="contentRight">
-          <div className="chartsGrid">
-            {loadingArtworks || !artworks.length ? (
-              <>
-                <div className="chartsColumn scrollUp">
-                  {skeletonColumns[0].map((item, index) => (
-                    <div
-                      className="albumArtwork skeleton shimmer"
-                      key={`skeleton-col1-${item.id}-${index}`}
-                    >
-                      <div className="skeletonBox" />
-                    </div>
-                  ))}
-                </div>
+          {!isPortrait ? (
+            <div className="chartsGrid">
+              {loadingArtworks || !artworks.length ? (
+                <>
+                  <div className="chartsColumn scrollUp">
+                    {skeletonColumns[0].map((item, index) => (
+                      <div
+                        className="albumArtwork skeleton shimmer"
+                        key={`skeleton-col1-${item.id}-${index}`}
+                      >
+                        <div className="skeletonBox" />
+                      </div>
+                    ))}
+                  </div>
 
-                <div className="chartsColumn scrollDown">
-                  {skeletonColumns[1].map((item, index) => (
-                    <div
-                      className="albumArtwork skeleton shimmer"
-                      key={`skeleton-col2-${item.id}-${index}`}
-                    >
-                      <div className="skeletonBox" />
-                    </div>
-                  ))}
-                </div>
+                  <div className="chartsColumn scrollDown">
+                    {skeletonColumns[1].map((item, index) => (
+                      <div
+                        className="albumArtwork skeleton shimmer"
+                        key={`skeleton-col2-${item.id}-${index}`}
+                      >
+                        <div className="skeletonBox" />
+                      </div>
+                    ))}
+                  </div>
 
-                <div className="chartsColumn scrollUpSlow">
-                  {skeletonColumns[2].map((item, index) => (
-                    <div
-                      className="albumArtwork skeleton shimmer"
-                      key={`skeleton-col3-${item.id}-${index}`}
-                    >
-                      <div className="skeletonBox" />
-                    </div>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="chartsColumn scrollUp">
-                  {columns[0].map((item, index) => (
-                    <div
-                      className="albumArtwork"
-                      key={`col1-${item.id}-${index}`}
-                    >
-                      <img src={item.image} alt={item.title || ""} loading="lazy" />
-                    </div>
-                  ))}
-                </div>
+                  <div className="chartsColumn scrollUpSlow">
+                    {skeletonColumns[2].map((item, index) => (
+                      <div
+                        className="albumArtwork skeleton shimmer"
+                        key={`skeleton-col3-${item.id}-${index}`}
+                      >
+                        <div className="skeletonBox" />
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="chartsColumn scrollUp">
+                    {columns[0].map((item, index) => (
+                      <div className="albumArtwork" key={`col1-${item.id}-${index}`}>
+                        <img src={item.image} alt={item.title || ""} loading="lazy" />
+                      </div>
+                    ))}
+                  </div>
 
-                <div className="chartsColumn scrollDown">
-                  {columns[1].map((item, index) => (
-                    <div
-                      className="albumArtwork"
-                      key={`col2-${item.id}-${index}`}
-                    >
-                      <img src={item.image} alt={item.title || ""} loading="lazy" />
-                    </div>
-                  ))}
-                </div>
+                  <div className="chartsColumn scrollDown">
+                    {columns[1].map((item, index) => (
+                      <div className="albumArtwork" key={`col2-${item.id}-${index}`}>
+                        <img src={item.image} alt={item.title || ""} loading="lazy" />
+                      </div>
+                    ))}
+                  </div>
 
-                <div className="chartsColumn scrollUpSlow">
-                  {columns[2].map((item, index) => (
-                    <div
-                      className="albumArtwork"
-                      key={`col3-${item.id}-${index}`}
-                    >
-                      <img src={item.image} alt={item.title || ""} loading="lazy" />
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+                  <div className="chartsColumn scrollUpSlow">
+                    {columns[2].map((item, index) => (
+                      <div className="albumArtwork" key={`col3-${item.id}-${index}`}>
+                        <img src={item.image} alt={item.title || ""} loading="lazy" />
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            <div className="chartsRowsMobile">
+              {loadingArtworks || !artworks.length ? (
+                <>
+                  <div className="chartsRow scrollLeftRow">
+                    {portraitSkeletonRows[0].map((item, index) => (
+                      <div
+                        className="albumArtwork mobileArtwork skeleton shimmer"
+                        key={`skeleton-row1-${item.id}-${index}`}
+                      >
+                        <div className="skeletonBox" />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="chartsRow scrollRightRow">
+                    {portraitSkeletonRows[1].map((item, index) => (
+                      <div
+                        className="albumArtwork mobileArtwork skeleton shimmer"
+                        key={`skeleton-row2-${item.id}-${index}`}
+                      >
+                        <div className="skeletonBox" />
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="chartsRow scrollLeftRow">
+                    {portraitRows[0].map((item, index) => (
+                      <div
+                        className="albumArtwork mobileArtwork"
+                        key={`row1-${item.id}-${index}`}
+                      >
+                        <img src={item.image} alt={item.title || ""} loading="lazy" />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="chartsRow scrollRightRow">
+                    {portraitRows[1].map((item, index) => (
+                      <div
+                        className="albumArtwork mobileArtwork"
+                        key={`row2-${item.id}-${index}`}
+                      >
+                        <img src={item.image} alt={item.title || ""} loading="lazy" />
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

@@ -274,7 +274,7 @@ function Sona() {
   }, [loop])
 
   const startSpin = useCallback(() => {
-    targetSpeedRef.current = 1.5
+    targetSpeedRef.current = 0.4
     startLoopIfNeeded()
     setIsPlayingUI(true)
   }, [startLoopIfNeeded])
@@ -663,11 +663,12 @@ function Sona() {
     return () => window.removeEventListener("resize", check)
   }, [nowPlaying])
 
-  const isTrackLoading = ready && !!provider && nowPlaying === null
+  const isTrackLoading = false
   const trackName =
     nowPlaying?.track?.name ||
     translateOrFallback("Sona.NoTrackTitle", "Nothing playing")
-
+  const showEmptyState = !nowPlaying?.track
+  
   const artists = Array.isArray(nowPlaying?.track?.artists)
     ? nowPlaying.track.artists.join(", ")
     : translateOrFallback(
@@ -677,7 +678,7 @@ function Sona() {
           : ""
       )
 
-  const cover = nowPlaying?.track?.image ?? "/sonaDefault.png"
+  const cover = nowPlaying?.track?.image ?? "/icon-512.png"
 
   useEffect(() => {
     if (cover && cover !== "/sonaDefault.png") {
@@ -732,9 +733,9 @@ function Sona() {
             </div>
 
             <div className="pin">
-              <div className="basePin">
+              {/* <div className="basePin">
                 <img src="/basepin.svg" alt="" />
-              </div>
+              </div> */}
 
               <div
                 className="pinTop"
@@ -748,18 +749,27 @@ function Sona() {
                   if (!needleDown && !intentPlay) stopSpinSmooth()
                 }}
               >
-                <img src="/pin.svg" alt="" />
+                <img src="/pin_base.svg" alt="" />
               </div>
             </div>
           </div>
-
-          <div className="musicInfoControlers">
+            <div
+              className={`musicInfoControlers ${
+                !isTrackLoading && !nowPlaying?.track ? "emptyText" : ""
+              }`}
+            >
             <div className="musicInfo">
               {isTrackLoading ? (
                 <>
                   <div className="skeletonText title" />
                   <div className="skeletonText artist" />
                 </>
+              ) : !nowPlaying?.track ? (
+                <div className="emptyStatePlayer">
+                  <img src="/discos.svg" alt="" />
+                  <h1>{t("sona.EmptyPlayerTitle")}</h1>
+                  <p>{t("sona.EmptyPlayer")}</p>
+                </div>
               ) : (
                 <>
                   <h1 className={`marquee ${isTitleOverflow ? "run" : ""}`}>
@@ -774,19 +784,21 @@ function Sona() {
               {error ? <p className="error">{error}</p> : null}
             </div>
 
-            <div className="controlers">
-              <div className="play" onClick={handlePlayPause}>
-                <img src={isPlayingUI ? "/pause.svg" : "/play.svg"} alt="" />
-              </div>
+            {nowPlaying?.track && (
+              <div className="controlers">
+                <div className="play" onClick={handlePlayPause}>
+                  <img src={isPlayingUI ? "/pause.svg" : "/play.svg"} alt="" />
+                </div>
 
-              <div className="backM" onClick={handlePrev}>
-                <img src="/back.svg" alt="" />
-              </div>
+                <div className="backM" onClick={handlePrev}>
+                  <img src="/back.svg" alt="" />
+                </div>
 
-              <div className="nextM" onClick={handleNext}>
-                <img src="/next.svg" alt="" />
+                <div className="nextM" onClick={handleNext}>
+                  <img src="/next.svg" alt="" />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

@@ -23,9 +23,15 @@
         "error": "Incorrect email or password.",
         "notYet": "Don't have an account yet?",
         "register": "Sign up",
-        "sessionActive": "This account is already active on another device.",
+
+        "sessionActive": "Session already active",
+        "sessionActiveDesc": "This account is already active on another device.",
+
         "invalidCredentials": "Invalid credentials",
-        "errorS": "An error occurred while logging in."
+        "invalidCredentialsDesc": "Please check your email and password and try again.",
+
+        "errorS": "Login error",
+        "tryAgainLater": "Please try again later."
     },
     "register":{
         "title": "Create an account",
@@ -33,15 +39,31 @@
         "name": "Name",
         "email": "Email",
         "password": "Password",
-        "price": "One-time payment of $1.99 for lifetime access.",
+        "price": "One-time payment of USD 2.99 for lifetime access.",
         "haveAccount": "Do you already have an account?",
-        "login": "Login"
+        "login": "Login",
+
+        "paymentErrorTitle": "Payment could not be completed",
+        "paymentErrorDesc": "Please try again in a moment.",
+      
+        "paypalErrorTitle": "PayPal error",
+        "paypalErrorDesc": "Something went wrong with PayPal. Please try again.",
+      
+        "registerErrorTitle": "Registration error",
+        "registerErrorDesc": "We couldn't complete your registration. Please try again.",
+      
+        "successTitle": "Account created successfully",
+        "successDesc": "Your Sona access is now active."
     },
     "connect":{
         "title": "Connect your music",
         "subtitle": "Allow Sona to access your library to control the current track in the app.",
         "comingSoon": "Coming soon",
         "loading": "Connecting"
+    },
+    "sona":{
+        "EmptyPlayerTitle":"Your music is on pause",
+        "EmptyPlayer": "Play a song from your albums or playlists to view it in this section."
     },
     "stylesMenu":{
         "vinyl": "Vinyl Styles",
@@ -58,7 +80,9 @@
         "Skipping": "Playing",
         "Warn": "Playing music with Spotify will only display 20 songs in the queue. To view all of them, open your Spotify app.",
         "AppleMusicNoQueue": "Apple Music does not support viewing the playback queue",
-        "NoProvider": "No music service connected"
+        "NoProvider": "No music service connected",
+        "EmptyTitle": "Your queue is empty",
+        "EmptyText": "The songs in your queue aren't available when playing via Apple Music. Play from your albums or playlists to view your queue here."
     },
     "options": {
         "title": "Options",
@@ -74,7 +98,8 @@
         "session": "Logout",
         "comingSoon": "Coming soon",
         "developed": "Developed by Devfer",
-        "version": "Version 1.0.1"
+        "version": "Version 1.0.1",
+        "shareText": "🎧 Music is experienced differently at Sona. Download the app here:"
     },
     "connectDevice": {
         "noDevice": "Open Spotify on your phone or computer and try again"

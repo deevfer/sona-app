@@ -459,3 +459,36 @@ button.tracksBack {
       transform: translateX(0);
     }
   }
+
+  @media (orientation: portrait) {
+    .stack3D.portraitRotatedStack {
+      position: absolute;
+      top: 52%;
+      left: 50%;
+      width: 100vh;
+      height: 100vw;
+      transform: translate(-50%, -50%) rotate(90deg);
+      transform-origin: center center;
+      overflow-x: auto;
+      overflow-y: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0 180px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+  
+    .stack3D.portraitRotatedStack::-webkit-scrollbar {
+      display: none;
+    }
+  
+    .stack3D.portraitRotatedStack .album3D {
+      flex: 0 0 auto;
+    }
+  
+    .stack3D.portraitRotatedStack .albumBox {
+      transform: rotate(-90deg);
+      transform-origin: center center;
+    }
+  }

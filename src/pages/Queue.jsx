@@ -26,11 +26,9 @@ function Queue() {
     resolveAppleArtwork,
   } = useProvider()
 
-  const [selectedBg] = useState(() =>
-    localStorage.getItem(BG_KEY) || "yellow"
-  )
-  const [storedCover, setStoredCover] = useState(() =>
-    localStorage.getItem(COVER_KEY) || ""
+  const [selectedBg] = useState(() => localStorage.getItem(BG_KEY) || "yellow")
+  const [storedCover, setStoredCover] = useState(
+    () => localStorage.getItem(COVER_KEY) || ""
   )
   const lastCoverRef = useRef(storedCover)
 
@@ -317,39 +315,39 @@ function Queue() {
 
   const playAppleTrack = async (index) => {
     if (skipping || !isAppleMusic) return
-  
+
     setSkipping(true)
-  
+
     try {
       const context = readStoredContext()
       if (!context?.id || !context?.type) {
         setSkipping(false)
         return
       }
-  
+
       const music = await getMusicInstance()
       if (!music) {
         setSkipping(false)
         return
       }
-  
+
       await music.setQueue(
         context.type === "album"
           ? { album: context.id }
           : { playlist: context.id }
       )
-  
+
       if (typeof music.changeToMediaAtIndex === "function") {
         await music.changeToMediaAtIndex(index)
       }
-  
+
       try {
         localStorage.setItem(
           APPLE_LAST_TRACK_KEY,
           JSON.stringify(appleQueue[index] || appleCurrentTrack || null)
         )
       } catch {}
-  
+
       navigate("/sona")
     } catch (err) {
       console.error("Error preparando Apple Music:", err)
@@ -367,10 +365,7 @@ function Queue() {
 
   if (!ready) return null
 
-  const appleTitle =
-    appleCurrentTrack?.name ||
-    appleContext?.name ||
-    "Apple Music"
+  const appleTitle = appleCurrentTrack?.name || appleContext?.name || "Apple Music"
 
   const appleSubtitle =
     appleCurrentTrack?.artists?.join(", ") ||
@@ -389,6 +384,16 @@ function Queue() {
         "Start playback from Sona to see the current track and queue."
       )
 
+  const hasSpotifyTrack = isSpotify && !!currentTrack
+  const hasAppleTrack = isAppleMusic && !!appleCurrentTrack
+  const hasActiveTrack = hasSpotifyTrack || hasAppleTrack
+
+  const emptyQueueTitle = translateOrFallback("Queue.EmptyTitle", "Nothing playing")
+  const emptyQueueText = translateOrFallback(
+    "Queue.EmptyText",
+    "Start playback from Sona to view your queue."
+  )
+
   return (
     <div className={`sonaBody ${bgClass} ${textClass}`} style={bgStyles}>
       <div className="overlayBackground"></div>
@@ -403,150 +408,191 @@ function Queue() {
             </div>
           )}
 
-          <div className="titleQueue">
-            <h1>{translateOrFallback("Queue.QueueTitle", "Queue")}</h1>
-          </div>
+          {!loading && !hasActiveTrack ? (
+            <>
 
-          {isSpotify && (
-            <div className="tracksView splitLayout fadeIn">
-              <div className="albumColumn">
-                <div className="albumCoverLarge">
-                  {loading ? (
-                    <div
-                      className="skeletonBox shimmer"
-                      style={{
-                        width: "100%",
-                        aspectRatio: "1",
-                        borderRadius: "12px",
-                      }}
-                    />
-                  ) : (
-                    <img
-                      src={currentTrack ? getSpotifyImage(currentTrack) : "/sonaDefault.png"}
-                      alt={currentTrack?.name || ""}
-                    />
-                  )}
-                </div>
-
-                {currentTrack && (
-                  <>
-                    <h2 className="albumTitleLarge">{currentTrack.name}</h2>
-                    <p className="queueArtistName">{getSpotifyArtists(currentTrack)}</p>
-                  </>
-                )}
+              <div className="titleQueue">
+                <h1>{translateOrFallback("Queue.QueueTitle", "Queue")}</h1>
               </div>
 
-              <div className="tracksColumn">
-                {loading ? (
-                  <div className="tracksSkeleton">
-                    {Array.from({ length: 10 }).map((_, i) => (
-                      <div className="trackRow skeleton shimmer" key={i}>
-                        <div className="skeletonLine short" />
-                        <div className="skeletonLine tiny" />
-                      </div>
-                    ))}
+              <div className="queueEmptyState">
+                <div className="queueEmptyStateInner">
+                  <div className="queueEmptyIcon">
+                    <img src="/discos.svg" alt="" />
                   </div>
-                ) : (
-                  <div className="tracksList">
-                    {queue.map((track, idx) => (
-                      <div
-                        className="trackRow clickable"
-                        key={`${track.id}-${idx}`}
-                        onClick={() => playSpotifyTrack(idx)}
-                      >
-                        <div className="trackLeft">
-                          <span className="trackIndex">
-                            {(idx + 1).toString().padStart(2, "0")}.
-                          </span>
-                          <span className="trackName">{track.name}</span>
-                        </div>
+                  <h2>{emptyQueueTitle}</h2>
+                  <p>{emptyQueueText}</p>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="titleQueue">
+                <h1>{translateOrFallback("Queue.QueueTitle", "Queue")}</h1>
+              </div>
 
-                        <span className="trackDuration">
-                          {formatDuration(track.duration_ms)}
-                        </span>
-                      </div>
-                    ))}
-
-                    <div className="warn">
-                      <p>{translateOrFallback("Queue.Warn", "Tap a track to jump in the queue.")}</p>
+              {isSpotify && (
+                <div className="tracksView splitLayout fadeIn">
+                  <div className="albumColumn">
+                    <div className="albumCoverLarge">
+                      {loading ? (
+                        <div
+                          className="skeletonBox shimmer"
+                          style={{
+                            width: "100%",
+                            aspectRatio: "1",
+                            borderRadius: "12px",
+                          }}
+                        />
+                      ) : (
+                        <img
+                          src={
+                            currentTrack
+                              ? getSpotifyImage(currentTrack)
+                              : "/sonaDefault.png"
+                          }
+                          alt={currentTrack?.name || ""}
+                        />
+                      )}
                     </div>
+
+                    {currentTrack && (
+                      <>
+                        <h2 className="albumTitleLarge">{currentTrack.name}</h2>
+                        <p className="queueArtistName">
+                          {getSpotifyArtists(currentTrack)}
+                        </p>
+                      </>
+                    )}
                   </div>
-                )}
-              </div>
-            </div>
-          )}
 
-          {isAppleMusic && (
-            <div className="tracksView splitLayout fadeIn">
-              <div className="albumColumn">
-                <div className="albumCoverLarge">
-                  {loading ? (
-                    <div
-                      className="skeletonBox shimmer"
-                      style={{
-                        width: "100%",
-                        aspectRatio: "1",
-                        borderRadius: "12px",
-                      }}
-                    />
-                  ) : (
-                    <img
-                      src={appleCurrentTrack?.image || appleContext?.image || "/sonaDefault.png"}
-                      alt={appleCurrentTrack?.name || appleContext?.name || ""}
-                    />
-                  )}
-                </div>
-
-                <>
-                  <h2 className="albumTitleLarge">{appleTitle}</h2>
-                  <p className="queueArtistName">{appleSubtitle}</p>
-                </>
-              </div>
-
-              <div className="tracksColumn">
-                {loading ? (
-                  <div className="tracksSkeleton">
-                    {Array.from({ length: 10 }).map((_, i) => (
-                      <div className="trackRow skeleton shimmer" key={i}>
-                        <div className="skeletonLine short" />
-                        <div className="skeletonLine tiny" />
+                  <div className="tracksColumn">
+                    {loading ? (
+                      <div className="tracksSkeleton">
+                        {Array.from({ length: 10 }).map((_, i) => (
+                          <div className="trackRow skeleton shimmer" key={i}>
+                            <div className="skeletonLine short" />
+                            <div className="skeletonLine tiny" />
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                ) : appleQueue.length > 0 ? (
-                  <div className="tracksList">
-                    {appleQueue.map((track, idx) => (
-                      <div
-                        className="trackRow clickable"
-                        key={`${track.id}-${idx}`}
-                        onClick={() => playAppleTrack(idx)}
-                      >
-                        <div className="trackLeft">
-                          <span className="trackIndex">
-                            {(idx + 1).toString().padStart(2, "0")}.
-                          </span>
-                          <span className="trackName">{track.name}</span>
+                    ) : (
+                      <div className="tracksList">
+                        {queue.map((track, idx) => (
+                          <div
+                            className="trackRow clickable"
+                            key={`${track.id}-${idx}`}
+                            onClick={() => playSpotifyTrack(idx)}
+                          >
+                            <div className="trackLeft">
+                              <span className="trackIndex">
+                                {(idx + 1).toString().padStart(2, "0")}.
+                              </span>
+                              <span className="trackName">{track.name}</span>
+                            </div>
+
+                            <span className="trackDuration">
+                              {formatDuration(track.duration_ms)}
+                            </span>
+                          </div>
+                        ))}
+
+                        <div className="warn">
+                          <p>
+                            {translateOrFallback(
+                              "Queue.Warn",
+                              "Tap a track to jump in the queue."
+                            )}
+                          </p>
                         </div>
-
-                        <span className="trackDuration">
-                          {formatDuration(track.duration_ms)}
-                        </span>
                       </div>
-                    ))}
+                    )}
                   </div>
-                ) : (
-                  <div className="queueAppleMessage">
-                    <p>{appleEmptyMessage}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+                </div>
+              )}
 
-          {!isSpotify && !isAppleMusic && !loading && (
-            <div className="queueAppleMessage">
-              <p>{translateOrFallback("Queue.NoProvider", "No music provider connected.")}</p>
-            </div>
+              {isAppleMusic && (
+                <div className="tracksView splitLayout fadeIn">
+                  <div className="albumColumn">
+                    <div className="albumCoverLarge">
+                      {loading ? (
+                        <div
+                          className="skeletonBox shimmer"
+                          style={{
+                            width: "100%",
+                            aspectRatio: "1",
+                            borderRadius: "12px",
+                          }}
+                        />
+                      ) : (
+                        <img
+                          src={
+                            appleCurrentTrack?.image ||
+                            appleContext?.image ||
+                            "/sonaDefault.png"
+                          }
+                          alt={appleCurrentTrack?.name || appleContext?.name || ""}
+                        />
+                      )}
+                    </div>
+
+                    <>
+                      <h2 className="albumTitleLarge">{appleTitle}</h2>
+                      <p className="queueArtistName">{appleSubtitle}</p>
+                    </>
+                  </div>
+
+                  <div className="tracksColumn">
+                    {loading ? (
+                      <div className="tracksSkeleton">
+                        {Array.from({ length: 10 }).map((_, i) => (
+                          <div className="trackRow skeleton shimmer" key={i}>
+                            <div className="skeletonLine short" />
+                            <div className="skeletonLine tiny" />
+                          </div>
+                        ))}
+                      </div>
+                    ) : appleQueue.length > 0 ? (
+                      <div className="tracksList">
+                        {appleQueue.map((track, idx) => (
+                          <div
+                            className="trackRow clickable"
+                            key={`${track.id}-${idx}`}
+                            onClick={() => playAppleTrack(idx)}
+                          >
+                            <div className="trackLeft">
+                              <span className="trackIndex">
+                                {(idx + 1).toString().padStart(2, "0")}.
+                              </span>
+                              <span className="trackName">{track.name}</span>
+                            </div>
+
+                            <span className="trackDuration">
+                              {formatDuration(track.duration_ms)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="queueAppleMessage">
+                        <p>{appleEmptyMessage}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {!isSpotify && !isAppleMusic && !loading && (
+                <div className="queueAppleMessage">
+                  <p>
+                    {translateOrFallback(
+                      "Queue.NoProvider",
+                      "No music provider connected."
+                    )}
+                  </p>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

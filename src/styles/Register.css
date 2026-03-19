@@ -176,7 +176,9 @@
     margin: 0 auto;
     text-align: center;
 }
-
+.material-form span.price {
+    color: #000;
+}
 .backButton {
     position: relative;
     z-index: 9999;
@@ -383,5 +385,77 @@
     .loginArtworksBottom {
         padding: 0 10px 12px;
         gap: 8px;
+    }
+}
+@media (orientation: landscape) and (max-height: 520px) {
+    .login .container {
+        width: 100%;
+        height: 100vh;
+        padding: 20px;
+        position: relative;
+    }
+    .loginForm {
+        position: relative;
+        height: auto;
+        min-height: 100%;
+        padding-top: 0;
+        padding-bottom: 0px;
+    }
+    .loginForm h1 {
+        font-size: 16px;
+        font-family: inherit;
+        font-weight: 500;
+    }
+    .loginForm span {
+        font-size: 10px;
+        font-family: inherit;
+        font-weight: 100;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .material-form {
+        background: #fff;
+        padding: 20px 20px;
+        border-radius: 30px;
+        width: 100%;
+        max-width: 360px;
+        margin: 0px auto;
+        z-index: 999;
+        overflow: scroll;
+        scrollbar-width: none;
+        height: 250px;
+    }
+    .material-form label {
+        font-size: 0.6rem;
+    }
+    .material-form input:focus ~ label, .material-form input:valid ~ label {
+        top: -1.2rem;
+        font-size: 0.6rem;
+        color: #121212;
+    }
+    .material-form input {
+        width: 100%;
+        padding: 0.6rem 0;
+        border: none;
+        border-bottom: 1px solid #ddd;
+        outline: none;
+        transition: 0.2s;
+        background: transparent;
+    }
+    .material-form .input-field {
+        position: relative;
+        margin: 20px 0;
+    }
+    .loginForm {
+        justify-content: flex-start;
+    }
+    .alreadyHave p {
+        font-size: 10px;
+        font-family: inherit;
+        font-weight: 300;
+        color: #121212;
+    }
+    .loginForm.connectService {
+        justify-content: center;
     }
 }

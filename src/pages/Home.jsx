@@ -252,7 +252,7 @@ function Home() {
       </div>
 
       <div className="container">
-        <div className="loginForm">
+        <div className="loginForm connectService">
           <h1>{t("connect.title")}</h1>
           <span>{t("connect.subtitle")}</span>
 

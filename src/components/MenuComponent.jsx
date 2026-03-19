@@ -704,9 +704,8 @@ function MenuComponent({
                       className="item clickable"
                       onClick={async () => {
                         const shareData = {
-                          title: "Sona",
-                          text: t("options.shareText"),
-                          url: "https://sona.fernandovasquez.tech",
+                          title:"Sona",
+                          text: `${t("options.shareText")} https://sona.fernandovasquez.tech`,
                         }
 
                         try {

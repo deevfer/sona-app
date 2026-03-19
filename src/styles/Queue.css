@@ -129,3 +129,60 @@
     height: 140px;
   }
   
+  .queueEmptyState {
+    width: 100%;
+    min-height: calc(100vh - 180px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .queueEmptyStateInner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+    padding: 20px;
+  }
+  
+  .queueEmptyIcon {
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    margin-bottom: 18px;
+  }
+  
+  .queueEmptyIcon svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .queueEmptyStateInner h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 10px;
+  }
+  
+  .queueEmptyStateInner p {
+    font-size: 14px;
+    line-height: 1.5;
+    opacity: 0.75;
+    margin: 0;
+    max-width: 320px;
+  }
+
+
+  @media (orientation: landscape) and (max-height: 520px){
+    .queueArtistName {
+        font-size: 10px;
+        opacity: 0.6;
+        text-align: left;
+        margin-top: 4px;
+    }
+}
