@@ -27,17 +27,22 @@ function SearchMenu({
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!containerRef.current) return
-
       if (!containerRef.current.contains(event.target)) {
+        // Si tocó un coverItem o album3D, no limpiar
+        const target = event.target.closest('.coverItem, .album3D, .albumFront, .albumBack, .albumSpine')
+        if (target) return
+
         setOpen(false)
         onSearchChange("")
       }
     }
 
     document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("touchstart", handleClickOutside)
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("touchstart", handleClickOutside)
     }
   }, [onSearchChange])
 
