@@ -5,6 +5,7 @@ import BackIcon from "../assets/back.svg?react"
 import { useTranslation } from "react-i18next"
 import LanguageSwitcher from "../components/LanguageSwitcher"
 import { sileo } from "sileo"
+import { Capacitor } from "@capacitor/core"
 
 const API_BASE = import.meta.env.VITE_API_BASE
 
@@ -211,7 +212,7 @@ function Login() {
         body: JSON.stringify({
           email,
           password,
-          device_name: "web",
+          device_name: "android",
         }),
       })
 
@@ -220,7 +221,8 @@ function Login() {
       if (res.ok) {
         localStorage.setItem("token", data.token)
         localStorage.setItem("user", JSON.stringify(data.user))
-        navigate("/home")
+        const isAndroidNative = Capacitor.isNativePlatform() && Capacitor.getPlatform() === "android"
+        navigate(isAndroidNative ? "/sona" : "/home")
         return
       }
 

@@ -1,0 +1,13 @@
+{
+  "appId": "com.sona.app",
+  "appName": "Sona",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "App": {
+      "appUrlOpen": true
+    }
+  }
+}

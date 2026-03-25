@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom"
 import "../styles/Albums.css"
 import MenuAlbums from "../components/MenuAlbums"
 import SearchMenu from "../components/SearchMenu"
-// import MenuBottomComponent from "../components/MenuBottomComponent"
 import BackIcon from "../assets/back.svg?react"
 import { useProvider } from "../hooks/useProvider"
+import { Capacitor } from "@capacitor/core"
 
 const API_BASE = import.meta.env.VITE_API_BASE
 
@@ -27,6 +27,8 @@ function Albums() {
     getMusicInstance,
     resolveAppleArtwork,
   } = useProvider()
+
+  const isAndroidNative = Capacitor.isNativePlatform() && Capacitor.getPlatform() === "android"
 
   const [tab, setTab] = useState(() =>
     localStorage.getItem(TAB_KEY) || "albums"
@@ -73,13 +75,11 @@ function Albums() {
 
   const getItemCover = (item) => {
     if (!item) return "/sonaDefault.png"
-
     if (item?.images?.[0]?.url) return item.images[0].url
     if (item?.artwork?.url) return resolveAppleArtwork(item.artwork)
     if (item?.attributes?.artwork?.url) {
       return resolveAppleArtwork(item.attributes.artwork)
     }
-
     return "/sonaDefault.png"
   }
 
@@ -267,7 +267,7 @@ function Albums() {
           return
         }
 
-        if (isAppleMusic) {
+        if (isAppleMusic && !isAndroidNative) {
           const music = await getMusicInstance()
           const currentItem = music?.nowPlayingItem
           const coverUrl = currentItem?.attributes?.artwork
@@ -295,6 +295,7 @@ function Albums() {
     selectedBg,
     isSpotify,
     isAppleMusic,
+    isAndroidNative,
     getMusicInstance,
     resolveAppleArtwork,
   ])
@@ -514,6 +515,36 @@ function Albums() {
       }
 
       if (isAppleMusic) {
+        // Guardar track info
+        try {
+          localStorage.setItem(
+            APPLE_LAST_TRACK_KEY,
+            JSON.stringify(tracks[index] || null)
+          )
+        } catch {}
+
+        // En Android nativo, MusicKit JS no puede reproducir
+        // Abrir la canción en Apple Music app
+        if (isAndroidNative) {
+          const track = tracks[index]
+          const catalogId =
+            track?.raw?.attributes?.playParams?.catalogId ||
+            track?.raw?.attributes?.playParams?.id ||
+            track?.raw?.id ||
+            track?.id
+
+          if (catalogId) {
+            window.open(
+              `https://music.apple.com/song/${catalogId}`,
+              "_blank"
+            )
+          }
+
+          navigate("/sona")
+          return
+        }
+
+        // En web, usar MusicKit JS normal
         const music = await getMusicInstance()
         if (!music) return
 
@@ -526,13 +557,6 @@ function Albums() {
         if (typeof music.changeToMediaAtIndex === "function") {
           await music.changeToMediaAtIndex(index)
         }
-
-        try {
-          localStorage.setItem(
-            APPLE_LAST_TRACK_KEY,
-            JSON.stringify(tracks[index] || null)
-          )
-        } catch {}
 
         navigate("/sona")
       }

@@ -212,8 +212,45 @@
     font-size: 18px!important;
     color: #fff !important;
 }
+.pinLight {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    background: transparent;
+    top: 325px;
+    right: 90px;
+    border-radius: 50px;
+    -webkit-box-shadow: 4px 4px 0px 0px rgb(142 27 27);
+    box-shadow: 0px 0px 14px 14px #941111;
+    transition: opacity 0.5s ease;
+    opacity: 0;
+}
+.pinLight.active {
+    opacity: 1;
+    transition: all 4s;
+}
+.infoAlbumApp {
+    position: absolute;
+    width: 20vh;
+    height: 20vh;
+    border-radius: 300px;
+    pointer-events: none;
+    background: #a4a4a4;
+    border: 1px solid #fff;
+}
 
+.circularText {
+    width: 100%;
+    height: 100%;
+}
 
+.albumTitle, .albumArtist {
+    fill: #fff;
+    font-size: 6px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
 @media (orientation: portrait) and (min-width: 320px) and (max-width: 484px){
 
     .sonaBody {
@@ -233,7 +270,7 @@
         position: relative;
         transform-origin: 50% 50%;
         left: -190px;
-        top: -80px;
+        top: -20px;
     }
     .vinyl img {
         width: 100%;
@@ -255,14 +292,14 @@
         justify-content: center;
     }
     .albumImg img {
-        width: 55vw;
-        height: 55vw;
+        width: 37vw;
+        height: 37vw;
         border-radius: 300px;
         overflow: hidden;
     }
     .pin {
         position: absolute;
-        top: 24%;
+        top: 31%;
         width: 40%;
         right: -5vw;
         height: auto;
@@ -293,26 +330,28 @@
         right: 0;
         display: flex;
         width: 100%;
-        top: -70px;
+        top: -50px;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
+        flex-direction: column;
     }
     .musicInfoControlers .musicInfo h1 {
-        font-size: 12px;
+        font-size: 18px;
         color: #2D2D2D;
         font-weight: 600;
         margin: 0;
     }
     .musicInfoControlers .musicInfo p {
-        font-size: 10px;
+        font-size: 12px;
         font-weight: 400;
         color: #2d2d2d;
     }
     .musicInfo {
-        width: 290px;
+        width: 250px;
+        padding: 10px 0 6px;
     }
     .marquee {
-        width: 120px;
+        width: 100%;
         overflow: hidden;
         white-space: nowrap;
         position: relative;
@@ -320,14 +359,15 @@
     .controlers {
         width: 100%;
         align-items: center;
-        justify-content: space-between;
-        margin: 0 0 0 10px;
+        justify-content: flex-start;
+        margin: 40px 0 0 0px;
     }
     .controlers div {
         transform: translateY(0);
         box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
         border-radius: 24px;
-        width: 45px;
+        width: 65px;
+        margin:0 10px 0 0;
     }
     .albumColumn {
         width: 90% !important;
@@ -354,6 +394,8 @@
     }
     .emptyStatePlayer {
         width: 100%;
+        padding: 0!important;
+        text-align: left;
     }
 
     .musicInfoControlers.emptyText {
@@ -363,7 +405,11 @@
         width: 100%!important;
         top: -70px;
         justify-content: center!important;
-        align-items: center!important;
+        align-items: flex-start!important;
+    }
+    .emptyStatePlayer {
+        width: 100%;
+        align-items: self-start;
     }
     .albumCoverLarge {
         width: 130px;
@@ -371,7 +417,7 @@
     .menuDropdown.open {
         display: block;
         pointer-events: auto;
-        transition: all 0.2sease;
+        transition: all 0.2s ease;
         background: #ffffff1c;
         padding: 10px 20px;
         border-radius: 30px;
@@ -405,7 +451,15 @@
         font-size: 8px!important;;
     }
 }
+/* Portrait TABLET pequeña (Huawei T5 en portrait = 600x900) */
+@media (orientation: portrait) and (min-width: 485px) and (max-width: 767px) {
+    /* ... CSS para tablet pequeña portrait ... */
+}
 
+/* Portrait TABLET grande (iPad etc = 768+) */
+@media (orientation: portrait) and (min-width: 768px) and (max-width: 1024px) {
+    /* ... tu CSS actual de tablet grande ... */
+}
 
 @media (orientation: landscape) and (max-height: 520px){
 
@@ -437,6 +491,16 @@
         height: 15vw;
         border-radius: 300px;
         overflow: hidden;
+        z-index: 99;
+    }
+    .infoAlbumApp {
+        position: absolute;
+        width: 40vh;
+        height: 40vh;
+        border-radius: 300px;
+        pointer-events: none;
+        background: #a4a4a4;
+        border: 1px solid #fff;
     }
     .pin {
         position: absolute;
@@ -445,12 +509,25 @@
         right: 60px;
         height: 100%;
     }
+    .pinLight {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        background: transparent;
+        top: 215px;
+        right: 58px;
+        border-radius: 50px;
+        -webkit-box-shadow: 4px 4px 0px 0px rgb(142 27 27);
+        box-shadow: 0 0 14px 14px #941111;
+        transition: opacity .5s ease;
+        opacity: 0;
+    }
     .pinTop {
         position: absolute;
         left: 98px;
-        top: 73px;
-        width: 55px;
-        height: 55px;
+        top: 83px;
+        width: 45px;
+        height: 45px;
         transform-origin: 50% 50%;
         transform: rotate(1deg);
         transition: all 1.3s ease;
@@ -458,8 +535,8 @@
     .pinTop img {
         position: absolute;
         width: 12vw;
-        left: 50%;
-        top: 50%;
+        left: 68%;
+        top: 68%;
         transform: translate(-81px, -81px);
         display: block;
     }
@@ -470,13 +547,144 @@
         font-size: 12px;
     }
     .marquee {
-        width: 170px;
+        width: 100%;
+        text-align: left;
     }
     .queueArtistName {
         font-size: 10px;
         opacity: 0.6;
         text-align: left;
         margin-top: 4px;
+    }
+}
+
+
+
+@media (orientation: landscape) and (min-height: 521px) and (max-height: 700px) {
+
+    .modalContent {
+        background: #f9f9f9;
+        color: #121212;
+        padding: 80px 30px;
+        border-radius: 50px;
+        width: 70%;
+        height: 90%;
+        max-width: 90%;
+        text-align: center;
+        animation: scaleIn 0.3s ease forwards;
+        position: relative;
+        overflow: scroll;
+        scrollbar-width: none;
+    }
+    .vinyl {
+        width: 53vw;
+        position: relative;
+        transform-origin: 50% 50%;
+        left: -10px;
+    }
+    .vinyl img {
+        width: 100%;
+    }
+    .albumImg img {
+        width: 22vw;
+        height: 22vw;
+        border-radius: 300px;
+        overflow: hidden;
+        z-index: 99;
+    }
+    .infoAlbumApp {
+        /* position: absolute;
+        width: 42vh;
+        height: 42vh;
+        border-radius: 300px;
+        pointer-events: none;
+        background: #a4a4a4;
+        border: 1px solid #fff; */
+        display: none;
+    }
+    .pin {
+        position: absolute;
+        top: 10px;
+        width: 40%;
+        right: 30px;
+        height: 100%;
+    }
+    .pinLight {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        background: transparent;
+        top: 215px;
+        right: 58px;
+        border-radius: 50px;
+        -webkit-box-shadow: 4px 4px 0px 0px rgb(142 27 27);
+        box-shadow: 0 0 14px 14px #941111;
+        transition: opacity .5s ease;
+        opacity: 0;
+    }
+    .pinTop {
+        position: absolute;
+        left: 178px;
+        top: 83px;
+        width: 75px;
+        height: 75px;
+        transform-origin: 50% 50%;
+        transform: rotate(1deg);
+        transition: all 1.3s ease;
+    }
+    .pinTop img {
+        position: absolute;
+        width: 17vw;
+        left: 28%;
+        top: 38%;
+        transform: translate(-94px, -101px);
+        display: block;
+    }
+    .musicInfoControlers .musicInfo h1 {
+        font-size: 16px;
+    }
+    .musicInfoControlers .musicInfo p {
+        font-size: 12px;
+    }
+    .marquee {
+        width: 100%;
+        text-align: left;
+    }
+    .queueArtistName {
+        font-size: 10px;
+        opacity: 0.6;
+        text-align: left;
+        margin-top: 4px;
+    }
+    .emptyStatePlayer img {
+        display: none;
+    }
+    .musicInfoControlers {
+        position: relative;
+        right: -30px;
+    }
+    .emptyStatePlayer {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 10px 0 6px;
+        flex-direction: column;
+        text-align: left;
+    }
+    .drawerContent {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #131a1b;
+        border-radius: 30px 30px 0 0;
+        padding: 0 20px 30px;
+        z-index: 99999999;
+        max-height: 70vh;
+        overflow-y: auto;
+        width: 60%;
+        margin: auto;
     }
 }
 
@@ -609,7 +817,7 @@
     .menuDropdown.open {
         display: block;
         pointer-events: auto;
-        transition: all 0.2sease;
+        transition: all 0.2s ease;
         background: #ffffff1c;
         padding: 10px 20px;
         border-radius: 30px;
@@ -696,7 +904,7 @@
         height: 15px;
         transform-origin: 50% 50%;
         transform: rotate(1deg);
-        transition: all 1.3sease;
+        transition: all 1.3s ease;
     }
     .pinTop img {
         position: absolute;
@@ -708,3 +916,146 @@
     }
     
 }
+@media (orientation: portrait) and (min-width: 485px) and (max-width: 800px) {
+    .sonaBody {
+        width: 100%;
+        height: 100vh;
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    .container {
+        width: 100%;
+        padding: 40px;
+        position: relative;
+    }
+    .vinyl {
+        width: 100vw;
+        position: relative;
+        transform-origin: 50% 50%;
+        left: -180px;
+        top: -20px;
+    }
+    .vinyl img {
+        width: 100%;
+    }
+    .vinylContent {
+        position: relative;
+        width: 120vw;
+        align-items: center;
+    }
+    .vinylPlay {
+        flex-direction: column;
+        height: 100%;
+        align-items: self-start;
+        max-width: 100%;
+        margin: auto;
+        max-height: 100vh;
+        justify-content: center;
+    }
+    .albumImg img {
+        width: 36vw;
+        height: 36vw;
+        border-radius: 300px;
+        overflow: hidden;
+        z-index: 9;
+    }
+    .infoAlbumApp {
+        /* position: absolute;
+        width: 28vh;
+        height: 28vh;
+        border-radius: 300px;
+        pointer-events: none;
+        background: #a4a4a4;
+        border: 1px solid #fff; */
+        display: none;
+    }
+    .pin {
+        position: absolute;
+        top: 25%;
+        width: 40%;
+        right: 0;
+        height: auto;
+    }
+    .pinTop {
+        position: absolute;
+        left: 0vw;
+        top: -10px;
+        width: 15vw;
+        height: 15vw;
+    }
+    .pinTop img {
+        position: absolute;
+        width: 32vw;
+        left: 0;
+        top: 0%;
+        transform: translate(-16vw, -16vw);
+        display: block;
+    }
+    .musicInfoControlers {
+        position: relative;
+        right: 0;
+        display: flex;
+        width: 100%;
+        top: -50px;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+    .musicInfoControlers .musicInfo h1 {
+        font-size: 22px;
+        font-weight: 600;
+        margin: 0;
+    }
+    .musicInfoControlers .musicInfo p {
+        font-size: 14px;
+    }
+    .musicInfo {
+        width: 300px;
+        padding: 10px 0 6px;
+    }
+    .marquee {
+        width: 100%;
+    }
+    .controlers {
+        width: 100%;
+        align-items: center;
+        justify-content: flex-start;
+        margin: 40px 0 0 0;
+    }
+    .controlers div {
+        box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+        border-radius: 24px;
+        width: 70px;
+        margin: 0 10px 0 0;
+    }
+    .emptyStatePlayer img {
+        display: none;
+    }
+    .emptyStatePlayer {
+        width: 100%;
+        padding: 0 !important;
+        text-align: left;
+        align-items: self-start;
+    }
+    .musicInfoControlers.emptyText {
+        top: -70px;
+        justify-content: center !important;
+        align-items: flex-start !important;
+    }
+}
+
+@media (orientation: landscape) and (min-width: 701px) and (max-width:1250px){
+    .infoAlbumApp {
+        display: none;
+    }
+    .emptyStatePlayer {
+        width: 100%;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 10px 0 6px;
+        flex-direction: column;
+        text-align: left;
+    }
+}
+

@@ -9,6 +9,10 @@ import SonaLogo from "../assets/sonaAnimated.svg?react"
 import LanguageSwitcher from "./LanguageSwitcher"
 import { useTranslation } from "react-i18next"
 import ShareCard from "./ShareCard"
+import { Capacitor } from "@capacitor/core"
+import { Drawer } from "vaul"
+import { Share } from "@capacitor/share"
+
 
 import { exportStoryVideo } from "../utils/exportStoryVideo"
 import { useProvider } from "../hooks/useProvider"
@@ -23,6 +27,9 @@ function MenuComponent({
   onSelectBg,
   cover,
   shareTrack,
+  nowPlayingPackage,
+  appIcon,
+  appName,
 }) {
   const navigate = useNavigate()
   const { t } = useTranslation()
@@ -45,7 +52,7 @@ function MenuComponent({
   const dropdownRef = useRef(null)
 
   const vinyls = [
-    "/vinyl-1.svg",
+    "/vinyl-1.png",
     "/vinyl-2.png",
     "/vinyl-3.png",
     "/vinyl-4.png",
@@ -479,70 +486,99 @@ function MenuComponent({
         </div>
 
         <div className="menuBottom">
-          <button type="button" onClick={toggleDropdown} aria-expanded={open}>
-            <img src={selectedVinyl} alt="" />
-          </button>
+          <Drawer.Root open={open} onOpenChange={setOpen}>
+            <Drawer.Trigger asChild>
+              <button type="button" aria-expanded={open}>
+                <img src={selectedVinyl} alt="" />
+              </button>
+            </Drawer.Trigger>
+            <Drawer.Portal>
+              <Drawer.Overlay className="drawerOverlay" />
+              <Drawer.Content className="drawerContent">
+                <Drawer.Title className="visuallyHidden">Config</Drawer.Title>
+                <div className="drawerHandle" />
+                <div className="drawerBody">
+                  <div className="vinilos">
+                    <div className="vinilosText">
+                      <p>{t("stylesMenu.vinyl")}</p>
+                    </div>
+                    <div className="vinilosButtons">
+                      {vinyls.map((vinyl) => (
+                        <button
+                          key={vinyl}
+                          type="button"
+                          onClick={() => handleSelectVinyl(vinyl)}
+                          className={selectedVinyl === vinyl ? "active" : ""}
+                        >
+                          <img src={vinyl} alt="" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
-          <div className={`menuDropdown ${open ? "open" : ""}`}>
-            <div className="vinilos">
-              <div className="vinilosText">
-                <p>{t("stylesMenu.vinyl")}</p>
-              </div>
-              <div className="vinilosButtons">
-                {vinyls.map((vinyl) => (
-                  <button
-                    key={vinyl}
-                    type="button"
-                    onClick={() => handleSelectVinyl(vinyl)}
-                    className={selectedVinyl === vinyl ? "active" : ""}
-                  >
-                    <img src={vinyl} alt="" />
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="backgrounds">
-              <div className="vinilosText">
-                <p>{t("stylesMenu.background")}</p>
-              </div>
-              <div className="backgroundsButtons">
-                <button
-                  type="button"
-                  className={`white ${selectedBg === "white" ? "active" : ""}`}
-                  onClick={() => handleSelectBg("white")}
-                  aria-label="White background"
-                />
-                <button
-                  type="button"
-                  className={`gray ${selectedBg === "gray" ? "active" : ""}`}
-                  onClick={() => handleSelectBg("gray")}
-                  aria-label="Gray background"
-                />
-                <button
-                  type="button"
-                  className={`yellow ${selectedBg === "yellow" ? "active" : ""}`}
-                  onClick={() => handleSelectBg("yellow")}
-                  aria-label="Yellow background"
-                />
-                <button
-                  type="button"
-                  className={`black ${selectedBg === "black" ? "active" : ""}`}
-                  onClick={() => handleSelectBg("black")}
-                  aria-label="Black background"
-                />
-                <button
-                  type="button"
-                  className={`cover ${selectedBg === "cover" ? "active" : ""}`}
-                  onClick={() => handleSelectBg("cover")}
-                  aria-label="Cover background"
-                >
-                  <div className="overlay" />
-                  <img src={cover || "/AppleMusic.png"} alt="" />
-                </button>
-              </div>
-            </div>
-          </div>
+                  <div className="backgrounds">
+                    <div className="vinilosText">
+                      <p>{t("stylesMenu.background")}</p>
+                    </div>
+                    <div className="backgroundsButtons">
+                      <button
+                        type="button"
+                        className={`white ${selectedBg === "white" ? "active" : ""}`}
+                        onClick={() => handleSelectBg("white")}
+                        aria-label="White background"
+                      />
+                      <button
+                        type="button"
+                        className={`gray ${selectedBg === "gray" ? "active" : ""}`}
+                        onClick={() => handleSelectBg("gray")}
+                        aria-label="Gray background"
+                      />
+                      <button
+                        type="button"
+                        className={`yellow ${selectedBg === "yellow" ? "active" : ""}`}
+                        onClick={() => handleSelectBg("yellow")}
+                        aria-label="Yellow background"
+                      />
+                      <button
+                        type="button"
+                        className={`black ${selectedBg === "black" ? "active" : ""}`}
+                        onClick={() => handleSelectBg("black")}
+                        aria-label="Black background"
+                      />
+                      <button
+                        type="button"
+                        className={`cover ${selectedBg === "cover" ? "active" : ""}`}
+                        onClick={() => handleSelectBg("cover")}
+                        aria-label="Cover background"
+                      >
+                        <div className="overlay" />
+                        <img src={cover || "/AppleMusic.png"} alt="" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </Drawer.Content>
+            </Drawer.Portal>
+          </Drawer.Root>
+        </div>
+        <div className="menuBottom">
+          {nowPlayingPackage && (
+            <button
+              type="button"
+              onClick={async () => {
+                if (Capacitor.isNativePlatform() && nowPlayingPackage) {
+                  try {
+                    const MediaSession = (await import("@capacitor/core")).registerPlugin("MediaSessionPlugin")
+                    await MediaSession.openApp({ packageName: nowPlayingPackage })
+                  } catch (e) {
+                    console.error("Could not open app", e)
+                  }
+                }
+              }}
+            >
+              <img src={appIcon || "/icon-512.png"} alt="" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -662,10 +698,17 @@ function MenuComponent({
                     <p>{t("options.general")}</p>
                   </div>
                   <div className="optionsItemContent">
-                    <div className="item clickable" onClick={() => setModalView("provider")}>
-                      <span>{t("options.provider")}</span>
-                      <span className="itemValue">{providerLabel}</span>
-                    </div>
+                    {Capacitor.isNativePlatform() ? (
+                      <div className="item">
+                        <span>{t("options.provider")}</span>
+                        <span className="itemValue">{appName || "—"}</span>
+                      </div>
+                    ) : (
+                      <div className="item clickable" onClick={() => setModalView("provider")}>
+                        <span>{t("options.provider")}</span>
+                        <span className="itemValue">{providerLabel}</span>
+                      </div>
+                    )}
 
                     <div className="item clickable langItem">
                       <span>{t("options.lang")}</span>
@@ -700,24 +743,32 @@ function MenuComponent({
                       <span>{t("options.donation")}</span>
                     </div>
 
-                    <div
-                      className="item clickable"
-                      onClick={async () => {
-                        const shareData = {
-                          title:"Sona",
-                          text: `${t("options.shareText")} https://sona.fernandovasquez.tech`,
-                        }
-
-                        try {
-                          if (navigator.share) {
-                            await navigator.share(shareData)
-                          } else {
-                            await navigator.clipboard.writeText(shareData.url)
-                            alert(t("options.linkCopied"))
-                          }
-                        } catch {}
-                      }}
-                    >
+                      <div
+                          className="item clickable"
+                          onClick={async () => {
+                            const url = "https://sona.fernandovasquez.tech"
+                            const text = t("options.shareText")
+                        
+                            try {
+                              if (Capacitor.isNativePlatform()) {
+                                await Share.share({
+                                  title: "Sona",
+                                  text: `${text}`,
+                                  url: url,
+                                  dialogTitle: "Sona",
+                                })
+                              } else if (navigator.share) {
+                                await navigator.share({
+                                  title: "Sona",
+                                  text: `${text} ${url}`,
+                                })
+                              } else {
+                                await navigator.clipboard.writeText(`${text} ${url}`)
+                                alert(t("options.linkCopied"))
+                              }
+                            } catch {}
+                          }}
+                        >
                       <span>{t("options.share")}</span>
                     </div>
                   </div>

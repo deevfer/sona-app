@@ -1,0 +1,46 @@
+.sonaAlertOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.sonaAlertBox {
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 30px 24px 20px;
+    max-width: 300px;
+    width: 90%;
+    text-align: center;
+}
+
+.sonaAlertBox p {
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 20px;
+    font-weight: 400;
+}
+
+.sonaAlertBox button {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 40px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.2s;
+}
+
+.sonaAlertBox button:active {
+    background: rgba(255, 255, 255, 0.2);
+}

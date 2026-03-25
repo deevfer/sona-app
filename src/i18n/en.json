@@ -8,7 +8,7 @@
         "lifetime": "One-time payment of USD 2.99 to unlock lifetime access.",
         "premium": "Active Premium account on your streaming platform.",
         "permission": "You will soon be able to access your Spotify account to sync your music.",
-        "appleMusic": "Allow access to your Apple Music account to play your music from Sona.",
+        "appleMusic": "You must enable notifications on your Android device to get the most out of the experience, regardless of which platform you use.",
         "note": "The app does not include its own music. All content is played directly from your streaming account.",
         "developed": "Developed by Devfer",
         "version": "Version 1.0.1"
@@ -63,7 +63,11 @@
     },
     "sona":{
         "EmptyPlayerTitle":"Your music is on pause",
-        "EmptyPlayer": "Play a song from your albums or playlists to view it in this section."
+        "EmptyPlayer": "Play a song from your albums or playlists to view it in this section.",
+        "EmptyPlayerTitleNative": "Not Launched",
+        "EmptyPlayerNative": "Open a music app to start",
+        "notificationPermission": "Sona needs notification access to detect what's playing. Tap OK to open settings.",
+        "noMusicApp": "Your music isn't ready. Please open your favorite music app first."
     },
     "stylesMenu":{
         "vinyl": "Vinyl Styles",

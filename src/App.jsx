@@ -13,7 +13,31 @@ import Queue from "./pages/Queue"
 import MenuBottomComponent from "./components/MenuBottomComponent"
 import SonaLogo from "./assets/sonaAnimated.svg?react"
 
+const API_BASE = import.meta.env.VITE_API_BASE
 const SONA_ROUTES = ["/sona", "/sona-albums", "/sona-queue"]
+
+function useHeartbeat() {
+  useEffect(() => {
+    const sendHeartbeat = () => {
+      const token = localStorage.getItem("token")
+      if (!token) return
+
+      fetch(`${API_BASE}/api/heartbeat`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }).catch(() => {})
+    }
+
+    sendHeartbeat()
+    // const interval = setInterval(sendHeartbeat, 30 * 1000)
+    const interval = setInterval(sendHeartbeat, 5 * 60 * 1000)
+
+    return () => clearInterval(interval)
+  }, [])
+}
 
 function AnimatedRoutes() {
   const location = useLocation()
@@ -66,7 +90,7 @@ function AnimatedRoutes() {
         </Routes>
       </AnimatePresence>
 
-      {showBottom && <MenuBottomComponent />}
+      {/* {showBottom && <MenuBottomComponent />} */}
     </>
   )
 }
@@ -86,6 +110,9 @@ function PageTransition({ children }) {
 }
 
 function App() {
+
+
+  useHeartbeat()
   return (
     <BrowserRouter>
       <div style={{ position: "relative", overflow: "hidden" }}>

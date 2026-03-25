@@ -4,6 +4,7 @@ import "../styles/Landing.css"
 import { useTranslation } from "react-i18next"
 import LanguageSwitcher from "../components/LanguageSwitcher"
 import SonaLogo from "../assets/sonaAnimated.svg?react"
+import { Capacitor } from "@capacitor/core"
 
 const API_BASE = import.meta.env.VITE_API_BASE
 
@@ -51,6 +52,12 @@ function Landing() {
           Accept: "application/json",
         }
 
+        const testRes = await fetch(`${API_BASE}/api/apple-music/status`, { headers })
+        if (testRes.status === 401) {
+          localStorage.clear()
+          setChecking(false)
+          return
+        }
         const [appleRes, spotifyRes] = await Promise.allSettled([
           fetch(`${API_BASE}/api/apple-music/status`, { headers }),
           fetch(`${API_BASE}/api/spotify/status`, { headers }),
@@ -59,7 +66,8 @@ function Landing() {
         if (appleRes.status === "fulfilled" && appleRes.value.ok) {
           const appleData = await appleRes.value.json()
           if (appleData.connected) {
-            navigate("/sona", { replace: true })
+            const isAndroidNative = Capacitor.isNativePlatform() && Capacitor.getPlatform() === "android"
+            navigate(isAndroidNative ? "/sona" : "/home", { replace: true })
             return
           }
         }
@@ -67,12 +75,14 @@ function Landing() {
         if (spotifyRes.status === "fulfilled" && spotifyRes.value.ok) {
           const spotifyData = await spotifyRes.value.json()
           if (spotifyData.connected) {
-            navigate("/sona", { replace: true })
+            const isAndroidNative = Capacitor.isNativePlatform() && Capacitor.getPlatform() === "android"
+            navigate(isAndroidNative ? "/sona" : "/home", { replace: true })
             return
           }
         }
 
-        navigate("/home", { replace: true })
+        const isAndroidNative = Capacitor.isNativePlatform() && Capacitor.getPlatform() === "android"
+        navigate(isAndroidNative ? "/sona" : "/home", { replace: true })
       } catch {
         setChecking(false)
       } finally {
@@ -389,18 +399,18 @@ function Landing() {
                   </div>
                 </div>
 
-                <div className="permission">
+                {/* <div className="permission">
                   <p>{t("landing.permission")}</p>
                   <div className="iconRequirement">
                     <img src="/spotify.png" alt="" />
                   </div>
-                </div>
+                </div> */}
 
                 <div className="appleMusic">
                   <p>{t("landing.appleMusic")}</p>
-                  <div className="iconRequirement">
-                    <img src="/AppleMusic.png" alt="" />
-                  </div>
+                  {/* <div className="iconRequirement">
+                    <img src="/musicIcons.png" alt="" />
+                  </div> */}
                 </div>
               </ul>
 

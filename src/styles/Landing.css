@@ -153,19 +153,19 @@
     border-radius: 30px;
     border: none;
     cursor: pointer;
-    font-size: 30px;
+    font-size: 20px;
     font-family: inherit;
-    width: 50px;
+    width: 35px;
     color: #121212;
     background: #fff;
-    height: 50px;
+    height: 35px;
     transform: rotate(45deg);
-    font-weight: 400;
+    font-weight: 300;
     position: absolute;
     left: 20px;
-    top: 0px;
-    -webkit-box-shadow: 3px 3px 30px -2px rgba(0, 0, 0, 0.34);
-    box-shadow: 3px 3px 30px -2px rgba(0, 0, 0, 0.34);
+    top: 0;
+    -webkit-box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, .2);
+    box-shadow: 2px 2px 6px -4px #0000002b;
 }
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -214,7 +214,7 @@
 .requirementsContent {
     margin: 70px 0;
 }
-.lifetimeAccess, .spotifyConection, .appleMusic, .permission {
+.lifetimeAccess, .spotifyConection, .permission {
     width: 100%;
     height: 140px;
     background: #fff;
@@ -226,6 +226,25 @@
     border: 0.5px solid #f2f2f2;
     margin: 15px 0;
     justify-content: space-around;
+}
+ .appleMusic{
+  width: 100%;
+  height: 140px;
+  background: #fff;
+  padding: 30px 10px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  border: .5px solid #f2f2f2;
+  margin: 15px 0;
+  justify-content: flex-start;
+}
+ .requirementsList .appleMusic p {
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 200;
+  width: 100%;
 }
 .iconRequirement {
     width: 50px;
@@ -240,10 +259,10 @@
     overflow: hidden;
 }
 .requirementsList p {
-    font-size: 14px;
-    font-family: inherit;
-    font-weight: 200;
-    width: 50%;
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 200;
+  width: 60%;
 }
 .lifetimeAccess .iconRequirement {
     width: 220px;

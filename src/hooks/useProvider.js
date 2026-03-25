@@ -24,10 +24,6 @@ export function useProvider() {
         Accept: "application/json",
       }
 
-      // -----------------------------
-      // 1. Si explícitamente el provider es apple_music,
-      //    SOLO validar Apple Music
-      // -----------------------------
       if (saved === "apple_music") {
         try {
           const res = await fetch(`${API_BASE}/api/apple-music/status`, {
@@ -44,7 +40,6 @@ export function useProvider() {
           }
         } catch {}
 
-        // fallback local solo para Apple Music
         if (appleLocal) {
           setProvider("apple_music")
           setReady(true)
@@ -57,10 +52,6 @@ export function useProvider() {
         return
       }
 
-      // -----------------------------
-      // 2. Si explícitamente el provider es spotify,
-      //    SOLO validar Spotify
-      // -----------------------------
       if (saved === "spotify") {
         try {
           const res = await fetch(`${API_BASE}/api/spotify/status`, {
@@ -83,10 +74,6 @@ export function useProvider() {
         return
       }
 
-      // -----------------------------
-      // 3. Si no hay provider guardado,
-      //    priorizar Apple Music si viene de una sesión Apple
-      // -----------------------------
       if (appleLocal) {
         try {
           const res = await fetch(`${API_BASE}/api/apple-music/status`, {
@@ -110,9 +97,6 @@ export function useProvider() {
         return
       }
 
-      // -----------------------------
-      // 4. Si no hay nada definido, intenta Apple primero
-      // -----------------------------
       try {
         const appleRes = await fetch(`${API_BASE}/api/apple-music/status`, {
           headers,
@@ -129,9 +113,6 @@ export function useProvider() {
         }
       } catch {}
 
-      // -----------------------------
-      // 5. Luego Spotify
-      // -----------------------------
       try {
         const spotifyRes = await fetch(`${API_BASE}/api/spotify/status`, {
           headers,
@@ -201,7 +182,14 @@ export function useProvider() {
 
   const getMusicInstance = useCallback(async () => {
     if (provider !== "apple_music") return null
-    if (musicInstanceRef.current) return musicInstanceRef.current
+    if (musicInstanceRef.current) {
+      // Verificar que tenga el token asignado
+      const savedUserToken = localStorage.getItem("appleMusicUserToken")
+      if (savedUserToken && !musicInstanceRef.current.isAuthorized) {
+        musicInstanceRef.current.musicUserToken = savedUserToken
+      }
+      return musicInstanceRef.current
+    }
 
     const MusicKit = await waitForMusicKit()
     let music = null
@@ -225,6 +213,12 @@ export function useProvider() {
     }
 
     if (!music) throw new Error("No se pudo inicializar Apple Music")
+
+    // Asignar el music_user_token guardado si existe
+    const savedUserToken = localStorage.getItem("appleMusicUserToken")
+    if (savedUserToken && !music.isAuthorized) {
+      music.musicUserToken = savedUserToken
+    }
 
     musicInstanceRef.current = music
     return music

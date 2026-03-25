@@ -8,7 +8,7 @@
       "lifetime": "Pago único de USD 2.99 para desbloquear acceso de por vida.",
       "premium": "Cuenta Premium activa en tu plataforma de streaming.",
       "permission": "Pronto podrás acceder a tu cuenta de Spotify para sincronizar tu música.",
-      "appleMusic": "Permitir acceso a tu cuenta de Apple Music para reproducir tu música desde Sona.",
+      "appleMusic": "Debes permitir el acceso a notificaciones en tu dispositivo android para poder disfrutar la experiencia con cualquier plataforma que utilices.",
       "note": "La app no incluye música propia. Todo el contenido se reproduce directamente desde tu cuenta de streaming favorita.",
       "developed": "Desarrollado por Devfer",
       "version": "Versión 1.0.1"
@@ -57,7 +57,11 @@
     },
     "sona":{
         "EmptyPlayerTitle":"Tu reproducción de música está en pausa",
-        "EmptyPlayer": "Reproduce una canción desde tus álbumes o playlist para visualizarla en esta sección."
+        "EmptyPlayer": "Reproduce una canción desde tus álbumes o playlist para visualizarla en esta sección.",
+        "EmptyPlayerTitleNative": "Sin iniciar",
+        "EmptyPlayerNative": "Abre una app de música para comenzar",
+        "notificationPermission": "Sona necesita acceso a notificaciones para detectar lo que se está reproduciendo. Toca Aceptar para abrir ajustes.",
+        "noMusicApp": "Tu música no está lista. Por favor abre tu aplicación de música favorita primero."
     },
     "connect":{
         "title": "Conecta tu música",

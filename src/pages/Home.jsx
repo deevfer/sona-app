@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import "../styles/Home.css"
 import { useTranslation } from "react-i18next"
 import LanguageSwitcher from "../components/LanguageSwitcher"
+import { App } from "@capacitor/app"
+import { Browser } from "@capacitor/browser"
+import { Capacitor } from "@capacitor/core"
 
 const API_BASE = import.meta.env.VITE_API_BASE
 const APPLE_DEV_NAME = "Sona"
@@ -16,64 +19,110 @@ function Home() {
   const [checking, setChecking] = useState(true)
   const [error, setError] = useState("")
 
-  useEffect(() => {
-    const checkConnection = async () => {
+  const checkConnection = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("token")
+
+      if (!token) {
+        return false
+      }
+
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      }
+
       try {
-        const token = localStorage.getItem("token")
+        const spotifyRes = await fetch(`${API_BASE}/api/spotify/status`, {
+          headers,
+        })
 
-        if (!token) {
-          setChecking(false)
-          return
-        }
-
-        const headers = {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        }
-
-        try {
-          const spotifyRes = await fetch(`${API_BASE}/api/spotify/status`, {
-            headers,
-          })
-
-          if (spotifyRes.ok) {
-            const spotifyData = await spotifyRes.json()
-            if (spotifyData.connected) {
-              localStorage.setItem("musicProvider", "spotify")
-              navigate("/sona", { replace: true })
-              return
-            }
+        if (spotifyRes.ok) {
+          const spotifyData = await spotifyRes.json()
+          if (spotifyData.connected) {
+            localStorage.setItem("musicProvider", "spotify")
+            navigate("/sona", { replace: true })
+            return true
           }
-        } catch (err) {
-          console.error("Spotify status error:", err)
-        }
-
-        try {
-          const appleRes = await fetch(`${API_BASE}/api/apple-music/status`, {
-            headers,
-          })
-
-          if (appleRes.ok) {
-            const appleData = await appleRes.json()
-            if (appleData.connected) {
-              localStorage.setItem("musicProvider", "apple_music")
-              localStorage.setItem("appleMusicConnected", "true")
-              navigate("/sona", { replace: true })
-              return
-            }
-          }
-        } catch (err) {
-          console.error("Apple Music status error:", err)
         }
       } catch (err) {
-        console.error("checkConnection error:", err)
+        console.error("Spotify status error:", err)
+      }
+
+      try {
+        const appleRes = await fetch(`${API_BASE}/api/apple-music/status`, {
+          headers,
+        })
+
+        if (appleRes.ok) {
+          const appleData = await appleRes.json()
+          if (appleData.connected) {
+            localStorage.setItem("musicProvider", "apple_music")
+            localStorage.setItem("appleMusicConnected", "true")
+            navigate("/sona", { replace: true })
+            return true
+          }
+        }
+      } catch (err) {
+        console.error("Apple Music status error:", err)
+      }
+
+      return false
+    } catch (err) {
+      console.error("checkConnection error:", err)
+      return false
+    }
+  }, [navigate])
+
+  useEffect(() => {
+    const runInitialCheck = async () => {
+      try {
+        await checkConnection()
       } finally {
         setChecking(false)
       }
     }
 
-    checkConnection()
-  }, [navigate])
+    runInitialCheck()
+  }, [checkConnection])
+
+  useEffect(() => {
+    let listener
+
+    const setupDeepLinkListener = async () => {
+      listener = await App.addListener("appUrlOpen", async ({ url }) => {
+        try {
+          if (!url) return
+
+          if (url.startsWith("sona://connected")) {
+            setError("")
+            const connected = await checkConnection()
+
+            if (!connected) {
+              setError("Apple Music connection could not be verified.")
+            }
+          }
+        } catch (err) {
+          console.error("appUrlOpen error:", err)
+          setError("Error returning to the app.")
+        } finally {
+          setLoadingApple(false)
+
+          try {
+            await Browser.close()
+          } catch {
+            // En Android puede no cerrar programáticamente; ignoramos
+          }
+        }
+      })
+    }
+
+    setupDeepLinkListener()
+
+    return () => {
+      listener?.remove?.()
+    }
+  }, [checkConnection])
 
   const handleSpotifyConnect = async () => {
     setLoadingSpotify(true)
@@ -184,6 +233,22 @@ function Home() {
         throw new Error("Usuario no autenticado")
       }
 
+      const isAndroidNative =
+        Capacitor.isNativePlatform() && Capacitor.getPlatform() === "android"
+
+      if (isAndroidNative) {
+        // Si tu ruta está en api.php, deja /api/...
+        // Si la moviste a web.php, cambia a /apple-music/android-connect
+        const authUrl = `${API_BASE}/apple-music/android-connect?token=${encodeURIComponent(token)}`
+
+        await Browser.open({
+          url: authUrl,
+          presentationStyle: "fullscreen",
+        })
+
+        return
+      }
+
       const tokenRes = await fetch(`${API_BASE}/api/apple-music/token`, {
         method: "GET",
         headers: {
@@ -238,7 +303,6 @@ function Home() {
     } catch (err) {
       console.error(err)
       setError(err.message || t("connect.error"))
-    } finally {
       setLoadingApple(false)
     }
   }

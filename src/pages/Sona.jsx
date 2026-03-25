@@ -5,9 +5,19 @@ import { useTranslation } from "react-i18next"
 
 import MenuComponent from "../components/MenuComponent"
 import MenuBottomComponent from "../components/MenuBottomComponent"
+import SonaAlert from "../components/SonaAlert"
 import { useProvider } from "../hooks/useProvider"
+import { Capacitor, registerPlugin } from "@capacitor/core"
+import { App as CapApp } from "@capacitor/app"
 
 const API_BASE = import.meta.env.VITE_API_BASE
+
+let MediaSession = null
+try {
+  if (Capacitor.isNativePlatform()) {
+    MediaSession = registerPlugin("MediaSessionPlugin")
+  }
+} catch {}
 
 function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n))
@@ -21,7 +31,31 @@ const CONTEXT_KEY = "sona:currentContext"
 
 function Sona() {
   const { t } = useTranslation()
+  const isNativeApp = Capacitor.isNativePlatform()
 
+  const [appIcon, setAppIcon] = useState(null)
+  const [appName, setAppName] = useState("")
+  const [alertMessage, setAlertMessage] = useState("")
+  // Precargar vinyls
+  useEffect(() => {
+    const vinyls = ["/vinyl-1.png", "/vinyl-2.png", "/vinyl-3.png", "/vinyl-4.png", "/vinyl-5.png", "/vinyl-6.png"]
+    vinyls.forEach(src => {
+      const img = new Image()
+      img.src = src
+    })
+  }, [])
+  // Mantener animación al rotar dispositivo
+  useEffect(() => {
+    const handleResize = () => {
+      // Forzar re-layout sin interrumpir animación
+      if (vinylRef.current && targetSpeedRef.current > 0) {
+        vinylRef.current.style.transform = `rotate(${rotationRef.current}deg)`
+      }
+    }
+
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
   const {
     provider,
     ready,
@@ -44,15 +78,20 @@ function Sona() {
   })
 
   const [selectedVinyl, setSelectedVinyl] = useState(() =>
-    localStorage.getItem(VINYL_KEY) || "/vinyl-1.svg"
+    localStorage.getItem(VINYL_KEY) || "/vinyl-1.png"
   )
   useEffect(() => {
     localStorage.setItem(VINYL_KEY, selectedVinyl)
   }, [selectedVinyl])
 
-  const [selectedBg, setSelectedBg] = useState(() =>
-    localStorage.getItem(BG_KEY) || "yellow"
-  )
+  const [selectedBg, setSelectedBg] = useState(() => {
+    const saved = localStorage.getItem(BG_KEY)
+    if (isNativeApp && saved !== "cover" && saved !== "black") {
+      localStorage.setItem(BG_KEY, "cover")
+      return "cover"
+    }
+    return saved || "yellow"
+  })
   useEffect(() => {
     localStorage.setItem(BG_KEY, selectedBg)
   }, [selectedBg])
@@ -218,11 +257,34 @@ function Sona() {
   }, [getMusicInstance, isAppleMusic, mapAppleNowPlaying])
 
   const fetchNowPlaying = useCallback(async () => {
+    // En Android nativo, usar MediaSession
+    if (isNativeApp && MediaSession) {
+      try {
+        const data = await MediaSession.getNowPlaying()
+        if (!data?.track) return null
+        return {
+          is_playing: !!data.is_playing,
+          progress_ms: data.progress_ms || 0,
+          packageName: data.packageName || null,
+          track: {
+            id: (data.track.name || "") + (data.track.artist || ""),
+            name: data.track.name || "",
+            artists: data.track.artist ? [data.track.artist] : [],
+            album: data.track.album || "",
+            image: data.track.image || "/icon-512.png",
+            duration_ms: data.track.duration_ms || 0,
+          },
+        }
+      } catch {
+        return null
+      }
+    }
+
     if (!provider) return null
     if (provider === "spotify") return spotifyNowPlaying()
     if (provider === "apple_music") return getAppleNowPlaying()
     return null
-  }, [provider, spotifyNowPlaying, getAppleNowPlaying])
+  }, [provider, isNativeApp, spotifyNowPlaying, getAppleNowPlaying])
 
   const safeAppleResume = useCallback(async (music) => {
     if (!music) return
@@ -296,9 +358,26 @@ function Sona() {
     }
   }, [])
 
-  // Apple Music event listeners
+  // Check MediaSession permission on Android
   useEffect(() => {
-    if (!ready || provider !== "apple_music") return
+    if (!isNativeApp || !MediaSession) return
+
+    const checkPermission = async () => {
+      try {
+        const { granted } = await MediaSession.hasPermission()
+        if (!granted) {
+          setAlertMessage(t("sona.notificationPermission") || "Sona needs notification access to detect what's playing.")
+          window.__sonaNeedsPermission = true
+        }
+      } catch {}
+    }
+
+    checkPermission()
+  }, [isNativeApp])
+
+  // Apple Music event listeners (web only)
+  useEffect(() => {
+    if (!ready || provider !== "apple_music" || isNativeApp) return
 
     let mounted = true
     let music = null
@@ -345,6 +424,27 @@ function Sona() {
         // silencio
       }
     }
+    //HEARTBEAT PARA SABER SI LA APP SIGUE VIVA O FUE DESINSTALADA
+    // useEffect(() => {
+    //   const token = localStorage.getItem("token")
+    //   if (!token) return
+  
+    //   const sendHeartbeat = () => {
+    //     fetch(`${API_BASE}/api/heartbeat`, {
+    //       method: "POST",
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //         Accept: "application/json",
+    //       },
+    //     }).catch(() => {})
+    //   }
+  
+    //   sendHeartbeat()
+    //   // const interval = setInterval(sendHeartbeat, 5 * 60 * 1000)
+    //   const interval = setInterval(sendHeartbeat, 30 * 1000)
+  
+    //   return () => clearInterval(interval)
+    // }, [])
 
     const setup = async () => {
       try {
@@ -377,6 +477,7 @@ function Sona() {
   }, [
     ready,
     provider,
+    isNativeApp,
     getMusicInstance,
     mapAppleNowPlaying,
     setNeedleByProgress,
@@ -385,14 +486,16 @@ function Sona() {
 
   // Polling
   useEffect(() => {
-    if (!ready || !provider) return
+    if (!ready) return
+    // En nativo no necesitamos provider para hacer polling via MediaSession
+    if (!isNativeApp && !provider) return
 
     let intervalId = null
     let cancelled = false
 
     const tick = async () => {
       if (cancelled || document.hidden) return
-      if (appleBusyRef.current) return
+      if (!isNativeApp && appleBusyRef.current) return
       if (Date.now() < cooldownUntilRef.current) return
 
       try {
@@ -400,17 +503,15 @@ function Sona() {
         if (cancelled) return
 
         if (!data) {
-          if (provider === "apple_music") {
-            setIsPlayingUI(false)
-            setIntentPlay(false)
-            setNeedleDown(false)
-          }
+          setIsPlayingUI(false)
+          setIntentPlay(false)
+          setNeedleDown(false)
           return
         }
 
         setNowPlaying(data)
 
-        if (provider === "apple_music" && data?.track) {
+        if (!isNativeApp && provider === "apple_music" && data?.track) {
           saveAppleLastTrack(data.track)
         }
 
@@ -439,11 +540,12 @@ function Sona() {
       }
     }
 
-    const initialDelay = provider === "apple_music" ? 1500 : 0
+    const pollInterval = isNativeApp ? 2000 : (provider === "apple_music" ? 2000 : 8000)
+    const initialDelay = isNativeApp ? 500 : (provider === "apple_music" ? 1500 : 0)
 
     const startPolling = () => {
       tick()
-      intervalId = setInterval(tick, provider === "apple_music" ? 2000 : 8000)
+      intervalId = setInterval(tick, pollInterval)
     }
 
     if (initialDelay > 0) {
@@ -456,7 +558,7 @@ function Sona() {
     } else {
       startPolling()
     }
-  }, [ready, provider, fetchNowPlaying, setNeedleByProgress, saveAppleLastTrack])
+  }, [ready, provider, isNativeApp, fetchNowPlaying, setNeedleByProgress, saveAppleLastTrack])
 
   useEffect(() => {
     return () => {
@@ -472,6 +574,29 @@ function Sona() {
     setError("")
 
     try {
+      // Android nativo — usar MediaSession
+      if (isNativeApp && MediaSession) {
+        const data = await MediaSession.getNowPlaying()
+        if (!data?.track) {
+          setAlertMessage(t("sona.noMusicApp") || "Your music isn't ready. Please open your favorite music app first.")
+          playPauseBusyRef.current = false
+          return
+        }
+        if (data?.is_playing) {
+          await MediaSession.pause()
+          setIntentPlay(false)
+          setNeedleDown(false)
+          setIsPlayingUI(false)
+        } else {
+          await MediaSession.play()
+          setIntentPlay(true)
+          setNeedleDown(true)
+          setIsPlayingUI(true)
+          setNeedleDeg(NEEDLE_MIN)
+        }
+        return
+      }
+
       if (!provider) return
 
       if (provider === "spotify") {
@@ -565,6 +690,21 @@ function Sona() {
     setError("")
 
     try {
+      // Android nativo
+      if (isNativeApp && MediaSession) {
+          const data = await MediaSession.getNowPlaying()
+          if (!data?.track) {
+            setAlertMessage(t("sona.noMusicApp") || "Your music isn't ready. Please open your favorite music app first.")
+            return
+          }
+          await MediaSession.next()
+          if (needleDown) setNeedleDeg(NEEDLE_MIN)
+          await new Promise((r) => setTimeout(r, 500))
+          const np = await fetchNowPlaying()
+          if (np) setNowPlaying(np)
+          return
+      }
+
       if (!provider) return
 
       if (provider === "spotify") {
@@ -606,6 +746,21 @@ function Sona() {
     setError("")
 
     try {
+      // Android nativo
+      if (isNativeApp && MediaSession) {
+          const data = await MediaSession.getNowPlaying()
+          if (!data?.track) {
+            setAlertMessage(t("sona.noMusicApp") || "Your music isn't ready. Please open your favorite music app first.")
+            return
+          }
+          await MediaSession.previous()
+          if (needleDown) setNeedleDeg(NEEDLE_MIN)
+          await new Promise((r) => setTimeout(r, 500))
+          const np = await fetchNowPlaying()
+          if (np) setNowPlaying(np)
+          return
+      }
+
       if (!provider) return
 
       if (provider === "spotify") {
@@ -668,7 +823,7 @@ function Sona() {
     nowPlaying?.track?.name ||
     translateOrFallback("Sona.NoTrackTitle", "Nothing playing")
   const showEmptyState = !nowPlaying?.track
-  
+
   const artists = Array.isArray(nowPlaying?.track?.artists)
     ? nowPlaying.track.artists.join(", ")
     : translateOrFallback(
@@ -701,7 +856,45 @@ function Sona() {
   const textClass =
     selectedBg === "black" || selectedBg === "cover" ? "text-light" : "text-dark"
 
+    useEffect(() => {
+      if (!isNativeApp || !MediaSession || !nowPlaying?.packageName) {
+        setAppIcon(null)
+        return
+      }
+  
+      MediaSession.getAppIcon({ packageName: nowPlaying.packageName })
+        .then(res => setAppIcon(res?.icon || null))
+        .catch(() => setAppIcon(null))
+    }, [isNativeApp, nowPlaying?.packageName])
+
+
+  useEffect(() => {
+    if (!isNativeApp || !MediaSession || !nowPlaying?.packageName) {
+      setAppName("")
+      return
+    }
+
+    MediaSession.getAppName({ packageName: nowPlaying.packageName })
+      .then(res => setAppName(res?.name || ""))
+      .catch(() => setAppName(""))
+  }, [isNativeApp, nowPlaying?.packageName])
+
+
+  useEffect(() => {
+    if (!isNativeApp) return
+
+    const listener = CapApp.addListener("backButton", (event) => {
+      // Bloquear navegación hacia atrás
+      event.canGoBack = false
+    })
+
+    return () => {
+      listener.then(l => l.remove())
+    }
+  }, [isNativeApp])
+
   if (!ready) return null
+
 
   return (
     <div className={`sonaBody ${bgClass} ${textClass}`} style={bgStyles}>
@@ -715,11 +908,14 @@ function Sona() {
             selectedBg={selectedBg}
             onSelectBg={setSelectedBg}
             cover={savedCover || cover}
+            nowPlayingPackage={nowPlaying?.packageName || null}
+            appIcon={appIcon}
+            appName={appName}
             shareTrack={{
-              name: nowPlaying?.track?.name,
-              artists: nowPlaying?.track?.artists || [],
-              image: savedCover || cover,
-            }}
+                name: nowPlaying?.track?.name,
+                artists: nowPlaying?.track?.artists || [],
+                image: savedCover || cover,
+              }}
           />
         </div>
 
@@ -727,16 +923,33 @@ function Sona() {
           <div className="vinylContent">
             <div className="vinyl" ref={vinylRef} onClick={handlePlayPause}>
               <div className="albumImg">
+                <div class="infoAlbumApp">
+                    <svg viewBox="0 0 200 200" class="circularText">
+                        <defs>
+                          <path id="topArc" d="M 100,100 m -90,0 a 90,90 0 1,1 180,0" />
+                          <path id="bottomArc" d="M 100,100 m 90,0 a 90,90 0 1,1 -180,0" />
+                        </defs>
+                        <text class="albumArtist">
+                            <textPath href="#bottomArc" startOffset="5%" text-anchor="middle">SONA</textPath>
+                        </text>
+                        <text class="albumTitle">
+                            <textPath href="#topArc" startOffset="50%" text-anchor="middle">MADE WITH LOVE</textPath>
+                        </text>
+                        <text class="albumArtist">
+                            <textPath href="#bottomArc" startOffset="50%" text-anchor="middle">DEVELOPED BY @DEVFER</textPath>
+                        </text>
+                        <text class="albumArtist">
+                            <textPath href="#bottomArc" startOffset="95%" text-anchor="middle">SONA</textPath>
+                        </text>
+                    </svg>
+                </div>
+                <div className="pinCenter"></div>
                 <img src={cover} alt="" />
               </div>
               <img className="vinylImg" src={selectedVinyl} alt="" />
             </div>
 
             <div className="pin">
-              {/* <div className="basePin">
-                <img src="/basepin.svg" alt="" />
-              </div> */}
-
               <div
                 className="pinTop"
                 style={{
@@ -748,16 +961,17 @@ function Sona() {
                   if (needleDown && intentPlay) startSpin()
                   if (!needleDown && !intentPlay) stopSpinSmooth()
                 }}
-              >
+              > 
+                {/* <div className={`pinLight ${needleDown ? "active" : ""}`}></div> */}
                 <img src="/pin_base.svg" alt="" />
               </div>
             </div>
           </div>
-            <div
-              className={`musicInfoControlers ${
-                !isTrackLoading && !nowPlaying?.track ? "emptyText" : ""
-              }`}
-            >
+          <div
+            className={`musicInfoControlers ${
+              !isTrackLoading && !nowPlaying?.track ? "emptyText" : ""
+            }`}
+          >
             <div className="musicInfo">
               {isTrackLoading ? (
                 <>
@@ -765,19 +979,37 @@ function Sona() {
                   <div className="skeletonText artist" />
                 </>
               ) : !nowPlaying?.track ? (
-                <div className="emptyStatePlayer">
-                  <img src="/discos.svg" alt="" />
-                  <h1>{t("sona.EmptyPlayerTitle")}</h1>
-                  <p>{t("sona.EmptyPlayer")}</p>
-                </div>
+                <>
+                  <div className="emptyStatePlayer">
+                    <img src="/discos.svg" alt="" />
+                    <h1>{isNativeApp ? t("sona.EmptyPlayerTitleNative") : t("sona.EmptyPlayerTitle")}</h1>
+                    <p>{isNativeApp ? t("sona.EmptyPlayerNative") : t("sona.EmptyPlayer")}</p>
+                  </div>
+                  <div className="controlers">
+                      <div className="play" onClick={handlePlayPause}>
+                        <img src="/play.svg" alt="" />
+                      </div>
+
+                      <div className="backM" onClick={handlePrev}>
+                        <img src="/back.svg" alt="" />
+                      </div>
+
+                      <div className="nextM" onClick={handleNext}>
+                        <img src="/next.svg" alt="" />
+                      </div>
+                  </div>
+                </>
               ) : (
                 <>
-                  <h1 className={`marquee ${isTitleOverflow ? "run" : ""}`}>
-                    <span ref={titleRef}>{trackName}</span>
-                  </h1>
-                  <p className={`marquee ${isArtistOverflow ? "run" : ""}`}>
-                    <span ref={artistRef}>{artists}</span>
-                  </p>
+                  <div className="emptyStatePlayer">
+                    <h1 className={`marquee ${isTitleOverflow ? "run" : ""}`}>
+                      <span ref={titleRef}>{trackName}</span>
+                    </h1>
+                    <p className={`marquee ${isArtistOverflow ? "run" : ""}`}>
+                      <span ref={artistRef}>{artists}</span>
+                    </p>
+                  </div>
+                  
                 </>
               )}
 
@@ -803,7 +1035,19 @@ function Sona() {
         </div>
       </div>
 
-      <MenuBottomComponent />
+      {/* <MenuBottomComponent /> */}
+      <SonaAlert 
+          message={alertMessage} 
+          onClose={async () => {
+            setAlertMessage("")
+            if (window.__sonaNeedsPermission) {
+              window.__sonaNeedsPermission = false
+              try {
+                await MediaSession?.requestPermission()
+              } catch {}
+            }
+          }} 
+      />
     </div>
   )
 }
