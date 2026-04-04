@@ -1,681 +1,434 @@
 .landing {
-    width: 100%;
-    height: 100vh;
-    background-color: #000000;
-    position: relative;
-    overflow: hidden;
-    isolation: isolate;
+  width: 100%;
+  height: 100vh;
+  background-color: #000000;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
 }
 
 .overlayBackgroundLanding {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0, 0, 0, 0.88) 0%,
-            rgba(0, 0, 0, 0.78) 22%,
-            rgba(0, 0, 0, 0.55) 45%,
-            rgba(0, 0, 0, 0.72) 72%,
-            rgba(0, 0, 0, 0.9) 100%
-        ),
-        linear-gradient(
-            180deg,
-            rgba(0, 0, 0, 0.38) 0%,
-            rgba(0, 0, 0, 0.15) 20%,
-            rgba(0, 0, 0, 0.1) 50%,
-            rgba(0, 0, 0, 0.22) 80%,
-            rgba(0, 0, 0, 0.42) 100%
-        );
-    backdrop-filter: blur(16px) saturate(1.05);
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+      linear-gradient(
+          90deg,
+          rgba(0, 0, 0, 0.88) 0%,
+          rgba(0, 0, 0, 0.78) 22%,
+          rgba(0, 0, 0, 0.55) 45%,
+          rgba(0, 0, 0, 0.72) 72%,
+          rgba(0, 0, 0, 0.9) 100%
+      ),
+      linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.38) 0%,
+          rgba(0, 0, 0, 0.15) 20%,
+          rgba(0, 0, 0, 0.1) 50%,
+          rgba(0, 0, 0, 0.22) 80%,
+          rgba(0, 0, 0, 0.42) 100%
+      );
+  backdrop-filter: blur(16px) saturate(1.05);
 }
 
 .contentLanding,
 .container-lang,
 .modalOverlay {
-    position: relative;
-    z-index: 1;
+  position: relative;
+  z-index: 1;
 }
-
 
 .contentRight::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 2;
-    /* background:
-        linear-gradient(to left, rgba(0,0,0,0.38) 0%, transparent 22%),
-        linear-gradient(to top, rgba(0,0,0,0.22) 0%, transparent 18%),
-        linear-gradient(to bottom, rgba(0,0,0,0.22) 0%, transparent 18%); */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
 }
+
 .contentLanding {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
-.contentLanding > div{
-    flex:1;
+
+.contentLanding > div {
+  flex: 1;
 }
+
 .titleContentLeft {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
 }
+
 .titleContentLeft h1 {
-    font-size: 46px;
-    font-weight: 600;
-    line-height: 40px;
-    max-width: 490px;
-    width: 100%;
-    padding: 0 0 0 40px;
+  font-size: 46px;
+  font-weight: 600;
+  line-height: 40px;
+  max-width: 490px;
+  width: 100%;
+  padding: 0 0 0 40px;
 }
+
 .vinylLanding {
-    position: relative;
-    width: 100%;
-    transform: translateX(200px); 
-    opacity: 0;
-    animation: slideInVinyl 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  position: relative;
+  width: 100%;
+  transform: translateX(200px);
+  opacity: 0;
+  animation: slideInVinyl 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
-.vinylLanding img{
-    width: 140%;
+
+.vinylLanding img {
+  width: 140%;
 }
+
 @keyframes slideInVinyl {
-    from {
-        transform: translateX(200px);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+  from {
+      transform: translateX(200px);
+      opacity: 0;
+  }
+  to {
+      transform: translateX(0);
+      opacity: 1;
+  }
 }
+
 .btnsContentLeft {
-    position: relative;
-    display: flex;
-    width: 100%;
-    justify-content: flex-start;
-    padding: 0 110px 0 40px;
+  position: relative;
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  padding: 0 110px 0 40px;
 }
 
 .btnPrimary button {
-    background: #fff;
-    padding: 15px 30px;
-    border-radius: 50px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 500;
-    font-family: inherit;
-    border: none;
-    cursor: pointer;
-    color: #121212;
+  background: #fff;
+  padding: 15px 30px;
+  border-radius: 50px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  color: #121212;
 }
+
 .btnSecondary button {
-    background: transparent;
-    border: none;
-    font-size: 14px;
-    font-family: inherit;
-    color: #fff;
-    padding: 15px 30px;
-    font-weight: 200;
-    cursor: pointer;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: #fff;
+  padding: 15px 30px;
+  font-weight: 200;
+  cursor: pointer;
 }
+
 .modalOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(6px);
-    z-index: 999;
-
-    animation: fadeIn 0.3s ease forwards;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  z-index: 999;
+  animation: fadeIn 0.3s ease forwards;
 }
+
 .modalContent {
-    background: #f9f9f9;
-    color: #121212;
-    padding: 80px 30px;
-    border-radius: 50px;
-    width: 70%;
-    height: 70%;
-    max-width: 90%;
-    text-align: center;
-    animation: scaleIn 0.3s ease forwards;
-    position: relative;
-    overflow: scroll;
-
-    scrollbar-width: none;
+  background: #f9f9f9;
+  color: #121212;
+  padding: 80px 30px;
+  border-radius: 50px;
+  width: 70%;
+  height: 70%;
+  max-width: 90%;
+  text-align: center;
+  position: relative;
+  overflow: scroll;
+  scrollbar-width: none;
 }
+
 .closeModal {
-    margin-top: 20px;
-    border-radius: 30px;
-    border: none;
-    cursor: pointer;
-    font-size: 30px;
-    font-family: inherit;
-    width: 50px;
-    color: #121212;
-    background: #fff;
-    height: 50px;
-    transform: rotate(45deg);
-    font-weight: 400;
-    position: absolute;
-    left: 20px;
-    top: 0px;
-    -webkit-box-shadow: 3px 3px 30px -2px rgba(0, 0, 0, 0.34);
-    box-shadow: 3px 3px 30px -2px rgba(0, 0, 0, 0.34);
+  margin-top: 20px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  font-size: 30px;
+  font-family: inherit;
+  width: 50px;
+  color: #121212;
+  background: #fff;
+  height: 50px;
+  transform: rotate(45deg);
+  font-weight: 400;
+  position: absolute;
+  left: 20px;
+  top: 0px;
+  -webkit-box-shadow: 3px 3px 30px -2px rgba(0, 0, 0, 0.34);
+  box-shadow: 3px 3px 30px -2px rgba(0, 0, 0, 0.34);
 }
+
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-@keyframes scaleIn {
-    from { 
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    to { 
-        transform: scale(1);
-        opacity: 1;
-    }
-}
 .requirementsList {
-    list-style: none;
-    padding: 0;
-    text-align: center;
-    line-height: 1.6;
-    width: 80%;
-    margin: 20px auto 0;
+  list-style: none;
+  padding: 0;
+  text-align: center;
+  line-height: 1.6;
+  width: 80%;
+  margin: 20px auto 0;
 }
+
 .noteRequirement {
-    margin-top: 20px;
-    font-size: 12px;
-    opacity: 0.7;
+  margin-top: 20px;
+  font-size: 12px;
+  opacity: 0.7;
 }
+
 .rights {
-    width: 30%;
-    margin: auto;
+  width: 30%;
+  margin: auto;
 }
+
 .rights p {
-    font-size: 12px;
-    font-family: inherit;
-    color: #cecece;
-    font-weight: 200;
+  font-size: 12px;
+  font-family: inherit;
+  color: #cecece;
+  font-weight: 200;
 }
+
 .rights span {
-    font-size: 12px;
-    font-family: inherit;
-    color: #cecece;
-    font-weight: 200;
+  font-size: 12px;
+  font-family: inherit;
+  color: #cecece;
+  font-weight: 200;
 }
-.requirementsContent {
-    margin: 70px 0;
-}
-.lifetimeAccess, .spotifyConection, .appleMusic, .permission {
-    width: 100%;
-    height: 140px;
-    background: #fff;
-    padding: 30px 10px;
-    border-radius: 30px;
-    display: flex;
-    align-items: center;
-    text-align: left;
-    border: 0.5px solid #f2f2f2;
-    margin: 15px 0;
-    justify-content: space-around;
-}
-.iconRequirement {
-    width: 50px;
-    height: 50px;
-}
-.iconRequirement img{
-    width: 100%;
-}
-.lifetimeAccess {
-    background: #121212;
-    color: #fff;
-    overflow: hidden;
-}
-.requirementsList p {
-    font-size: 14px;
-    font-family: inherit;
-    font-weight: 200;
-    width: 50%;
-}
-.lifetimeAccess .iconRequirement {
-    width: 220px;
-    height: 180px;
-    position: relative;
-    right: -80px;
-}
+
 .rights svg {
-    width: 65px;
-}
-@media (max-width: 768px) {
-
-    .contentLanding{
-        flex-direction: column;
-        justify-content: center;
-        text-align: center;
-    }
-    
-    .contentLanding > div{
-        flex: unset;
-        width: 100%;
-    }
-    
-    .titleContentLeft h1{
-        font-size: 32px;
-        line-height: 34px;
-        width: 100%;
-        padding: 0 20px;
-    }
-    
-    .btnsContentLeft{
-        padding: 0;
-        justify-content: center;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-    
-    .btnPrimary button,
-    .btnSecondary button{
-        width: 220px;
-    }
-    
-    .vinylLanding{
-        transform: translateX(0);
-        margin-top: 40px;
-    }
-    
-    .vinylLanding img{
-        width: 110%;
-    }
-    
-    .modalContent{
-        width: 90%;
-        height: 85%;
-        padding: 60px 20px;
-        border-radius: 35px;
-    }
-    
-    .requirementsList{
-        width: 100%;
-    }
-    
-    .rights{
-        width: 70%;
-    }
-    
-    }
-@media (min-width: 1200px){
-
-.titleContentLeft h1{
-    font-size: 56px;
-    line-height: 48px;
-    width: 560px;
+  width: 65px;
 }
 
-.btnsContentLeft{
-    padding: 0 160px 0 40px;
+.requirementsContent {
+  margin: 70px 0;
 }
 
-.vinylLanding img{
-    width: 160%;
+.lifetimeAccess,
+.spotifyConection,
+.appleMusic {
+  width: 100%;
+  height: 140px;
+  background: #fff;
+  padding: 30px 10px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  border: 0.5px solid #f2f2f2;
+  margin: 15px 0;
+  justify-content: space-around;
 }
 
-.modalContent{
-    width: 60%;
-    height: 65%;
+.permission {
+  width: 100%;
+  height: 140px;
+  background: #fff;
+  padding: 30px 30px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  border: 0.5px solid #f2f2f2;
+  margin: 15px 0;
+  justify-content: left;
 }
 
-.rights{
-    width: 25%;
+.iconRequirement {
+  width: 50px;
+  height: 50px;
 }
 
+.iconRequirement img {
+  width: 100%;
+}
+
+.lifetimeAccess {
+  background: #121212;
+  color: #fff;
+  overflow: hidden;
+}
+
+.requirementsList p {
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 200;
+  width: 50%;
+}
+
+.requirementsList .permission p {
+  width: 100%;
+}
+
+.lifetimeAccess .iconRequirement {
+  width: 220px;
+  height: 180px;
+  position: relative;
+  right: -80px;
 }
 
 /* =========================
-   RESPONSIVE (Tablet-first)
-   Base = tu CSS actual (landscape / 2 columnas)
-   ========================= */
+ Content Right (landscape base)
+ ========================= */
+.contentRight {
+  position: relative;
+  width: 50%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
 
-/* ---------- LANDSCAPE: reducir texto, mantener botones ---------- */
-@media (orientation: landscape) {
-    .titleContentLeft h1 {
-      font-size: 38px;          /* más pequeño */
-      line-height: 36px;
-      width: 420px;             /* evita que se haga gigante */
-      padding-left: 40px;       /* igual */
-    }
-  
-    /* Botones mantienen tamaño: NO tocamos padding/font-size */
-    .btnsContentLeft {
-      padding: 0 40px 0 40px;  /* igual que tu base */
-    }
-  
-    .vinylLanding img {
-      width: 140%;
-    }
-  }
-  
-  /* ---------- PORTRAIT: centro + vinyl abajo cortado ---------- */
-  @media (orientation: portrait) {
-    .landing {
-      overflow: hidden; /* necesario para “cortar” el vinyl */
-    }
-  
-    .contentLanding {
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 0 24px;
-    }
-  
-    .contentLeft {
-      width: 100%;
-      text-align: center;
-      z-index: 2;
-    }
-  
-    .titleContentLeft {
-      margin-bottom: 24px;
-    }
-  
-    .titleContentLeft h1 {
-      width: 100%;
-      padding: 0;
-      font-size: 40px;
-      line-height: 38px;
-      margin: 0 auto;
-    }
-  
-    .btnsContentLeft {
-      justify-content: center;
-      padding: 0;
-      gap: 12px;
-      flex-direction: column; /* se ve como tu screenshot vertical */
-      align-items: center;
-    }
-  
-    .contentRight {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -28vh;   /* sube/baja el “corte” (ajústalo si quieres más/menos) */
-      height: 60vh;    /* controla cuánto se ve del vinyl */
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      z-index: 1;
-      pointer-events: none;
-    }
-  
-    .vinylLanding {
-      transform: none;
-      opacity: 1;
-      animation: none; /* si quieres mantener animación en portrait, lo reactivamos */
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-  
-    .vinylLanding img {
-      width: 130vw;   /* grande para que llene y se recorte */
-      max-width: none;
-    }
-  }
-  .contentRight {
-    position: relative;
-    width: 50%;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-  }
-  
-  .chartsGrid {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(140px, 180px));
-    gap: 18px;
-    justify-content: end;
-    align-items: start;
-    overflow: hidden;
-    padding: 0 30px;
-  }
-  
-  .chartsColumn {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    will-change: transform;
-  }
-  
-  .albumArtwork {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: 0;
-    overflow: hidden;
-    flex-shrink: 0;
-  }
-  
-  .albumArtwork img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  
-  /* desktop / landscape */
-  .scrollUp {
-    animation: landingScrollUp 48s linear infinite;
-  }
-  
-  .scrollDown {
-    animation: landingScrollDown 50s linear infinite;
-  }
-  
-  .scrollUpSlow {
-    animation: landingScrollUp 54s linear infinite;
-  }
-  
-  @keyframes landingScrollUp {
-    0% {
-      transform: translateY(0);
-    }
-    100% {
-      transform: translateY(-50%);
-    }
-  }
-  
-  @keyframes landingScrollDown {
-    0% {
-      transform: translateY(-50%);
-    }
-    100% {
-      transform: translateY(0);
-    }
-  }
-  
-  /* portrait */
-  .chartsRowsMobile {
-    width: 100%;
-    position: absolute;
-    left: 0;
-    bottom: 40px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    overflow: hidden;
-    padding: 0;
-  }
-  
-  .chartsRow {
-    display: flex;
-    flex-direction: row;
-    gap: 14px;
-    width: max-content;
-    will-change: transform;
-  }
-  
-  .mobileArtwork {
-    width: 140px;
-    min-width: 140px;
-    aspect-ratio: 1 / 1;
-  }
-  
-  .scrollLeftRow {
-    animation: landingScrollLeft 38s linear infinite;
-  }
-  
-  .scrollRightRow {
-    animation: landingScrollRight 40s linear infinite;
-  }
-  
-  @keyframes landingScrollLeft {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
-  
-  @keyframes landingScrollRight {
-    0% {
-      transform: translateX(-50%);
-    }
-    100% {
-      transform: translateX(0);
-    }
-  }
-  
-  @media (orientation: portrait) {
-    .contentLanding.portraitLayout {
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 0 24px;
-    }
-  
-    .contentLanding.portraitLayout .contentLeft {
-      width: 100%;
-      max-width: 420px;
-      position: relative;
-      z-index: 3;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin: auto 0;
-    }
-  
-    .contentLanding.portraitLayout .titleContentLeft {
-      margin-bottom: 24px;
-    }
-  
-    .contentLanding.portraitLayout .titleContentLeft h1 {
-      width: 100%;
-      max-width: 340px;
-      margin: 0 auto;
-      padding: 0;
-      font-size: 40px;
-      line-height: 38px;
-      text-align: center;
-    }
-  
-    .contentLanding.portraitLayout .btnsContentLeft {
-      padding: 0;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      gap: 12px;
-    }
-  
-    .contentLanding.portraitLayout .contentRight {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      width: 100%;
-      height: 34vh;
-      overflow: hidden;
-      display: block;
-      pointer-events: none;
-      z-index: 1;
-    }
-  
-    .contentLanding.portraitLayout .btnPrimary button,
-    .contentLanding.portraitLayout .btnSecondary button {
-      width: 220px;
-    }
-  }
-  
-  /* Responsive */
-  @media (max-width: 1100px) {
-    .chartsGrid {
-      /* grid-template-columns: repeat(3, minmax(110px, 140px)); */
-      gap: 14px;
-      padding: 0;
-    }
-  
-    .albumArtwork {
-      border-radius: 0px;
-    }
-  }
-  .albumArtwork.skeleton {
-    background: transparent;
-    overflow: hidden;
-  }
-  
-  .albumArtwork .skeletonBox {
-    width: 100%;
-    height: 100%;
-    border-radius: 28px;
-    background: rgba(255, 255, 255, 0.08);
-  }
-  
-  .shimmer .skeletonBox {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .shimmer .skeletonBox::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    transform: translateX(-100%);
-    background: linear-gradient(
+.chartsGrid {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(140px, 180px));
+  gap: 18px;
+  justify-content: end;
+  align-items: start;
+  overflow: hidden;
+  padding: 0 30px;
+}
+
+.chartsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  will-change: transform;
+}
+
+.albumArtwork {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 0;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.albumArtwork img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Scroll animations - landscape */
+.scrollUp {
+  animation: landingScrollUp 48s linear infinite;
+}
+
+.scrollDown {
+  animation: landingScrollDown 50s linear infinite;
+}
+
+.scrollUpSlow {
+  animation: landingScrollUp 54s linear infinite;
+}
+
+@keyframes landingScrollUp {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+@keyframes landingScrollDown {
+  0% { transform: translateY(-50%); }
+  100% { transform: translateY(0); }
+}
+
+/* Scroll animations - portrait rows */
+.chartsRowsMobile {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.chartsRow {
+  display: flex;
+  flex-direction: row;
+  gap: 14px;
+  width: max-content;
+  will-change: transform;
+}
+
+.mobileArtwork {
+  width: 140px;
+  min-width: 140px;
+  aspect-ratio: 1 / 1;
+}
+
+.scrollLeftRow {
+  animation: landingScrollLeft 38s linear infinite;
+}
+
+.scrollRightRow {
+  animation: landingScrollRight 40s linear infinite;
+}
+
+@keyframes landingScrollLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes landingScrollRight {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+/* Skeleton */
+.albumArtwork.skeleton {
+  background: transparent;
+  overflow: hidden;
+}
+
+.albumArtwork .skeletonBox {
+  width: 100%;
+  height: 100%;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.shimmer .skeletonBox {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer .skeletonBox::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
       90deg,
       transparent,
-      rgba(255,255,255,0.12),
+      rgba(255, 255, 255, 0.12),
       transparent
-    );
-    animation: shimmerMove 1.8s infinite;
-  }
-  
-  @keyframes shimmerMove {
-    100% {
-      transform: translateX(100%);
-    }
-  }
-
-@media (min-width: 320px) and (max-width: 484px){}
-
-
-@media (min-width: 568px) and (max-width: 736px){}
-
-
-@media (min-width: 768px) and (max-width: 800px){
-  .contentRight {
-    display: none;
+  );
+  animation: shimmerMove 1.8s infinite;
 }
+
+@keyframes shimmerMove {
+  100% { transform: translateX(100%); }
 }

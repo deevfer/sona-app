@@ -1,11 +1,19 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import "../styles/Home.css"
+import "../styles/Responsive.css"
 import { useTranslation } from "react-i18next"
 import LanguageSwitcher from "../components/LanguageSwitcher"
+import { Capacitor } from "@capacitor/core"
+import AppleMusicAuthPlugin from "../plugins/appleMusicAuth"
 
 const API_BASE = import.meta.env.VITE_API_BASE
 const APPLE_DEV_NAME = "Sona"
+
+// 🔥 DETECCIÓN DE SIMULADOR
+const isSimulator =
+  Capacitor.getPlatform() === "ios" &&
+  !window?.webkit?.messageHandlers
 
 function Home() {
   const navigate = useNavigate()
@@ -16,12 +24,20 @@ function Home() {
   const [checking, setChecking] = useState(true)
   const [error, setError] = useState("")
 
+  const isNativeIOS =
+    Capacitor.isNativePlatform() && Capacitor.getPlatform() === "ios"
+
   useEffect(() => {
     const checkConnection = async () => {
       try {
         const token = localStorage.getItem("token")
-
         if (!token) {
+          setChecking(false)
+          return
+        }
+
+        // 🔥 MOCK EN SIMULADOR (EVITA LLAMADAS REALES)
+        if (isSimulator) {
           setChecking(false)
           return
         }
@@ -42,6 +58,10 @@ function Home() {
               localStorage.setItem("musicProvider", "spotify")
               navigate("/sona", { replace: true })
               return
+            } else {
+              if (localStorage.getItem("musicProvider") === "spotify") {
+                localStorage.removeItem("musicProvider")
+              }
             }
           }
         } catch (err) {
@@ -60,6 +80,12 @@ function Home() {
               localStorage.setItem("appleMusicConnected", "true")
               navigate("/sona", { replace: true })
               return
+            } else {
+              // 🔥 LIMPIEZA CRÍTICA
+              localStorage.removeItem("appleMusicConnected")
+              if (localStorage.getItem("musicProvider") === "apple_music") {
+                localStorage.removeItem("musicProvider")
+              }
             }
           }
         } catch (err) {
@@ -173,6 +199,117 @@ function Home() {
     return music
   }
 
+  const handleAppleMusicConnectNative = async (token) => {
+    const tokenRes = await fetch(`${API_BASE}/api/apple-music/token`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    })
+
+    if (!tokenRes.ok) {
+      const errorText = await tokenRes.text()
+      throw new Error(errorText || "No se pudo obtener el developer token de Apple Music")
+    }
+
+    const tokenData = await tokenRes.json()
+    const developerToken = tokenData.token
+
+    if (!developerToken) {
+      throw new Error("No se recibió el developer token")
+    }
+
+    const nativeResult = await AppleMusicAuthPlugin.connect({
+      developerToken,
+    })
+
+    const musicUserToken = nativeResult?.musicUserToken
+
+    if (!musicUserToken) {
+      throw new Error("No se recibió el Music User Token")
+    }
+
+    const connectRes = await fetch(`${API_BASE}/api/apple-music/connect`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        music_user_token: musicUserToken,
+        provider_user_id: null,
+        scopes: ["native_ios"],
+      }),
+    })
+
+    if (!connectRes.ok) {
+      const errorText = await connectRes.text()
+      throw new Error(errorText || "No se pudo guardar la conexión de Apple Music")
+    }
+
+    localStorage.setItem("appleMusicConnected", "true")
+    localStorage.setItem("appleMusicUserToken", musicUserToken)
+    localStorage.setItem("musicProvider", "apple_music")
+
+    navigate("/sona", { replace: true })
+  }
+
+  const handleAppleMusicConnectWeb = async (token) => {
+    const tokenRes = await fetch(`${API_BASE}/api/apple-music/token`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    })
+
+    if (!tokenRes.ok) {
+      const errorText = await tokenRes.text()
+      throw new Error(errorText || "No se pudo obtener el developer token de Apple Music")
+    }
+
+    const tokenData = await tokenRes.json()
+    const developerToken = tokenData.token
+
+    if (!developerToken) {
+      throw new Error("No se recibió el developer token")
+    }
+
+    const music = await getOrCreateMusicKitInstance(developerToken)
+    const musicUserToken = await music.authorize()
+
+    if (!musicUserToken) {
+      throw new Error("No se recibió el Music User Token")
+    }
+
+    const connectRes = await fetch(`${API_BASE}/api/apple-music/connect`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        music_user_token: musicUserToken,
+        provider_user_id: null,
+        scopes: ["musickit_web"],
+      }),
+    })
+
+    if (!connectRes.ok) {
+      const errorText = await connectRes.text()
+      throw new Error(errorText || "No se pudo guardar la conexión de Apple Music")
+    }
+
+    localStorage.setItem("appleMusicConnected", "true")
+    localStorage.setItem("appleMusicUserToken", musicUserToken)
+    localStorage.setItem("musicProvider", "apple_music")
+
+    navigate("/sona", { replace: true })
+  }
+
   const handleAppleMusicConnect = async () => {
     setLoadingApple(true)
     setError("")
@@ -184,57 +321,23 @@ function Home() {
         throw new Error("Usuario no autenticado")
       }
 
-      const tokenRes = await fetch(`${API_BASE}/api/apple-music/token`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      })
+      // 🔥 MOCK EN SIMULADOR
+      if (isSimulator) {
+        localStorage.setItem("musicProvider", "apple_music")
+        localStorage.setItem("appleMusicConnected", "true")
 
-      if (!tokenRes.ok) {
-        const errorText = await tokenRes.text()
-        throw new Error(errorText || "No se pudo obtener el developer token de Apple Music")
+        setTimeout(() => {
+          navigate("/sona", { replace: true })
+        }, 300)
+
+        return
       }
 
-      const tokenData = await tokenRes.json()
-      const developerToken = tokenData.token
-
-      if (!developerToken) {
-        throw new Error("No se recibió el developer token")
+      if (isNativeIOS) {
+        await handleAppleMusicConnectNative(token)
+      } else {
+        await handleAppleMusicConnectWeb(token)
       }
-
-      const music = await getOrCreateMusicKitInstance(developerToken)
-      const musicUserToken = await music.authorize()
-
-      if (!musicUserToken) {
-        throw new Error("No se recibió el Music User Token")
-      }
-
-      const connectRes = await fetch(`${API_BASE}/api/apple-music/connect`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          music_user_token: musicUserToken,
-          provider_user_id: null,
-          scopes: ["musickit_web"],
-        }),
-      })
-
-      if (!connectRes.ok) {
-        const errorText = await connectRes.text()
-        throw new Error(errorText || "No se pudo guardar la conexión de Apple Music")
-      }
-
-      localStorage.setItem("appleMusicConnected", "true")
-      localStorage.setItem("appleMusicUserToken", musicUserToken)
-      localStorage.setItem("musicProvider", "apple_music")
-
-      navigate("/sona", { replace: true })
     } catch (err) {
       console.error(err)
       setError(err.message || t("connect.error"))

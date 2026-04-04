@@ -164,7 +164,7 @@
   }
   
   .queueEmptyStateInner h2 {
-    font-size: 28px;
+    font-size: 18px;
     font-weight: 600;
     margin: 0 0 10px;
   }
@@ -177,12 +177,46 @@
     max-width: 320px;
   }
 
+  .trackRow.active {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(6px);
+  }
+  
+  .trackRow.active .trackName,
+  .trackRow.active .trackIndex,
+  .trackRow.active .trackDuration {
+    opacity: 1;
+  }
 
-  @media (orientation: landscape) and (max-height: 520px){
+
+.titleQueue h1 {
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 0;
+    top: 50px;
+    position: relative;
+}
+.queueEmptyIcon img{
+  width: 100%;
+}
+
+.text-dark .albumsStage {
+  color: #000;
+}
+
+.text-light .albumsStage {
+  color: #fff;
+}
+@media (orientation: landscape) and (max-height: 520px){
     .queueArtistName {
         font-size: 10px;
         opacity: 0.6;
         text-align: left;
         margin-top: 4px;
     }
+  .titleQueue h1 {
+      top: 0px;
+  }
 }

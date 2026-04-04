@@ -3,6 +3,8 @@
     padding: 0;
     box-sizing: border-box;
     -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
 }
   
 body {
@@ -10,9 +12,12 @@ body {
     font-family: 'Poppins', sans-serif;
     color: white;
     margin: 0!important;
+    
 }
 html, body {
     touch-action: manipulation;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
 

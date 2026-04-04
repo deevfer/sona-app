@@ -1,0 +1,2247 @@
+/* =========================
+   ALL PORTRAIT (iPhone + iPad) — base
+   ========================= */
+[data-sileo-viewport][data-position$=center] {
+    top: 60px!important;
+}
+
+@media (orientation: portrait) {
+    .contentLanding.portraitLayout {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0 24px;
+    }
+
+    .contentLanding.portraitLayout .contentLeft {
+        width: 100%;
+        max-width: 420px;
+        position: relative;
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: auto 0;
+    }
+
+    .contentLanding.portraitLayout .titleContentLeft {
+        margin-bottom: 24px;
+    }
+
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        width: 100%;
+        max-width: 340px;
+        margin: 0 auto;
+        padding: 0;
+        font-size: 40px;
+        line-height: 38px;
+        text-align: center;
+    }
+
+    .contentLanding.portraitLayout .btnsContentLeft {
+        padding: 0;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .contentLanding.portraitLayout .contentRight {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 34vh;
+        overflow: hidden;
+        display: block;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .contentLanding.portraitLayout .btnPrimary button,
+    .contentLanding.portraitLayout .btnSecondary button {
+        width: 220px;
+    }
+
+    .contentRight .chartsGrid {
+        display: none;
+    }
+
+    .modalContent {
+        width: 90%;
+        height: 75%;
+        padding: 60px 20px;
+        border-radius: 35px;
+    }
+
+    .requirementsList {
+        width: 100%;
+    }
+
+    .rights {
+        width: 70%;
+    }
+    .loginForm {
+        padding: 0 20px!important;
+    }
+    .material-form {
+        margin: 30px auto 0px!important;
+    }
+
+}
+
+/* =========================
+   ALL LANDSCAPE — base
+   ========================= */
+@media (orientation: landscape) {
+    .titleContentLeft h1 {
+        font-size: 38px;
+        line-height: 36px;
+        max-width: 420px;
+        padding-left: 40px;
+    }
+
+    .btnsContentLeft {
+        padding: 0 40px;
+    }
+}
+
+/* =========================================================
+   PORTRAIT iPHONES
+   ========================================================= */
+
+/* iPhone SE 3rd, iPhone 8 — 375×667 */
+@media (orientation: portrait) and (width: 375px) and (height: 667px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 32px;
+        line-height: 32px;
+        max-width: 280px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        display: none;
+    }
+    .backButton {
+        left: -30px;
+    }
+    .mobileArtwork {
+        width: 110px;
+        min-width: 110px;
+    }
+    .loginForm {
+        height: 120%;
+    }
+    .vinylContent {
+        width: 100vw;
+    }
+    .musicInfoControlers.emptyText {
+        top: -60px!important;
+    }
+    .emptyStatePlayer h1 {
+        font-size: 14px!important;
+    }
+    .emptyStatePlayer p {
+        font-size: 12px!important;
+    }
+    .vinylPlay {
+        height: 100%!important;
+    }
+    .vinyl {
+        width: 100vw!important;
+        left: -120px!important;
+        top: 0px!important;
+    }
+    .pin {
+        position: absolute!important;
+        top: 24%!important;
+        width: 40%!important;
+        right: 1vw!important;
+        height: auto!important;
+    }
+    .pinTop {
+        position: absolute!important;
+        left: -2vw!important;
+        top: 40px!important;
+        width: 12vw!important;
+        height: 12vw!important;
+    }
+    .pinTop img {
+        width: 30vw!important;
+        left: 0!important;
+        top: 0%!important;
+        transform: translate(-16vw, -16vw)!important;
+    }
+    .albumImg img {
+        width: 50vw!important;
+        height: 50vw!important;
+    }
+    .musicInfoControlers {
+        top: -45px!important;
+    }
+    .musicInfoControlers .musicInfo h1 {
+        font-size: 14px!important;
+    }
+    .musicInfoControlers .musicInfo p {
+        font-size: 10px!important;
+    }
+    .controlers div {
+        width: 55px!important;
+    }
+    .controlers {
+        width: 60%!important;
+        margin: 10px 0!important;
+    }
+    .menuAlbumItem {
+        top: -10px!important;
+    }
+    .searchMenuTop {
+        top: 30px!important;
+    }
+    .searchOpen .searchInput {
+        left: -305px!important;
+    }
+    .coverItem {
+        width: 115px!important;
+    }
+    .listCovers {
+        padding: 80px 0!important;
+    }
+    .albumCoverLarge {
+        width: 130px!important;
+    }
+    .tracksBackFloating {
+        top: -115px!important;
+    }
+    .trackRow {
+        padding: 6px 10px;
+    }
+    .albumTitleLarge {
+        font-size: 14px!important;
+        text-align: center;
+    }
+    .stack3D {
+        height: 85vh!important;
+        width: 140vw!important;
+        margin-left: calc(-80vw + 50%)!important;
+    }
+    .album3D {
+        width: 400px!important;
+        height: 400px!important;
+        margin-left: -360px;
+    }
+    .material-form {
+        margin: 30px auto 0px!important;
+    }
+}
+
+/* iPhone 8 Plus — 414×736 */
+@media (orientation: portrait) and (width: 414px) and (height: 736px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 38px;
+        line-height: 36px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        display: none;
+    }
+    .mobileArtwork {
+        width: 130px;
+        min-width: 130px;
+    }
+    .listCovers {
+        padding: 70px 0!important;
+    }
+    .searchMenuTop {
+        top: 20px!important;
+    }
+    .menuAlbumItem {
+        top: -20px!important;
+    }
+    .searchOpen .searchInput {
+        left: -345px!important;
+    }
+    .splitLayout {
+        top: 30px!important;
+        height: 89vh!important;
+    }
+    .trackRow {
+        padding: 8px 10px!important;
+    }
+    .titleQueue h1 {
+        top: 0!important;
+    }
+    .vinylPlay {
+        height: 103%!important;
+    }
+    .vinyl {
+        width: 110vw!important;
+        left: -170px!important;
+        top: 0px!important;
+    }
+    .pin {
+        top: 30%!important;
+        width: 40%!important;
+        right: -5vw!important;
+    }
+    .pinTop {
+        left: -3vw!important;
+        top: 0px!important;
+        width: 15vw!important;
+        height: 15vw!important;
+    }
+    .pinTop img {
+        width: 32vw!important;
+        left: 0!important;
+        top: 0%!important;
+        transform: translate(-16vw, -16vw)!important;
+    }
+    .musicInfoControlers {
+        top: -60px!important;
+    }
+    .musicInfoControlers .musicInfo h1 {
+        font-size: 14px!important;
+    }
+    .musicInfoControlers .musicInfo p {
+        font-size: 12px!important;
+    }
+    .controlers {
+        width: 50%!important;
+        margin: 10px 0!important;
+    }
+    .controlers div {
+        width: 55px!important;
+    }
+}
+
+/* iPhone X, XS, 11 Pro, 12 mini, 13 mini — 375×812 */
+@media (orientation: portrait) and (width: 375px) and (height: 812px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 32px;
+        line-height: 32px;
+        max-width: 280px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        height: 30vh;
+    }
+    .mobileArtwork {
+        width: 110px;
+        min-width: 110px;
+    }
+    .vinylContent {
+        width: 100vw;
+    }
+    .vinyl {
+        width: 100vw!important;
+        left: -120px!important;
+        top: 0px!important;
+    }
+    .pin {
+        position: absolute !important;
+        top: 30% !important;
+        width: 40% !important;
+        right: 0vw !important;
+        height: auto !important;
+    }
+    .pinTop {
+        position: absolute!important;
+        left: -2vw!important;
+        top: 40px!important;
+        width: 12vw!important;
+        height: 12vw!important;
+    }
+    .pinTop img {
+        width: 30vw!important;
+        left: 0!important;
+        top: 0%!important;
+        transform: translate(-16vw, -16vw)!important;
+    }
+    .albumImg img {
+        width: 50vw!important;
+        height: 50vw!important;
+    }
+    .musicInfoControlers {
+        top: -75px!important;
+    }
+    .musicInfoControlers .musicInfo h1 {
+        font-size: 14px!important;
+    }
+    .musicInfoControlers .musicInfo p {
+        font-size: 10px!important;
+    }
+    .musicInfoControlers.emptyText {
+        top: -60px!important;
+    }
+    .emptyStatePlayer h1 {
+        font-size: 14px!important;
+    }
+    .emptyStatePlayer p {
+        font-size: 12px!important;
+    }
+    .vinylPlay {
+        height: 100%!important;
+    }
+    .controlers div {
+        width: 55px!important;
+    }
+    .controlers {
+        width: 60%!important;
+        margin: 10px 0!important;
+    }
+    .menuAlbumItem {
+        top: -10px!important;
+    }
+    .searchMenuTop {
+        top: 30px!important;
+    }
+    .searchOpen .searchInput {
+        left: -305px!important;
+    }
+    .coverItem {
+        width: 115px!important;
+    }
+    .listCovers {
+        padding: 80px 0!important;
+    }
+    .albumCoverLarge {
+        width: 130px!important;
+    }
+    .tracksBackFloating {
+        top: -115px!important;
+    }
+    .trackRow {
+        padding: 6px 10px;
+    }
+    .albumTitleLarge {
+        font-size: 14px!important;
+        text-align: center;
+    }
+    .stack3D {
+        height: 85vh!important;
+        width: 140vw!important;
+        margin-left: calc(-80vw + 50%)!important;
+    }
+    .album3D {
+        width: 400px!important;
+        height: 400px!important;
+        margin-left: -360px;
+    }
+    .material-form {
+        margin: 30px auto 0px!important;
+    }
+}
+
+/* iPhone XR, 11, XS Max, 11 Pro Max — 414×896 */
+@media (orientation: portrait) and (width: 414px) and (height: 896px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 38px;
+        line-height: 36px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        height: 32vh;
+    }
+    .mobileArtwork {
+        width: 130px;
+        min-width: 130px;
+    }
+    .searchOpen .searchInput {
+        left: -340px !important;
+    }
+    .tracksBackFloating {
+        top: -70px!important;
+    }
+}
+
+/* iPhone 12, 12 Pro, 13, 13 Pro, 14 — 390×844 */
+@media (orientation: portrait) and (width: 390px) and (height: 844px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 38px;
+        line-height: 36px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        height: 32vh;
+    }
+    .mobileArtwork {
+        width: 130px;
+        min-width: 130px;
+    }
+}
+
+/* iPhone 12 Pro Max, 13 Pro Max, 14 Plus — 428×926 */
+@media (orientation: portrait) and (width: 428px) and (height: 926px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 42px;
+        line-height: 40px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        height: 34vh;
+    }
+    .searchOpen .searchInput {
+        left: -350px !important;
+    }
+}
+
+/* iPhone 14 Pro, 15, 15 Pro, 16 — 393×852 */
+@media (orientation: portrait) and (width: 393px) and (height: 852px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 38px;
+        line-height: 36px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        height: 32vh;
+    }
+    .mobileArtwork {
+        width: 130px;
+        min-width: 130px;
+    }
+    .tracksBackFloating {
+        top: -70px!important;
+    }
+}
+
+/* iPhone 17 Air — 400×912 */
+@media (orientation: portrait) and (width: 400px) and (height: 912px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 38px;
+        line-height: 36px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        height: 32vh;
+    }
+    .mobileArtwork {
+        width: 130px;
+        min-width: 130px;
+    }
+}
+
+/* iPhone 16 Pro, 17, 17 Pro — 402×874 */
+@media (orientation: portrait) and (width: 402px) and (height: 874px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 38px;
+        line-height: 36px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        height: 32vh;
+    }
+    .mobileArtwork {
+        width: 130px;
+        min-width: 130px;
+    }
+}
+
+/* iPhone 14 Pro Max, 15 Plus, 15 Pro Max, 16 Plus — 430×932 */
+@media (orientation: portrait) and (width: 430px) and (height: 932px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 42px;
+        line-height: 40px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        height: 34vh;
+    }
+    .searchOpen .searchInput {
+        left: -350px!important;
+    }
+    .pin {
+        right: -7vw!important;
+    }
+}
+
+/* iPhone 16 Pro Max, 17 Pro Max — 440×956 */
+@media (orientation: portrait) and (width: 440px) and (height: 956px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 42px;
+        line-height: 40px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        height: 34vh;
+    }
+    .searchOpen .searchInput {
+        left: -360px !important;
+    }
+    .pin {
+        right: -7vw!important;
+    }
+    .stack3D {
+        margin-left: calc(-80vw + 50%)!important;
+    }
+}
+
+/* =========================================================
+   PORTRAIT iPADS
+   ========================================================= */
+
+/* iPad mini 6th — 744×1133 */
+@media (orientation: portrait) and (width: 744px) and (height: 1133px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 48px;
+        line-height: 44px;
+        max-width: 460px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        height: 36vh;
+    }
+    .mobileArtwork {
+        width: 160px;
+        min-width: 160px;
+    }
+    .modalContent {
+        width: 75%;
+        height: 65%;
+    }
+    .searchMenuTop {
+        top: 40px!important;
+    }
+    .searchExpandable .searchInput {
+        left: -615px!important;
+    }
+    .searchOpen .searchInput {
+        left: -615px!important;
+    }
+    .coverItem {
+        width: 180px!important;
+    }
+    .listCovers {
+        padding: 100px 0!important;
+    }
+    .stack3D {
+        width: 120vw!important;
+        margin-left: calc(-60vw + 50%)!important;
+    }
+    .splitLayout {
+        flex-direction: column!important;
+        align-items: center!important;
+        justify-content: center!important;
+    }
+    .tracksBackFloating {
+        left: -160px!important;
+    }
+    .vinylContent {
+        position: relative;
+        width: 100%!important;
+    }
+    .vinylPlay {
+        flex-direction: column!important;
+        height: 100%!important;
+        align-items: flex-start!important;
+        max-width: 100vw!important;
+        max-height: 90vh!important;
+        justify-content: center!important;
+    }
+    .vinyl {
+        width: 700px!important;
+        left: -100px!important;
+    }
+    .albumImg img {
+        width: 380px!important;
+        height: 380px!important;
+        border-radius: 190px!important;
+    }
+    .pin {
+        top: 135px!important;
+        right: -10px!important;
+    }
+    .pinTop {
+        left: 178px!important;
+        top: 113px!important;
+        width: 95px!important;
+        height: 95px!important;
+    }
+    .pinTop img {
+        width: 200px!important;
+        transform: translate(-144px, -144px)!important;
+    }
+    .musicInfoControlers {
+        right: 0!important;
+        width: 100%!important;
+        top: -50px!important;
+    }
+    .musicInfoControlers.emptyText {
+        top: -70px !important;
+        padding: 67px 0!important;
+    }
+    .musicInfo {
+        width: 100%!important;
+    }
+    .marquee {
+        width: 330px!important;
+    }
+    .controlers {
+        width: 260px!important;
+    }
+    .controlers div {
+        border-radius: 35px!important;
+        width: 85px!important;
+    }
+    .albumTitleLarge {
+        text-align: center!important;
+    }
+    .albumColumn {
+        align-items: center!important;
+        justify-content: center!important;
+    }
+    .emptyStatePlayer img {
+        display: none!important;
+    }
+}
+
+/* iPad 9th — 810×1080 */
+@media (orientation: portrait) and (width: 810px) and (height: 1080px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 48px;
+        line-height: 44px;
+        max-width: 460px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        height: 36vh;
+    }
+    .mobileArtwork {
+        width: 160px;
+        min-width: 160px;
+    }
+    .modalContent {
+        width: 75%;
+        height: 65%;
+    }
+    .pin {
+        top: 12%!important;
+    }
+    .coverItem {
+        width: 190px!important;
+    }
+    .searchOpen .searchInput {
+        left: -685px !important;
+    }
+    .searchExpandable .searchInput {
+        left: -685px!important;
+    }
+
+}
+
+/* iPad 10th/A16, iPad Air M1/M2 — 820×1180 */
+@media (orientation: portrait) and (width: 820px) and (height: 1180px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 56px;
+        line-height: 50px;
+        max-width: 520px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        height: 38vh;
+    }
+    .contentLanding.portraitLayout .btnPrimary button,
+    .contentLanding.portraitLayout .btnSecondary button {
+        width: 280px;
+    }
+    .mobileArtwork {
+        width: 180px;
+        min-width: 180px;
+    }
+    .modalContent {
+        width: 60%;
+        height: 60%;
+    }
+    .rights {
+        width: 40%;
+    }
+    .musicInfoControlers.emptyText {
+        padding: 11px 0!important;
+    }
+    .searchExpandable .searchInput {
+        left: -665px !important;
+    }
+    .searchOpen .searchInput {
+        left: -695px !important;
+    }
+}
+
+/* iPad Pro 11" M4 — 834×1194 */
+@media (orientation: portrait) and (width: 834px) and (height: 1194px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 56px;
+        line-height: 50px;
+        max-width: 520px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        height: 38vh;
+    }
+    .contentLanding.portraitLayout .btnPrimary button,
+    .contentLanding.portraitLayout .btnSecondary button {
+        width: 280px;
+    }
+    .mobileArtwork {
+        width: 180px;
+        min-width: 180px;
+    }
+    .modalContent {
+        width: 60%;
+        height: 60%;
+    }
+    .rights {
+        width: 40%;
+    }
+    .searchExpandable .searchInput {
+        left: -715px !important;
+    }
+    .pin {
+        top: 16%!important;
+    }
+}
+
+/* iPad Air 13" M2, iPad Pro 13" M4 — 1024×1366 */
+@media (orientation: portrait) and (width: 1024px) and (height: 1366px) {
+    .contentLanding.portraitLayout .titleContentLeft h1 {
+        font-size: 48px;
+        line-height: 44px;
+        max-width: 460px;
+    }
+    .contentLanding.portraitLayout .contentRight {
+        height: 36vh;
+    }
+    .mobileArtwork {
+        width: 160px;
+        min-width: 160px;
+    }
+    .modalContent {
+        width: 75%;
+        height: 65%;
+    }
+    .searchMenuTop {
+        top: 40px!important;
+    }
+    .searchExpandable .searchInput {
+        left: -855px!important;
+    }
+    .searchOpen .searchInput {
+        left: -855px!important;
+    }
+    .coverItem {
+        width: 180px!important;
+    }
+    .listCovers {
+        padding: 100px 0!important;
+    }
+    .stack3D {
+        width: 120vw!important;
+        margin-left: calc(-60vw + 50%)!important;
+    }
+    .splitLayout {
+        flex-direction: column!important;
+        align-items: center!important;
+        justify-content: center!important;
+        padding: 80px 40px!important;
+    }
+    .tracksBackFloating {
+        top: -130px !important;
+        left: -300px !important;
+    }
+    .vinylContent {
+        position: relative;
+        width: 100%!important;
+    }
+    .vinylPlay {
+        flex-direction: column!important;
+        height: 100%!important;
+        align-items: flex-start!important;
+        max-width: 100vw!important;
+        max-height: 90vh!important;
+        justify-content: center!important;
+    }
+    .vinyl {
+        width: 930px !important;
+        left: -190px !important;
+    }
+    .albumImg img {
+        width: 520px !important;
+        height: 520px !important;
+        border-radius: 330px !important;
+    }
+    .pin {
+        top: 160px!important;
+        right: -10px!important;
+    }
+    .pinTop {
+        left: 218px !important;
+        top: 165px !important;
+        width: 135px !important;
+        height: 135px !important;
+    }
+    .pinTop img {
+        width: 270px !important;
+        transform: translate(-194px, -194px) !important;
+    }
+    .musicInfoControlers {
+        right: 0 !important;
+        width: 100% !important;
+        top: -50px !important;
+        display: flex!important;
+    }
+    .musicInfoControlers.emptyText {
+        top: -70px !important;
+        padding: 30px 0!important;
+        justify-content: center!important;
+    }
+    .musicInfo {
+        width: 60% !important;
+    }
+    .marquee {
+        width: 330px!important;
+    }
+    .controlers {
+        width: 40% !important;
+    }
+    .controlers div {
+        border-radius: 35px!important;
+        width: 110px!important;
+    }
+    .albumTitleLarge {
+        text-align: center!important;
+    }
+    .albumColumn {
+        align-items: center!important;
+        justify-content: center!important;
+    }
+    .emptyStatePlayer img {
+        display: none!important;
+    }
+}
+
+/* =========================================================
+   LANDSCAPE iPHONES
+   ========================================================= */
+
+/* iPhone SE 3rd, iPhone 8 — 667×375 */
+@media (orientation: landscape) and (width: 667px) and (height: 375px) {
+    .titleContentLeft h1 {
+        font-size: 28px;
+        line-height: 28px;
+        max-width: 320px;
+    }
+    .titleContentLeft {
+        margin-bottom: 20px;
+    }
+    .btnPrimary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .btnSecondary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(90px, 120px));
+        gap: 10px;
+        padding: 0 10px;
+    }
+    .contentRight {
+        width: 45%;
+    }
+    .modalContent {
+        width: 85%;
+        height: 85%;
+        padding: 40px 20px;
+        border-radius: 25px;
+    }
+    .coverItem {
+        width: 120px!important;
+    }
+    .searchExpandable .searchInput {
+        left: -570px!important;
+    }
+    .menuAlbumItem {
+        position: relative!important;
+        top: -20px!important;
+    }
+    .albumColumn {
+        width: 110px!important;
+    }
+    .albumTitleLarge {
+        font-size: 12px!important;
+    }
+    .tracksBackFloating {
+        top: -65px!important;
+    }
+    .trackRow {
+        padding: 6px 10px!important;
+    }
+    .trackIndex {
+        font-size: 9px!important;
+    }
+    .trackName {
+        font-size: 10px!important;
+    }
+    .trackDuration {
+        font-size: 10px!important;
+    }
+    .splitLayout {
+        top: 50px!important;
+    }
+    .musicInfoControlers {
+        position: relative;
+        right: 0!important;
+    }
+    .pin {
+        position: absolute;
+        top: 20px!important;
+        right: 10px!important;
+    }
+    .pinTop {
+        left: 90px!important;
+        top: 53px!important;
+        width: 35px!important;
+        height: 35px!important;
+    }
+    .pinTop img {
+        width: 12vw!important;
+        left: 50%!important;
+        top: 50%!important;
+        transform: translate(-59px, -59px)!important;
+    }
+}
+
+/* iPhone 8 Plus — 736×414 */
+@media (orientation: landscape) and (width: 736px) and (height: 414px) {
+    .titleContentLeft h1 {
+        font-size: 28px;
+        line-height: 28px;
+        max-width: 320px;
+    }
+    .titleContentLeft {
+        margin-bottom: 20px;
+    }
+    .btnPrimary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .btnSecondary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(90px, 120px));
+        gap: 10px;
+        padding: 0 10px;
+    }
+    .contentRight {
+        width: 45%;
+    }
+    .modalContent {
+        width: 85%;
+        height: 85%;
+        padding: 40px 20px;
+        border-radius: 25px;
+    }
+    .coverItem {
+        width: 120px!important;
+    }
+    .searchExpandable .searchInput {
+        left: -620px!important;
+    }
+    .menuAlbumItem {
+        position: relative!important;
+        top: -20px!important;
+    }
+    .albumColumn {
+        width: 110px!important;
+    }
+    .albumTitleLarge {
+        font-size: 12px!important;
+    }
+    .tracksBackFloating {
+        top: -100px!important;
+    }
+    .trackRow {
+        padding: 6px 10px!important;
+    }
+    .trackIndex {
+        font-size: 9px!important;
+    }
+    .trackName {
+        font-size: 10px!important;
+    }
+    .trackDuration {
+        font-size: 10px!important;
+    }
+    .splitLayout {
+        top: 120px!important;
+    }
+    .musicInfoControlers {
+        position: relative;
+        right: 0!important;
+    }
+    .pin {
+        position: absolute;
+        top: 20px!important;
+        right: 15px!important;
+    }
+    .pinTop {
+        left: 90px!important;
+        top: 53px!important;
+        width: 35px!important;
+        height: 35px!important;
+    }
+    .pinTop img {
+        width: 12vw!important;
+        left: 50%!important;
+        top: 50%!important;
+        transform: translate(-59px, -59px)!important;
+    }
+}
+
+/* iPhone X, XS, 11 Pro, 12 mini, 13 mini — 812×375 */
+@media (orientation: landscape) and (width: 812px) and (height: 375px) {
+    .titleContentLeft h1 {
+        font-size: 28px;
+        line-height: 28px;
+        max-width: 320px;
+    }
+    .titleContentLeft {
+        margin-bottom: 20px;
+    }
+    .btnPrimary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .btnSecondary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(90px, 120px));
+        gap: 10px;
+        padding: 0 10px;
+    }
+    .contentRight {
+        width: 45%;
+    }
+    .modalContent {
+        width: 85%;
+        height: 85%;
+        padding: 40px 20px;
+        border-radius: 25px;
+    }
+    .coverItem {
+        width: 120px!important;
+    }
+    .searchExpandable .searchInput {
+        left: -700px!important;
+    }
+    .menuAlbumItem {
+        position: relative!important;
+        top: -20px!important;
+    }
+    .albumColumn {
+        width: 110px!important;
+    }
+    .albumTitleLarge {
+        font-size: 12px!important;
+    }
+    .tracksBackFloating {
+        top: -65px!important;
+    }
+    .trackRow {
+        padding: 6px 10px!important;
+    }
+    .trackIndex {
+        font-size: 9px!important;
+    }
+    .trackName {
+        font-size: 10px!important;
+    }
+    .trackDuration {
+        font-size: 10px!important;
+    }
+    .splitLayout {
+        top: 110px!important;
+    }
+    .musicInfoControlers {
+        position: relative;
+        right: 0!important;
+    }
+    .pin {
+        position: absolute;
+        top: 0px!important;
+        right: 30px!important;
+    }
+    .pinTop {
+        left: 90px!important;
+        top: 53px!important;
+        width: 55px!important;
+        height: 55px!important;
+    }
+    .pinTop img {
+        width: 12vw!important;
+        left: 50%!important;
+        top: 50%!important;
+        transform: translate(-71px, -71px)!important;
+    }
+    .stack3D {
+        height: 75vh!important;
+        width: 110vw!important;
+        margin-left: calc(-90vw + 90%)!important;
+    }
+}
+
+/* iPhone XR, 11, XS Max, 11 Pro Max — 896×414 */
+@media (orientation: landscape) and (width: 896px) and (height: 414px) {
+    .titleContentLeft h1 {
+        font-size: 28px;
+        line-height: 28px;
+        max-width: 320px;
+    }
+    .titleContentLeft {
+        margin-bottom: 20px;
+    }
+    .btnPrimary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .btnSecondary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(100px, 130px));
+        gap: 10px;
+        padding: 0 10px;
+    }
+    .contentRight {
+        width: 45%;
+    }
+    .modalContent {
+        width: 85%;
+        height: 85%;
+        padding: 40px 20px;
+        border-radius: 25px;
+    }
+    .coverItem {
+        width: 120px!important;
+    }
+    .searchExpandable .searchInput {
+        left: -760px!important;
+    }
+    .menuAlbumItem {
+        position: relative!important;
+        top: -20px!important;
+    }
+    .albumColumn {
+        width: 110px!important;
+    }
+    .albumTitleLarge {
+        font-size: 12px!important;
+    }
+    .tracksBackFloating {
+        top: -85px!important;
+    }
+    .trackRow {
+        padding: 6px 10px!important;
+    }
+    .trackIndex {
+        font-size: 9px!important;
+    }
+    .trackName {
+        font-size: 10px!important;
+    }
+    .trackDuration {
+        font-size: 10px!important;
+    }
+    .splitLayout {
+        top: 110px!important;
+    }
+    .musicInfoControlers {
+        position: relative;
+        right: 0!important;
+    }
+    .vinylContent {
+        width: 55%!important;
+    }
+    .pin {
+        position: absolute;
+        top: 20px!important;
+        right: 10px!important;
+    }
+    .pinTop {
+        left: 90px!important;
+        top: 53px!important;
+        width: 65px!important;
+        height: 65px!important;
+    }
+    .pinTop img {
+        width: 12vw!important;
+        left: 50%!important;
+        top: 50%!important;
+        transform: translate(-79px, -79px)!important;
+    }
+}
+
+/* iPhone 12, 12 Pro, 13, 13 Pro, 14 — 844×390 */
+@media (orientation: landscape) and (width: 844px) and (height: 390px) {
+    .titleContentLeft h1 {
+        font-size: 28px;
+        line-height: 28px;
+        max-width: 320px;
+    }
+    .titleContentLeft {
+        margin-bottom: 20px;
+    }
+    .btnPrimary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .btnSecondary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(100px, 130px));
+        gap: 10px;
+        padding: 0 10px;
+    }
+    .contentRight {
+        width: 45%;
+    }
+    .modalContent {
+        width: 85%;
+        height: 85%;
+        padding: 40px 20px;
+        border-radius: 25px;
+    }
+    .coverItem {
+        width: 120px!important;
+    }
+    .searchExpandable .searchInput {
+        left: -760px!important;
+    }
+    .menuAlbumItem {
+        position: relative!important;
+        top: -20px!important;
+    }
+    .albumColumn {
+        width: 110px!important;
+    }
+    .albumTitleLarge {
+        font-size: 12px!important;
+    }
+    .tracksBackFloating {
+        top: -85px!important;
+    }
+    .trackRow {
+        padding: 6px 10px!important;
+    }
+    .trackIndex {
+        font-size: 9px!important;
+    }
+    .trackName {
+        font-size: 10px!important;
+    }
+    .trackDuration {
+        font-size: 10px!important;
+    }
+    .splitLayout {
+        top: 70px!important;
+    }
+    .musicInfoControlers {
+        position: relative;
+        right: 0!important;
+    }
+    .vinylContent {
+        width: 55%!important;
+    }
+    .pin {
+        position: absolute;
+        top: 20px!important;
+        right: 10px!important;
+    }
+    .pinTop {
+        left: 90px!important;
+        top: 53px!important;
+        width: 50px!important;
+        height: 50px!important;
+    }
+    .pinTop img {
+        width: 12vw!important;
+        left: 50%!important;
+        top: 50%!important;
+        transform: translate(-73px, -73px)!important;
+    }
+    .stack3D {
+        height: 76vh!important;
+        width: 110vw!important;
+        margin-left: calc(-90vw + 90%)!important;
+    }
+    .album3D {
+        width: 250px!important;
+        height: 250px!important;
+    }
+}
+
+/* iPhone 12 Pro Max, 13 Pro Max, 14 Plus — 926×428 */
+@media (orientation: landscape) and (width: 926px) and (height: 428px) {
+    .titleContentLeft h1 {
+        font-size: 28px;
+        line-height: 28px;
+        max-width: 320px;
+    }
+    .titleContentLeft {
+        margin-bottom: 20px;
+    }
+    .btnPrimary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .btnSecondary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(100px, 130px));
+        gap: 10px;
+        padding: 0 10px;
+    }
+    .contentRight {
+        width: 45%;
+    }
+    .modalContent {
+        width: 85%;
+        height: 85%;
+        padding: 40px 20px;
+        border-radius: 25px;
+    }
+    .coverItem {
+        width: 120px!important;
+    }
+    .searchExpandable .searchInput {
+        left: -810px!important;
+    }
+    .menuAlbumItem {
+        position: relative!important;
+        top: -20px!important;
+    }
+    .albumColumn {
+        width: 110px!important;
+    }
+    .albumTitleLarge {
+        font-size: 12px!important;
+    }
+    .tracksBackFloating {
+        top: -65px!important;
+    }
+    .trackRow {
+        padding: 6px 10px!important;
+    }
+    .trackIndex {
+        font-size: 9px!important;
+    }
+    .trackName {
+        font-size: 10px!important;
+    }
+    .trackDuration {
+        font-size: 10px!important;
+    }
+    .splitLayout {
+        top: 90px!important;
+    }
+    .musicInfoControlers {
+        position: relative;
+        right: 0!important;
+    }
+    .vinylContent {
+        width: 55%!important;
+    }
+    .pin {
+        position: absolute;
+        top: 20px!important;
+        right: 0px!important;
+    }
+    .pinTop {
+        left: 90px!important;
+        top: 53px!important;
+        width: 60px!important;
+        height: 60px!important;
+    }
+    .pinTop img {
+        width: 12vw!important;
+        left: 50%!important;
+        top: 50%!important;
+        transform: translate(-80px, -80px)!important;
+    }
+}
+
+/* iPhone 14 Pro, 15, 15 Pro, 16 — 852×393 */
+@media (orientation: landscape) and (width: 852px) and (height: 393px) {
+    .titleContentLeft h1 {
+        font-size: 28px;
+        line-height: 28px;
+        max-width: 320px;
+    }
+    .titleContentLeft {
+        margin-bottom: 20px;
+    }
+    .btnPrimary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .btnSecondary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(90px, 120px));
+        gap: 10px;
+        padding: 0 10px;
+    }
+    .contentRight {
+        width: 45%;
+    }
+    .modalContent {
+        width: 85%;
+        height: 85%;
+        padding: 40px 20px;
+        border-radius: 25px;
+    }
+    .coverItem {
+        width: 120px!important;
+    }
+    .searchExpandable .searchInput {
+        left: -720px!important;
+    }
+    .menuAlbumItem {
+        position: relative!important;
+        top: -20px!important;
+    }
+    .albumColumn {
+        width: 110px!important;
+    }
+    .albumTitleLarge {
+        font-size: 12px!important;
+    }
+    .tracksBackFloating {
+        top: -65px!important;
+    }
+    .trackRow {
+        padding: 6px 10px!important;
+    }
+    .trackIndex {
+        font-size: 9px!important;
+    }
+    .trackName {
+        font-size: 10px!important;
+    }
+    .trackDuration {
+        font-size: 10px!important;
+    }
+    .splitLayout {
+        top: 50px!important;
+    }
+    .musicInfoControlers {
+        position: relative;
+        right: 0!important;
+    }
+    .vinylContent {
+        width: 55%!important;
+    }
+    .pin {
+        position: absolute;
+        top: 20px!important;
+        right: 0px!important;
+    }
+    .pinTop {
+        left: 90px!important;
+        top: 53px!important;
+        width: 50px!important;
+        height: 50px!important;
+    }
+    .pinTop img {
+        width: 12vw!important;
+        left: 50%!important;
+        top: 50%!important;
+        transform: translate(-73px, -73px)!important;
+    }
+    .stack3D {
+        height: 76vh!important;
+        width: 110vw!important;
+        margin-left: calc(-90vw + 87%)!important;
+    }
+    .album3D {
+        width: 250px!important;
+        height: 250px!important;
+    }
+}
+
+/* iPhone 17 Air — 912×400 */
+@media (orientation: landscape) and (width: 912px) and (height: 400px) {
+    .titleContentLeft h1 {
+        font-size: 28px;
+        line-height: 28px;
+        max-width: 320px;
+    }
+    .titleContentLeft {
+        margin-bottom: 20px;
+    }
+    .btnPrimary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .btnSecondary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(100px, 130px));
+        gap: 10px;
+        padding: 0 10px;
+    }
+    .contentRight {
+        width: 45%;
+    }
+    .modalContent {
+        width: 85%;
+        height: 85%;
+        padding: 40px 20px;
+        border-radius: 25px;
+    }
+    .coverItem {
+        width: 120px!important;
+    }
+    .searchExpandable .searchInput {
+        left: -770px!important;
+    }
+    .menuAlbumItem {
+        position: relative!important;
+        top: -20px!important;
+    }
+    .albumColumn {
+        width: 110px!important;
+    }
+    .albumTitleLarge {
+        font-size: 12px!important;
+    }
+    .tracksBackFloating {
+        top: -65px!important;
+    }
+    .trackRow {
+        padding: 6px 10px!important;
+    }
+    .trackIndex {
+        font-size: 9px!important;
+    }
+    .trackName {
+        font-size: 10px!important;
+    }
+    .trackDuration {
+        font-size: 10px!important;
+    }
+    .splitLayout {
+        top: 50px!important;
+    }
+    .musicInfoControlers {
+        position: relative;
+        right: 0!important;
+    }
+
+    .vinylContent {
+        width: 55%!important;
+    }
+    .pin {
+        position: absolute;
+        top: 20px!important;
+        right: 0px!important;
+    }
+    .pinTop {
+        left: 90px!important;
+        top: 53px!important;
+        width: 50px!important;
+        height: 50px!important;
+    }
+    .pinTop img {
+        width: 12vw!important;
+        left: 50%!important;
+        top: 50%!important;
+        transform: translate(-79px, -79px)!important;
+    }
+
+    .stack3D {
+        height: 76vh!important;
+        width: 110vw!important;
+        margin-left: calc(-90vw + 87%)!important;
+    }
+    .album3D {
+        width: 250px!important;
+        height: 250px!important;
+    }
+}
+
+/* iPhone 16 Pro, 17, 17 Pro — 874×402 */
+@media (orientation: landscape) and (width: 874px) and (height: 402px) {
+    .titleContentLeft h1 {
+        font-size: 28px;
+        line-height: 28px;
+        max-width: 320px;
+    }
+    .titleContentLeft {
+        margin-bottom: 20px;
+    }
+    .btnPrimary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .btnSecondary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(100px, 130px));
+        gap: 10px;
+        padding: 0 10px;
+    }
+    .contentRight {
+        width: 45%;
+    }
+    .modalContent {
+        width: 85%;
+        height: 85%;
+        padding: 40px 20px;
+        border-radius: 25px;
+    }
+    .coverItem {
+        width: 120px!important;
+    }
+    .searchExpandable .searchInput {
+        left: -760px!important;
+    }
+    .menuAlbumItem {
+        position: relative!important;
+        top: -20px!important;
+    }
+    .albumColumn {
+        width: 110px!important;
+    }
+    .albumTitleLarge {
+        font-size: 12px!important;
+    }
+    .tracksBackFloating {
+        top: -65px!important;
+    }
+    .trackRow {
+        padding: 6px 10px!important;
+    }
+    .trackIndex {
+        font-size: 9px!important;
+    }
+    .trackName {
+        font-size: 10px!important;
+    }
+    .trackDuration {
+        font-size: 10px!important;
+    }
+    .splitLayout {
+        top: 90px!important;
+    }
+    .musicInfoControlers {
+        position: relative;
+        right: 0!important;
+    }
+    .vinylContent {
+        width: 55%!important;
+    }
+    .pin {
+        position: absolute;
+        top: 20px!important;
+        right: 0px!important;
+    }
+    .pinTop {
+        left: 90px!important;
+        top: 53px!important;
+        width: 50px!important;
+        height: 50px!important;
+    }
+    .pinTop img {
+        width: 12vw!important;
+        left: 50%!important;
+        top: 50%!important;
+        transform: translate(-73px, -73px)!important;
+    }
+    .stack3D {
+        height: 76vh!important;
+        width: 110vw!important;
+        margin-left: calc(-90vw + 87%)!important;
+    }
+    .album3D {
+        width: 250px!important;
+        height: 250px!important;
+    }
+}
+
+/* iPhone 14 Pro Max, 15 Plus, 15 Pro Max, 16 Plus — 932×430 */
+@media (orientation: landscape) and (width: 932px) and (height: 430px) {
+    .titleContentLeft h1 {
+        font-size: 28px;
+        line-height: 28px;
+        max-width: 320px;
+    }
+    .titleContentLeft {
+        margin-bottom: 20px;
+    }
+    .btnPrimary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .btnSecondary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(100px, 130px));
+        gap: 10px;
+        padding: 0 10px;
+    }
+    .contentRight {
+        width: 45%;
+    }
+    .modalContent {
+        width: 85%;
+        height: 85%;
+        padding: 40px 20px;
+        border-radius: 25px;
+    }
+    .coverItem {
+        width: 120px!important;
+    }
+    .searchExpandable .searchInput {
+        left: -810px!important;
+    }
+    .menuAlbumItem {
+        position: relative!important;
+        top: -20px!important;
+    }
+    .albumColumn {
+        width: 110px!important;
+    }
+    .albumTitleLarge {
+        font-size: 12px!important;
+    }
+    .tracksBackFloating {
+        top: -65px!important;
+    }
+    .trackRow {
+        padding: 6px 10px!important;
+    }
+    .trackIndex {
+        font-size: 9px!important;
+    }
+    .trackName {
+        font-size: 10px!important;
+    }
+    .trackDuration {
+        font-size: 10px!important;
+    }
+    .splitLayout {
+        top: 90px!important;
+    }
+    .musicInfoControlers {
+        position: relative;
+        right: 0!important;
+    }
+    .vinylContent {
+        width: 55%!important;
+    }
+    .pin {
+        position: absolute;
+        top: 30px!important;
+        right: 0px!important;
+    }
+    .pinTop {
+        left: 90px!important;
+        top: 53px!important;
+        width: 50px!important;
+        height: 50px!important;
+    }
+    .pinTop img {
+        width: 12vw!important;
+        left: 50%!important;
+        top: 50%!important;
+        transform: translate(-80px, -80px)!important;
+    }
+    .stack3D {
+        height: 76vh!important;
+        width: 110vw!important;
+        margin-left: calc(-90vw + 87%)!important;
+    }
+    .album3D {
+        width: 250px!important;
+        height: 250px!important;
+    }
+}
+
+/* iPhone 16 Pro Max, 17 Pro Max — 956×440 */
+@media (orientation: landscape) and (width: 956px) and (height: 440px) {
+    .titleContentLeft h1 {
+        font-size: 28px;
+        line-height: 28px;
+        max-width: 320px;
+    }
+    .titleContentLeft {
+        margin-bottom: 20px;
+    }
+    .btnPrimary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .btnSecondary button {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(100px, 140px));
+        gap: 12px;
+        padding: 0 10px;
+    }
+    .contentRight {
+        width: 45%;
+    }
+    .modalContent {
+        width: 85%;
+        height: 85%;
+        padding: 40px 20px;
+        border-radius: 25px;
+    }
+    .coverItem {
+        width: 120px!important;
+    }
+    .searchExpandable .searchInput {
+        left: -820px!important;
+    }
+    .menuAlbumItem {
+        position: relative!important;
+        top: -20px!important;
+    }
+    .albumColumn {
+        width: 110px!important;
+    }
+    .albumTitleLarge {
+        font-size: 12px!important;
+    }
+    .tracksBackFloating {
+        top: -65px!important;
+    }
+    .trackRow {
+        padding: 6px 10px!important;
+    }
+    .trackIndex {
+        font-size: 9px!important;
+    }
+    .trackName {
+        font-size: 10px!important;
+    }
+    .trackDuration {
+        font-size: 10px!important;
+    }
+    .splitLayout {
+        top: 90px!important;
+        height: 65vh!important;
+    }
+    .musicInfoControlers {
+        position: relative;
+        right: 0!important;
+    }
+    .vinylContent {
+        width: 55%!important;
+    }
+    .pin {
+        position: absolute;
+        top: 30px!important;
+        right: 0px!important;
+    }
+    .pinTop {
+        left: 90px!important;
+        top: 53px!important;
+        width: 50px!important;
+        height: 50px!important;
+    }
+    .pinTop img {
+        width: 12vw!important;
+        left: 50%!important;
+        top: 50%!important;
+        transform: translate(-80px, -80px)!important;
+    }
+    .stack3D {
+        height: 76vh!important;
+        width: 110vw!important;
+        margin-left: calc(-90vw + 87%)!important;
+    }
+    .album3D {
+        width: 250px!important;
+        height: 250px!important;
+    }
+}
+
+/* =========================================================
+   LANDSCAPE iPADS
+   ========================================================= */
+
+/* iPad mini 6th — 1133×744 */
+@media (orientation: landscape) and (width: 1133px) and (height: 744px) {
+    .titleContentLeft h1 {
+        font-size: 36px;
+        line-height: 34px;
+        max-width: 400px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(110px, 150px));
+        gap: 14px;
+        padding: 0 20px;
+    }
+    .modalContent {
+        width: 70%;
+        height: 70%;
+    }
+    .pin {
+        top: 70px !important;
+        right: 110px !important;
+    }
+    .pinTop {
+        width: 85px!important;
+        height: 85px!important;
+    }
+    .pinTop img {
+        transform: translate(-124px, -124px)!important;
+    }
+    .searchOpen .searchInput {
+        left: -965px !important;
+    }
+    .searchExpandable .searchInput {
+        left: -965px!important;
+    }
+}
+
+/* iPad 9th — 1080×810 */
+@media (orientation: landscape) and (width: 1080px) and (height: 810px) {
+    .titleContentLeft h1 {
+        font-size: 46px;
+        line-height: 42px;
+        max-width: 490px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(140px, 180px));
+        gap: 18px;
+        padding: 0 30px;
+    }
+    .modalContent {
+        width: 60%;
+        height: 65%;
+    }
+    .rights {
+        width: 25%;
+    }
+    .pin {
+        top: 15% !important;
+        right: 0px !important;
+    }
+    .coverItem {
+        width: 170px!important;
+    }
+    .vinyl {
+        width: 560px!important;
+        left: -40px!important;
+    }
+    .albumImg img {
+        width: 290px!important;
+        height: 290px!important;
+        border-radius: 170px!important;
+    }
+    .musicInfoControlers .musicInfo h1 {
+        font-size: 26px!important;
+    }
+    .musicInfoControlers {
+        right: 0!important;
+    }
+    .musicInfoControlers.emptyText .musicInfo h1 {
+        font-size: 16px !important;
+    }
+    .searchOpen .searchInput {
+        left: -945px !important;
+    }
+    .searchExpandable .searchInput {
+        left: -945px!important;
+    }
+}
+
+/* iPad 10th/A16, iPad Air M1/M2 — 1180×820 */
+@media (orientation: landscape) and (width: 1180px) and (height: 820px) {
+    .titleContentLeft h1 {
+        font-size: 46px;
+        line-height: 42px;
+        max-width: 490px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(140px, 180px));
+        gap: 18px;
+        padding: 0 30px;
+    }
+    .modalContent {
+        width: 60%;
+        height: 65%;
+    }
+    .rights {
+        width: 25%;
+    }
+    .pin {
+        top: 15% !important;
+        right: 0px !important;
+    }
+    .coverItem {
+        width: 170px!important;
+    }
+    .vinyl {
+        width: 560px!important;
+        left: -40px!important;
+    }
+    .albumImg img {
+        width: 290px!important;
+        height: 290px!important;
+        border-radius: 170px!important;
+    }
+    .musicInfoControlers .musicInfo h1 {
+        font-size: 26px!important;
+    }
+    .musicInfoControlers {
+        right: 0!important;
+    }
+    .musicInfoControlers.emptyText .musicInfo h1 {
+        font-size: 16px !important;
+    }
+    .searchOpen .searchInput {
+        left: -1005px !important;
+    }
+    .searchExpandable .searchInput {
+        left: -1005px!important;
+    }
+}
+
+/* iPad Pro 11" M4 — 1194×834 */
+@media (orientation: landscape) and (width: 1194px) and (height: 834px) {
+    .titleContentLeft h1 {
+        font-size: 46px;
+        line-height: 42px;
+        max-width: 490px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(140px, 180px));
+        gap: 18px;
+        padding: 0 30px;
+    }
+    .modalContent {
+        width: 60%;
+        height: 65%;
+    }
+    .rights {
+        width: 25%;
+    }
+    .pin {
+        top: 17% !important;
+        right: 0px !important;
+    }
+    .coverItem {
+        width: 170px!important;
+    }
+    .vinyl {
+        width: 560px!important;
+        left: -40px!important;
+    }
+    .albumImg img {
+        width: 290px!important;
+        height: 290px!important;
+        border-radius: 170px!important;
+    }
+    .musicInfoControlers .musicInfo h1 {
+        font-size: 26px!important;
+    }
+    .musicInfoControlers {
+        right: 0!important;
+    }
+    .musicInfoControlers.emptyText .musicInfo h1 {
+        font-size: 16px !important;
+    }
+    .searchOpen .searchInput {
+        left: -1005px !important;
+    }
+    .searchExpandable .searchInput {
+        left: -1005px!important;
+    }
+    .pinTop img {
+        transform: translate(-124px, -124px)!important;
+    }
+}
+
+/* iPad Air 13" M2, iPad Pro 13" M4 — 1366×1024 */
+@media (orientation: landscape) and (width: 1366px) and (height: 1024px) {
+    .titleContentLeft h1 {
+        font-size: 46px;
+        line-height: 42px;
+        max-width: 490px;
+    }
+    .chartsGrid {
+        grid-template-columns: repeat(3, minmax(140px, 180px));
+        gap: 18px;
+        padding: 0 30px;
+    }
+    .modalContent {
+        width: 60%;
+        height: 65%;
+    }
+    .rights {
+        width: 25%;
+    }
+    .pin {
+        top: 17% !important;
+        right: 0px !important;
+    }
+    .coverItem {
+        width: 170px!important;
+    }
+    .vinyl {
+        width: 750px !important;
+        left: -10px !important;
+    }
+    .albumImg img {
+        width: 420px !important;
+        height: 420px !important;
+        border-radius: 350px !important;
+    }
+    .musicInfoControlers .musicInfo h1 {
+        font-size: 26px!important;
+    }
+    .musicInfoControlers {
+        right: 0!important;
+    }
+    .musicInfoControlers.emptyText .musicInfo h1 {
+        font-size: 16px !important;
+    }
+    .musicInfo {
+        width: 410px!important;
+    }
+    .controlers {
+        width: 250px!important;
+    }
+    .controlers div {
+        border-radius: 24px!important;
+        width: 75px!important;
+    }
+    .searchOpen .searchInput {
+        left: -1160px !important;
+    }
+    .searchExpandable .searchInput {
+        left: -1160px!important;
+    }
+    .pin {
+        top: 18% !important;
+        right: 30px !important;
+    }
+    .pinTop {
+        left: 280px!important;
+        top: 65px!important;
+        width: 115px!important;
+        height: 115px!important;
+    }
+    .pinTop img {
+        transform: translate(-76px, -81px) !important;
+    }
+}

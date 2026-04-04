@@ -3,14 +3,15 @@
     right: 40px;
     top: 40px;
     height: 50px;
-    width: 30%;
+    width: 100%;
     z-index: 9999;
 }
 .searchMenuTopContent {
     width: 100%;
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
     align-items: center;
+    padding: 0 5px;
 }
 .searchMenuItem {
     width: 38px;
@@ -82,39 +83,49 @@
   padding: 6px 10px;
   border-radius: 8px;
   position: absolute;
+  pointer-events: none;
 }
 .searchExpandable .searchInput {
-    width: 38px;
-    opacity: 0;
-    right: 0;
-    left: 0px;
-    transition: all 0.3s;
-    top: 0;
-    height: 100%;
-    border-radius: 50px;
-    background: transparent;
+  width: 60vw;
+  opacity: 0;
+  margin-left: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: -235px;
+  height: 100%;
+  border-radius: 50px;
+  background: #ffffff54;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 0 30px;
+  color: #2d2d2d;
+  transition: all .3s;
+  z-index: 999999;
 }
 
 .searchOpen .searchInput {
-    width: 260px;
-    opacity: 1;
-    margin-left: 0;
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: -260px;
-    height: 100%;
-    border-radius: 50px 0 0 50px;
-    background: #ffffff54;
-    font-size: 12px;
-    font-family: inherit;
-    padding: 0 30px;
-    color: #2D2D2D;
-    transition: all 0.3s;
-}
+  width: 80vw;
+  opacity: 1;
+  margin-left: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: -325px;
+  height: 100%;
+  border-radius: 50px;
+  background: #ffffff54;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 0 30px;
+  color: #2d2d2d;
+  transition: all .3s;
+  z-index: 999999;
+  pointer-events: auto;
+  }
 .searchOpen button {
     background: #ffffff54;
-    border-radius: 0 20px 20px 0;;
+    border-radius: 10px;
     transition: all 0.3s;
 }
 .searchOpen .searchInput::placeholder {
@@ -123,22 +134,28 @@
 
   @media (orientation: landscape) and (max-height: 520px) {
 
-  .searchMenuTop {
-    top: 20px;
-    height: auto;
-    width: 30%;
-  }
+    .searchMenuTop {
+      position: absolute;
+      right: 0;
+      top: 20px;
+      height: auto;
+      width: 100%;
+      z-index: 100;
+    }
+    .searchMenuItem button {
+      background: #ffffffb0;
+    }
   }
 
 
 @media (orientation: portrait) {
   .searchMenuTop {
     position: absolute;
-    right: 20px;
-    top: 20px;
+    right: 0;
+    top: 80px;
     height: auto;
-    width: 30%;
-    z-index: 9999;
+    width: 100%;
+    z-index: 2;
 }
 }
 .viewToggle {
@@ -168,9 +185,13 @@
 .searchMenuVisible {
   opacity: 1;
   pointer-events: auto;
+  display: block;
+  transition: all 0.3s;
 }
 
 .searchMenuHidden {
   opacity: 0;
   pointer-events: none;
+  display: none;
+  transition: all 0.3s;
 }

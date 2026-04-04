@@ -9,6 +9,9 @@ import SonaLogo from "../assets/sonaAnimated.svg?react"
 import LanguageSwitcher from "./LanguageSwitcher"
 import { useTranslation } from "react-i18next"
 import ShareCard from "./ShareCard"
+import { Capacitor } from "@capacitor/core"
+import { sileo } from "sileo"
+
 
 import { exportStoryVideo } from "../utils/exportStoryVideo"
 import { useProvider } from "../hooks/useProvider"
@@ -27,6 +30,20 @@ function MenuComponent({
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { provider } = useProvider()
+  const errorTitle = (text) => (
+    <span style={{ color: "#ff5a5f", fontWeight: 600 }}>{text}</span>
+  )
+
+  const toastDescription = (text) => (
+    <span style={{ color: "rgba(255,255,255,0.78)" }}>{text}</span>
+  )
+
+  const showErrorToast = ({ title, description }) => {
+    sileo.error({
+      title: errorTitle(title),
+      description: toastDescription(description),
+    })
+  }
 
   const [open, setOpen] = useState(false)
   const [openModal, setOpenModal] = useState(false)
@@ -42,14 +59,29 @@ function MenuComponent({
   const [downloadProgress, setDownloadProgress] = useState(0)
   const [switchingProvider, setSwitchingProvider] = useState("")
 
+  const isNativeIOS = Capacitor.isNativePlatform() && Capacitor.getPlatform() === "ios"
+
+  const showAlert = ({ title, description }) => {
+    if (isNativeIOS && window.Capacitor?.Plugins?.Dialog) {
+      window.Capacitor.Plugins.Dialog.alert({
+        title,
+        message: description,
+      }).catch(() => {
+        alert(`${title}\n${description}`)
+      })
+    } else {
+      alert(`${title}\n${description}`)
+    }
+  }
+
   const dropdownRef = useRef(null)
 
   const vinyls = [
-    "/vinyl-1.svg",
-    "/vinyl-2.png",
+    "/vinyl-1-1.png",
+    "/vinyl-2-1.png",
+    "/vinyl-2-2.png",
+    "/vinyl-3-1.png",
     "/vinyl-3.png",
-    "/vinyl-4.png",
-    "/vinyl-5.png",
     "/vinyl-6.png",
   ]
 
@@ -204,6 +236,48 @@ function MenuComponent({
       return
     }
 
+    const isNativeIOS =
+      Capacitor.isNativePlatform() && Capacitor.getPlatform() === "ios"
+
+    if (isNativeIOS) {
+      const { default: AppleMusicAuthPlugin } = await import("../plugins/appleMusicAuth")
+
+      const tokenData = await apiFetch("/api/apple-music/token")
+      const developerToken = tokenData?.token
+
+      if (!developerToken) {
+        throw new Error("No se recibió el developer token")
+      }
+
+      const nativeResult = await AppleMusicAuthPlugin.connect({
+        developerToken,
+      })
+
+      const musicUserToken = nativeResult?.musicUserToken
+
+      if (!musicUserToken) {
+        throw new Error("No se recibió el Music User Token")
+      }
+
+      await apiFetch("/api/apple-music/connect", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          music_user_token: musicUserToken,
+          scopes: ["native_ios"],
+        }),
+      })
+
+      localStorage.setItem("appleMusicConnected", "true")
+      localStorage.setItem("appleMusicUserToken", musicUserToken)
+
+      await reloadWithConnectedProvider("apple_music")
+      return
+    }
+
+    // Web flow
     const MusicKit = await waitForMusicKit()
 
     const tokenData = await apiFetch("/api/apple-music/token")
@@ -289,11 +363,10 @@ function MenuComponent({
         // si también falla, mostramos alerta
       }
 
-      alert(
-        e?.message ||
-          t("connect.error") ||
-          "No se pudo cambiar el proveedor de música."
-      )
+      showAlert({
+        title: t("errors.providerSwitch"),
+        description: t("errors.providerSwitchDesc"),
+      })
     } finally {
       setSwitchingProvider("")
     }
@@ -688,18 +761,7 @@ function MenuComponent({
                     <p>{t("options.support")}</p>
                   </div>
                   <div className="optionsItemContent">
-                    <div
-                      className="item clickable"
-                      onClick={() =>
-                        window.open(
-                          "https://www.paypal.com/paypalme/mindsguatemala",
-                          "_blank"
-                        )
-                      }
-                    >
-                      <span>{t("options.donation")}</span>
-                    </div>
-
+                    
                     <div
                       className="item clickable"
                       onClick={async () => {

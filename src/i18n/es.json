@@ -5,9 +5,9 @@
       "requirements": "Ver requisitos",
       "modalTitle": "Requisitos",
       "intro": "Para disfrutar de toda la experiencia de la app necesitas:",
-      "lifetime": "Pago único de USD 2.99 para desbloquear acceso de por vida.",
+      "lifetime": "Pago único de USD 3.99 para desbloquear acceso de por vida.",
       "premium": "Cuenta Premium activa en tu plataforma de streaming.",
-      "permission": "Pronto podrás acceder a tu cuenta de Spotify para sincronizar tu música.",
+      "permission": "La conexión con Spotify estará disponible pronto.",
       "appleMusic": "Permitir acceso a tu cuenta de Apple Music para reproducir tu música desde Sona.",
       "note": "La app no incluye música propia. Todo el contenido se reproduce directamente desde tu cuenta de streaming favorita.",
       "developed": "Desarrollado por Devfer",
@@ -31,39 +31,68 @@
         "invalidCredentialsDesc": "Verifica tu correo y contraseña e intenta nuevamente.",
 
         "errorS": "Error al iniciar sesión",
-        "tryAgainLater": "Por favor intenta nuevamente más tarde."
+        "tryAgainLater": "Por favor intenta nuevamente más tarde.",
+        "forgotPassword": "¿Olvidaste tu contraseña?"   
     },
-    "register":{
+    "reset": {
+        "title": "Recuperar contraseña",
+        "enterEmail": "Ingresa tu correo electrónico para recibir un código de verificación.",
+        "sendCode": "Enviar código",
+        "verifyTitle": "Verificar código",
+        "enterCode": "Ingresa el código de 6 dígitos que enviamos a tu correo.",
+        "code": "Código de verificación",
+        "verify": "Verificar",
+        "resendCode": "Reenviar código",
+        "newPasswordTitle": "Nueva contraseña",
+        "enterNewPassword": "Ingresa tu nueva contraseña (mínimo 8 caracteres).",
+        "resetButton": "Cambiar contraseña",
+        "codeSentTitle": "Código enviado",
+        "codeSentDesc": "Revisa tu bandeja de entrada o carpeta de spam.",
+        "successTitle": "Contraseña actualizada",
+        "successDesc": "Ya puedes iniciar sesión con tu nueva contraseña.",
+        "errorTitle": "Error",
+        "errorDesc": "Ocurrió un error. Intenta nuevamente.",
+        "userNotFound": "No existe una cuenta con este correo.",
+        "invalidCode": "El código ingresado no es válido.",
+        "codeExpired": "El código ha expirado. Solicita uno nuevo.",
+        "passwordMin": "La contraseña debe tener al menos 8 caracteres."
+    },
+    "register": {
         "title": "Crear una cuenta",
         "subtitle": "Completa tus datos para crear tu cuenta y comenzar a disfrutar la experiencia completa de Sona.",
         "name": "Nombre",
         "email": "Correo",
         "password": "Contraseña",
-        "price": "Pago único de USD 2.99 para acceso de por vida.",
+        "price": "Pago único de USD 3.99 para acceso de por vida.",
         "haveAccount": "¿Ya tienes cuenta?",
         "login": "Inicia sesión",
-
+        "purchase": "Pagar",
+        "processing": "Procesando...",
+        "fillAllFields": "Completa todos los campos para continuar.",
+        "emailExists": "Este correo ya está registrado.",
+        "iapNotAvailable": "La compra dentro de la app no está disponible en este dispositivo.",
+        "purchasePending": "Tu compra está pendiente de aprobación.",
         "paymentErrorTitle": "No se pudo completar el pago",
         "paymentErrorDesc": "Por favor intenta nuevamente en un momento.",
-      
         "paypalErrorTitle": "Error de PayPal",
         "paypalErrorDesc": "Ocurrió un problema con PayPal. Intenta nuevamente.",
-      
         "registerErrorTitle": "Error de registro",
         "registerErrorDesc": "No pudimos completar tu registro. Intenta nuevamente.",
-      
         "successTitle": "Cuenta creada correctamente",
         "successDesc": "Tu acceso a Sona ya está activo."
     },
-    "sona":{
-        "EmptyPlayerTitle":"Tu reproducción de música está en pausa",
-        "EmptyPlayer": "Reproduce una canción desde tus álbumes o playlist para visualizarla en esta sección."
+    "sona": {
+        "EmptyPlayerTitle": "Tu música está en pausa",
+        "EmptyPlayer": "Reproduce una canción desde tus álbumes o playlist para visualizarla en esta sección.",
+        "appleMusicDetected": "Cambia a Apple Music en Ajustes para disfrutar de todas las funciones: álbumes, playlists, cola y más."
     },
-    "connect":{
+    "connect": {
         "title": "Conecta tu música",
         "subtitle": "Permite que Sona acceda a tu biblioteca para controlar la pista actual en la aplicación.",
         "comingSoon": "Muy pronto",
-        "loading": "Conectando"
+        "loading": "Conectando",
+        "otherService": "Otra aplicación de música",
+        "error": "No se pudo conectar con el servicio de música."
     },
     "stylesMenu":{
         "vinyl": "Estilo del vinilo",
@@ -73,7 +102,9 @@
         "album": "Álbumes",
         "lists": "Playlist",
         "loading": "Cargando...",
-        "search": "Buscar"
+        "search": "Buscar",
+        "emptyTitle": "No tienes contenido guardado",
+        "emptyDesc": "Añade álbumes o playlists desde tu app de Apple Music para verlos aquí."
     },
     "Queue":{
         "QueueTitle": "Cola",
@@ -108,6 +139,22 @@
         "png": "Compartir imagen",
         "downloadMp4": "Descargar video",
         "exporting": "Exportando video"
+    },
+    "errors": {
+        "playbackRestricted": "Canción no disponible",
+        "playbackRestrictedDesc": "Esta canción tiene restricciones de contenido en tu dispositivo. Revisa Ajustes → Tiempo en pantalla → Contenido explícito.",
+        "playbackFailed": "Error de reproducción",
+        "playbackFailedDesc": "No se pudo reproducir esta canción. Intenta con otra.",
+        "queueFailed": "Error al cargar cola",
+        "queueFailedDesc": "No se pudo preparar la cola de reproducción.",
+        "connectionFailed": "Error de conexión",
+        "connectionFailedDesc": "No se pudo conectar con el servicio de música. Verifica tu conexión.",
+        "noTracks": "Sin canciones",
+        "noTracksDesc": "No se encontraron canciones disponibles para reproducir.",
+        "providerSwitch": "Error al cambiar proveedor",
+        "providerSwitchDesc": "No se pudo cambiar el proveedor de música. Intenta de nuevo.",
+        "generic": "Algo salió mal",
+        "genericDesc": "Ocurrió un error inesperado. Intenta de nuevo."
     }
     
   }

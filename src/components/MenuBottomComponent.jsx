@@ -10,43 +10,35 @@ function MenuBottomComponent({ visible = true }) {
   const location = useLocation()
   const navigate = useNavigate()
   const path = location.pathname
-
   const [zoom, setZoom] = useState(false)
 
   const handleClick = (route) => {
+    if (path === route) return
     setZoom(true)
-
-    setTimeout(() => {
-      setZoom(false)
-      navigate(route)
-    }, 180)
+    setTimeout(() => setZoom(false), 200)
+    navigate(route, { replace: true })
   }
 
   return (
-    <div className={`menuBottomContent ${visible ? "visible" : "hidden"}`}>
+    <div className={`menuBottomContent ${visible ? "menuVisible" : "menuHidden"}`}>
       <div className={`menuBottomElements ${zoom ? "menuZoom" : ""}`}>
-
-        {/* ALBUMS */}
         <div className={`menuItem ${path === "/sona-albums" ? "active" : ""}`}>
-          <button onClick={() => handleClick("/sona-albums")}>
+          <button type="button" onClick={() => handleClick("/sona-albums")}>
             <AlbumsIcon />
           </button>
         </div>
 
-        {/* MUSIC */}
         <div className={`menuItem ${path === "/sona" ? "active" : ""}`}>
-          <button onClick={() => handleClick("/sona")}>
+          <button type="button" onClick={() => handleClick("/sona")}>
             <MusicIcon />
           </button>
         </div>
 
-        {/* QUEUE */}
         <div className={`menuItem ${path === "/sona-queue" ? "active" : ""}`}>
-          <button onClick={() => handleClick("/sona-queue")}>
+          <button type="button" onClick={() => handleClick("/sona-queue")}>
             <QueueIcon />
           </button>
         </div>
-
       </div>
     </div>
   )

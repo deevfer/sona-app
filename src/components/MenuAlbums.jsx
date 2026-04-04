@@ -1,14 +1,13 @@
-import { useLocation, useNavigate } from "react-router-dom"
 import "../styles/MenuAlbums.css"
 import { useTranslation } from "react-i18next"
 
-function MenuAlbums({ tab = "albums", onChangeTab }) {
+function MenuAlbums({ tab = "albums", onChangeTab, searchOpen = false }) {
   const { t } = useTranslation()
 
   const isLists = tab === "lists"
 
   return (
-    <div className="menuAlbumsTop">
+    <div className={`menuAlbumsTop ${searchOpen ? "menuAlbumsHidden" : ""}`}>
       <div className="menuAlbumsContent">
         <div className="menuAlbumItem">
           <div className={`switch ${isLists ? "active" : ""}`}>

@@ -11,6 +11,7 @@ function SearchMenu({
   searchQuery = "",
   onSearchChange,
   hidden = false,
+  onSearchOpen,
 }) {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
@@ -19,37 +20,23 @@ function SearchMenu({
   const containerRef = useRef(null)
 
   useEffect(() => {
-    if (open && inputRef.current) {
-      inputRef.current.focus()
+    if (open) {
+      setTimeout(() => {
+        inputRef.current?.focus()
+      }, 100)
     }
   }, [open])
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!containerRef.current) return
-      if (!containerRef.current.contains(event.target)) {
-        // Si tocó un coverItem o album3D, no limpiar
-        const target = event.target.closest('.coverItem, .album3D, .albumFront, .albumBack, .albumSpine')
-        if (target) return
-
-        setOpen(false)
-        onSearchChange("")
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside)
-    document.addEventListener("touchstart", handleClickOutside)
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-      document.removeEventListener("touchstart", handleClickOutside)
-    }
-  }, [onSearchChange])
+    onSearchOpen?.(open)
+  }, [open, onSearchOpen])
 
   const handleToggle = () => {
+    console.log("toggle clicked, open:", open)
     if (open) {
       onSearchChange("")
       setOpen(false)
+      inputRef.current?.blur()
     } else {
       setOpen(true)
     }
@@ -63,20 +50,6 @@ function SearchMenu({
       ref={containerRef}
     >
       <div className="searchMenuTopContent">
-        <div className={`searchMenuItem searchExpandable ${open ? "searchOpen" : ""}`}>
-          <button className="search" onClick={handleToggle}>
-            <SearchIcon />
-          </button>
-
-          <input
-            ref={inputRef}
-            type="text"
-            className="searchInput"
-            placeholder={t("menuAlbums.search")}
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-          />
-        </div>
 
         <div className={`searchMenuItem viewToggle ${open ? "fadeOut" : "fadeIn"}`}>
           <button
@@ -90,6 +63,20 @@ function SearchMenu({
               <ListIcon />
             </span>
           </button>
+        </div>
+        <div className={`searchMenuItem searchExpandable ${open ? "searchOpen" : ""}`}>
+          <button className="search" onClick={handleToggle}>
+            <SearchIcon />
+          </button>
+
+          <input
+            ref={inputRef}
+            type="text"
+            className="searchInput"
+            placeholder={t("menuAlbums.search")}
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+          />
         </div>
       </div>
     </div>

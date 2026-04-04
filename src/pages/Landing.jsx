@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 import "../styles/Landing.css"
+import "../styles/Responsive.css"
 import { useTranslation } from "react-i18next"
 import LanguageSwitcher from "../components/LanguageSwitcher"
 import SonaLogo from "../assets/sonaAnimated.svg?react"
@@ -389,17 +390,17 @@ function Landing() {
                   </div>
                 </div>
 
-                <div className="permission">
-                  <p>{t("landing.permission")}</p>
-                  <div className="iconRequirement">
-                    <img src="/spotify.png" alt="" />
-                  </div>
-                </div>
 
                 <div className="appleMusic">
                   <p>{t("landing.appleMusic")}</p>
                   <div className="iconRequirement">
                     <img src="/AppleMusic.png" alt="" />
+                  </div>
+                </div>
+                <div className="spotifyConection">
+                  <p>{t("landing.permission")}</p>
+                  <div className="iconRequirement">
+                    <img src="/spotify.png" alt="" />
                   </div>
                 </div>
               </ul>

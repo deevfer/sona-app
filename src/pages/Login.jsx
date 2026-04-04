@@ -1,4 +1,5 @@
 import "../styles/Login.css"
+import "../styles/Responsive.css"
 import { useState, useEffect, useMemo, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import BackIcon from "../assets/back.svg?react"
@@ -34,6 +35,13 @@ function Login() {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
 
+  // Reset password states
+  const [resetView, setResetView] = useState(null) // null | "email" | "code" | "newPassword"
+  const [resetEmail, setResetEmail] = useState("")
+  const [resetCode, setResetCode] = useState("")
+  const [resetPassword, setResetPassword] = useState("")
+  const [resetLoading, setResetLoading] = useState(false)
+
   const [loadingArtworks, setLoadingArtworks] = useState(true)
   const [artworks, setArtworks] = useState([])
   const [loginBg, setLoginBg] = useState("")
@@ -48,6 +56,10 @@ function Login() {
     <span style={{ color: "#ff5a5f", fontWeight: 600 }}>{text}</span>
   )
 
+  const successTitle = (text) => (
+    <span style={{ color: "#32d74b", fontWeight: 600 }}>{text}</span>
+  )
+
   const toastDescription = (text) => (
     <span style={{ color: "rgba(255,255,255,0.78)" }}>{text}</span>
   )
@@ -59,6 +71,13 @@ function Login() {
     })
   }
 
+  const showSuccessToast = ({ title, description }) => {
+    sileo.success({
+      title: successTitle(title),
+      description: toastDescription(description),
+    })
+  }
+
   useEffect(() => {
     const fetchLoginArtworks = async () => {
       try {
@@ -66,11 +85,7 @@ function Login() {
 
         const res = await fetch(
           `${API_BASE}/api/apple-music/landing-artworks?storefront=us&limit=40`,
-          {
-            headers: {
-              Accept: "application/json",
-            },
-          }
+          { headers: { Accept: "application/json" } }
         )
 
         if (!res.ok) throw new Error("No se pudieron cargar artworks")
@@ -80,21 +95,15 @@ function Login() {
 
         const uniqueItems = items.filter(
           (item, index, self) =>
-            item?.id &&
-            item?.image &&
-            self.findIndex((x) => x.id === item.id) === index
+            item?.id && item?.image && self.findIndex((x) => x.id === item.id) === index
         )
 
         setArtworks(uniqueItems)
 
         if (uniqueItems.length > 0) {
           const shuffled = shuffleArray(uniqueItems)
-          const initialCards = shuffled.slice(0, TOTAL_VISIBLE_CARDS)
-          setDisplayCards(initialCards)
-
-          const randomBg =
-            uniqueItems[Math.floor(Math.random() * uniqueItems.length)]
-          setLoginBg(randomBg?.image || "")
+          setDisplayCards(shuffled.slice(0, TOTAL_VISIBLE_CARDS))
+          setLoginBg(uniqueItems[Math.floor(Math.random() * uniqueItems.length)]?.image || "")
         } else {
           setDisplayCards([])
           setLoginBg("")
@@ -145,16 +154,13 @@ function Login() {
             return prevCards
           }
 
-          const nextArtwork =
-            availablePool[Math.floor(Math.random() * availablePool.length)]
+          const nextArtwork = availablePool[Math.floor(Math.random() * availablePool.length)]
 
           setFlippingIndex(randomIndex)
 
           replaceTimeoutRef.current = setTimeout(() => {
             setDisplayCards((cardsNow) =>
-              cardsNow.map((card, index) =>
-                index === randomIndex ? nextArtwork : card
-              )
+              cardsNow.map((card, index) => (index === randomIndex ? nextArtwork : card))
             )
           }, FLIP_DURATION / 2)
 
@@ -177,26 +183,6 @@ function Login() {
     }
   }, [loadingArtworks, artworks, displayCards.length])
 
-  const rows = useMemo(() => {
-    if (!displayCards.length) return [[], []]
-
-    const row1 = displayCards.slice(0, Math.ceil(displayCards.length / 2))
-    const row2 = displayCards.slice(Math.ceil(displayCards.length / 2))
-
-    return [row1, row2]
-  }, [displayCards])
-
-  const skeletonRows = useMemo(() => {
-    const placeholders = Array.from({ length: TOTAL_VISIBLE_CARDS }, (_, i) => ({
-      id: `skeleton-${i}`,
-    }))
-
-    const row1 = placeholders.slice(0, Math.ceil(placeholders.length / 2))
-    const row2 = placeholders.slice(Math.ceil(placeholders.length / 2))
-
-    return [row1, row2]
-  }, [])
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -204,15 +190,8 @@ function Login() {
     try {
       const res = await fetch(`${API_BASE}/api/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          device_name: "web",
-        }),
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ email, password, device_name: "ios" }),
       })
 
       const data = await res.json().catch(() => ({}))
@@ -225,33 +204,125 @@ function Login() {
       }
 
       if (data?.error === "SESSION_ACTIVE") {
-        showErrorToast({
-          title: t("login.sessionActive"),
-          description: t("login.sessionActiveDesc"),
-        })
+        showErrorToast({ title: t("login.sessionActive"), description: t("login.sessionActiveDesc") })
         return
       }
 
       if (data?.error === "INVALID_CREDENTIALS") {
-        showErrorToast({
-          title: t("login.invalidCredentials"),
-          description: t("login.invalidCredentialsDesc"),
-        })
+        showErrorToast({ title: t("login.invalidCredentials"), description: t("login.invalidCredentialsDesc") })
         return
       }
 
-      showErrorToast({
-        title: t("login.errorS"),
-        description: t("login.tryAgainLater"),
-      })
+      showErrorToast({ title: t("login.errorS"), description: t("login.tryAgainLater") })
     } catch (err) {
       console.error(err)
-      showErrorToast({
-        title: t("login.errorS"),
-        description: t("login.tryAgainLater"),
-      })
+      showErrorToast({ title: t("login.errorS"), description: t("login.tryAgainLater") })
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleSendCode = async (e) => {
+    e.preventDefault()
+    if (!resetEmail) return
+    setResetLoading(true)
+
+    try {
+      const res = await fetch(`${API_BASE}/api/password/send-code`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ email: resetEmail }),
+      })
+
+      const data = await res.json().catch(() => ({}))
+
+      if (res.ok && data?.sent) {
+        showSuccessToast({ title: t("reset.codeSentTitle"), description: t("reset.codeSentDesc") })
+        setResetView("code")
+        return
+      }
+
+      if (data?.error === "USER_NOT_FOUND") {
+        showErrorToast({ title: t("reset.errorTitle"), description: t("reset.userNotFound") })
+        return
+      }
+
+      showErrorToast({ title: t("reset.errorTitle"), description: t("reset.errorDesc") })
+    } catch {
+      showErrorToast({ title: t("reset.errorTitle"), description: t("reset.errorDesc") })
+    } finally {
+      setResetLoading(false)
+    }
+  }
+
+  const handleVerifyCode = async (e) => {
+    e.preventDefault()
+    if (!resetCode || resetCode.length !== 6) return
+    setResetLoading(true)
+
+    try {
+      const res = await fetch(`${API_BASE}/api/password/verify-code`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ email: resetEmail, code: resetCode }),
+      })
+
+      const data = await res.json().catch(() => ({}))
+
+      if (res.ok && data?.verified) {
+        setResetView("newPassword")
+        return
+      }
+
+      if (data?.error === "CODE_EXPIRED") {
+        showErrorToast({ title: t("reset.errorTitle"), description: t("reset.codeExpired") })
+        return
+      }
+
+      showErrorToast({ title: t("reset.errorTitle"), description: t("reset.invalidCode") })
+    } catch {
+      showErrorToast({ title: t("reset.errorTitle"), description: t("reset.errorDesc") })
+    } finally {
+      setResetLoading(false)
+    }
+  }
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault()
+    if (!resetPassword || resetPassword.length < 8) {
+      showErrorToast({ title: t("reset.errorTitle"), description: t("reset.passwordMin") })
+      return
+    }
+    setResetLoading(true)
+
+    try {
+      const res = await fetch(`${API_BASE}/api/password/reset`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ email: resetEmail, code: resetCode, password: resetPassword }),
+      })
+
+      const data = await res.json().catch(() => ({}))
+
+      if (res.ok && data?.reset) {
+        showSuccessToast({ title: t("reset.successTitle"), description: t("reset.successDesc") })
+        setResetView(null)
+        setResetEmail("")
+        setResetCode("")
+        setResetPassword("")
+        return
+      }
+
+      if (data?.error === "CODE_EXPIRED") {
+        showErrorToast({ title: t("reset.errorTitle"), description: t("reset.codeExpired") })
+        return
+      }
+
+      showErrorToast({ title: t("reset.errorTitle"), description: t("reset.errorDesc") })
+    } catch {
+      showErrorToast({ title: t("reset.errorTitle"), description: t("reset.errorDesc") })
+    } finally {
+      setResetLoading(false)
     }
   }
 
@@ -274,112 +345,147 @@ function Login() {
 
       <div className="container">
         <div className="backButton">
-          <button onClick={() => navigate("/")}>
+          <button onClick={() => resetView ? setResetView(null) : navigate("/")}>
             <BackIcon />
           </button>
         </div>
 
         <div className="loginForm">
-          <h1>{t("login.title")}</h1>
-          <span>{t("login.subtitle")}</span>
+          {!resetView && (
+            <>
+              <h1>{t("login.title")}</h1>
+              <span>{t("login.subtitle")}</span>
 
-          <form className="material-form" onSubmit={handleSubmit}>
-            <div className="input-field">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <label>{t("login.email")}</label>
-              <span className="bar"></span>
-            </div>
+              <form className="material-form" onSubmit={handleSubmit}>
+                <div className="input-field">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                  <label>{t("login.email")}</label>
+                  <span className="bar"></span>
+                </div>
 
-            <div className="input-field">
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <label>{t("login.password")}</label>
-              <span className="bar"></span>
-            </div>
+                <div className="input-field">
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <label>{t("login.password")}</label>
+                  <span className="bar"></span>
+                </div>
 
-            <button type="submit" disabled={loading}>
-              {loading ? t("login.loading") : t("login.button")}
-            </button>
-
-            <div className="alreadyHave">
-              <p>
-                {t("login.notYet")}{" "}
-                <button type="button" onClick={() => navigate("/register")}>
-                  {t("login.register")}
+                <button type="submit" disabled={loading}>
+                  {loading ? t("login.loading") : t("login.button")}
                 </button>
-              </p>
-            </div>
-          </form>
+
+                <div className="alreadyHave">
+                  <p>
+                    <button type="button" onClick={() => setResetView("email")}>
+                      {t("login.forgotPassword")}
+                    </button>
+                  </p>
+                </div>
+
+                <div className="alreadyHave">
+                  <p>
+                    {t("login.notYet")}{" "}
+                    <button type="button" onClick={() => navigate("/register")}>
+                      {t("login.register")}
+                    </button>
+                  </p>
+                </div>
+              </form>
+            </>
+          )}
+
+          {resetView === "email" && (
+            <>
+              <h1>{t("reset.title")}</h1>
+              <span>{t("reset.enterEmail")}</span>
+
+              <form className="material-form" onSubmit={handleSendCode}>
+                <div className="input-field">
+                  <input
+                    type="email"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
+                    required
+                  />
+                  <label>{t("login.email")}</label>
+                  <span className="bar"></span>
+                </div>
+
+                <button type="submit" disabled={resetLoading}>
+                  {resetLoading ? t("login.loading") : t("reset.sendCode")}
+                </button>
+              </form>
+            </>
+          )}
+
+          {resetView === "code" && (
+            <>
+              <h1>{t("reset.verifyTitle")}</h1>
+              <span>{t("reset.enterCode")}</span>
+
+              <form className="material-form" onSubmit={handleVerifyCode}>
+                <div className="input-field">
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={6}
+                    value={resetCode}
+                    onChange={(e) => setResetCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                    required
+                  />
+                  <label>{t("reset.code")}</label>
+                  <span className="bar"></span>
+                </div>
+
+                <button type="submit" disabled={resetLoading || resetCode.length !== 6}>
+                  {resetLoading ? t("login.loading") : t("reset.verify")}
+                </button>
+
+                <div className="alreadyHave">
+                  <p>
+                    <button type="button" onClick={() => setResetView("email")}>
+                      {t("reset.resendCode")}
+                    </button>
+                  </p>
+                </div>
+              </form>
+            </>
+          )}
+
+          {resetView === "newPassword" && (
+            <>
+              <h1>{t("reset.newPasswordTitle")}</h1>
+              <span>{t("reset.enterNewPassword")}</span>
+
+              <form className="material-form" onSubmit={handleResetPassword}>
+                <div className="input-field">
+                  <input
+                    type="password"
+                    value={resetPassword}
+                    onChange={(e) => setResetPassword(e.target.value)}
+                    required
+                  />
+                  <label>{t("login.password")}</label>
+                  <span className="bar"></span>
+                </div>
+
+                <button type="submit" disabled={resetLoading}>
+                  {resetLoading ? t("login.loading") : t("reset.resetButton")}
+                </button>
+              </form>
+            </>
+          )}
         </div>
       </div>
-
-      {/* <div className="loginArtworksBottom">
-        {loadingArtworks || !displayCards.length ? (
-          <>
-            <div className="loginArtworkRowFixed">
-              {skeletonRows[0].map((item) => (
-                <div
-                  className="loginArtworkCard skeleton shimmer"
-                  key={item.id}
-                >
-                  <div className="skeletonBox" />
-                </div>
-              ))}
-            </div>
-
-            <div className="loginArtworkRowFixed">
-              {skeletonRows[1].map((item) => (
-                <div
-                  className="loginArtworkCard skeleton shimmer"
-                  key={item.id}
-                >
-                  <div className="skeletonBox" />
-                </div>
-              ))}
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="loginArtworkRowFixed">
-              {rows[0].map((item, index) => (
-                <div
-                  className={`loginArtworkCard ${
-                    flippingIndex === index ? "isFlipping" : ""
-                  }`}
-                  key={`row1-${item.id}`}
-                >
-                  <img src={item.image} alt={item.title || ""} loading="lazy" />
-                </div>
-              ))}
-            </div>
-
-            <div className="loginArtworkRowFixed">
-              {rows[1].map((item, index) => {
-                const realIndex = rows[0].length + index
-                return (
-                  <div
-                    className={`loginArtworkCard ${
-                      flippingIndex === realIndex ? "isFlipping" : ""
-                    }`}
-                    key={`row2-${item.id}`}
-                  >
-                    <img src={item.image} alt={item.title || ""} loading="lazy" />
-                  </div>
-                )
-              })}
-            </div>
-          </>
-        )}
-      </div> */}
     </div>
   )
 }

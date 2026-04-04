@@ -1,13 +1,13 @@
 .listCovers {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: wrap;
 
     height: 100%;
     max-height: 100vh;
 
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
 
     gap: 5px;
 
@@ -17,17 +17,19 @@
     align-content: flex-start;
     justify-content: center;
     scrollbar-width: none;
+    padding: 70px 0;
 }
 .coverItem {
-    width: 250px;
+    width: 200px;
     flex-shrink: 0;
 }
 
 .coverItem img {
-    width: 100%;
-    aspect-ratio: 1 / 1; 
-    object-fit: cover;
-    border-radius: 12px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 0;
+  padding: 5px;
 }
 .listCovers::-webkit-scrollbar {
     height: 6px;
@@ -71,6 +73,7 @@ button.tracksBack {
     gap: 60px;
     top: 80px;
     height: 80vh;
+    z-index: 3;
 }
   .albumColumn {
     width: 320px;
@@ -82,7 +85,7 @@ button.tracksBack {
   
   .albumCoverLarge img {
     width: 100%;
-    border-radius: 20px;
+    border-radius: 0px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.25);
   }
   
@@ -100,14 +103,34 @@ button.tracksBack {
     border: none;
     cursor: pointer;
 }
+.text-dark .tracksBackFloating{
+  background: rgba(75, 75, 75, 0.38);
+  padding: 8px;
+  border-radius: 50px;
+  width: 40px;
+  height: 40px;
+}
+.text-dark .trackRow {
+  color: #000;
+}
+.text-light .trackRow {
+  color: #fff;
+}
+.text-dark .albumTitleLarge {
+  color: #000;
+}
+.text-light .albumTitleLarge {
+  color: #fff;
+}
   
   /* ---------------- RIGHT COLUMN ---------------- */
   
   .tracksColumn {
     flex: 1;
     overflow-y: auto;
-    padding-right: 10px;
+    padding-right: 0px;
     scrollbar-width: none;
+    width: 100%;
   }
   
   .tracksList {
@@ -120,13 +143,20 @@ button.tracksBack {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 6px 0;
+    padding: 16px 10px;
+    border-radius: 16px;
   }
   
   .trackLeft {
     display: flex;
     gap: 14px;
     align-items: baseline;
+    position: relative;
+  }
+  .trackLeft svg {
+    position: absolute;
+    left: 30px;
+    top: 1px;
   }
   
   .trackIndex {
@@ -290,14 +320,14 @@ button.tracksBack {
     display: flex;
     flex-direction: row;
     align-items: center;
-    height: 80vh;
+    height: 85vh;
     overflow-x: auto;
     overflow-y: hidden;
     padding: 0;
     gap: 0;
     scrollbar-width: none;
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
+    width: 140vw;
+    margin-left: calc(-90vw + 50%);
   }
   .stack3D::-webkit-scrollbar {
     display: none;
@@ -392,40 +422,41 @@ button.tracksBack {
     text-transform: uppercase;
   }
   /* ====== ANIMACIÓN GRID: flip aleatorio ====== */
+/* ===== COVER BASE ===== */
 .listCovers.fadeIn .coverItem {
+  opacity: 0;
+  transform: rotateX(90deg);
+  animation: coverFlipIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+  /* PERFORMANCE */
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  contain: layout paint;
+}
+
+/* delays más suaves y baratos */
+.listCovers.fadeIn .coverItem:nth-child(5n+1) { animation-delay: 0.04s; }
+.listCovers.fadeIn .coverItem:nth-child(5n+2) { animation-delay: 0.08s; }
+.listCovers.fadeIn .coverItem:nth-child(5n+3) { animation-delay: 0.12s; }
+.listCovers.fadeIn .coverItem:nth-child(5n+4) { animation-delay: 0.16s; }
+.listCovers.fadeIn .coverItem:nth-child(5n+5) { animation-delay: 0.2s; }
+
+/* ===== KEYFRAMES ULTRA LIGEROS ===== */
+@keyframes coverFlipIn {
+  0% {
     opacity: 0;
-    animation: coverFlipIn 0.6s ease forwards;
+    transform: rotateX(90deg) translateZ(0);
   }
-  
-  /* Delays aleatorios con nth-child */
-  .listCovers.fadeIn .coverItem:nth-child(5n+1) { animation-delay: 0.05s; }
-  .listCovers.fadeIn .coverItem:nth-child(5n+2) { animation-delay: 0.15s; }
-  .listCovers.fadeIn .coverItem:nth-child(5n+3) { animation-delay: 0.08s; }
-  .listCovers.fadeIn .coverItem:nth-child(5n+4) { animation-delay: 0.22s; }
-  .listCovers.fadeIn .coverItem:nth-child(5n+5) { animation-delay: 0.12s; }
-  
-  .listCovers.fadeIn .coverItem:nth-child(7n+1) { --flip: rotateY(180deg); }
-  .listCovers.fadeIn .coverItem:nth-child(7n+2) { --flip: rotateX(180deg); }
-  .listCovers.fadeIn .coverItem:nth-child(7n+3) { --flip: rotateY(-180deg); }
-  .listCovers.fadeIn .coverItem:nth-child(7n+4) { --flip: rotateX(-180deg) rotateZ(20deg); }
-  .listCovers.fadeIn .coverItem:nth-child(7n+5) { --flip: rotateY(180deg) rotateZ(-15deg); }
-  .listCovers.fadeIn .coverItem:nth-child(7n+6) { --flip: rotateX(180deg) rotateZ(10deg); }
-  .listCovers.fadeIn .coverItem:nth-child(7n+7) { --flip: rotateY(-180deg) rotateZ(-20deg); }
-  
-  @keyframes coverFlipIn {
-    0% {
-      opacity: 0;
-      transform: perspective(800px) var(--flip, rotateY(180deg)) scale(0.8);
-    }
-    60% {
-      opacity: 1;
-      transform: perspective(800px) rotateY(-8deg) scale(1.02);
-    }
-    100% {
-      opacity: 1;
-      transform: perspective(800px) rotateY(0deg) scale(1);
-    }
+  60% {
+    opacity: 1;
+    transform: rotateX(-6deg);
   }
+  100% {
+    opacity: 1;
+    transform: rotateX(0deg);
+  }
+}
   
   /* ====== ANIMACIÓN STACK3D: entrada de derecha a izquierda ====== */
   .stack3D.fadeIn .album3D {
@@ -491,4 +522,101 @@ button.tracksBack {
       transform: rotate(-90deg);
       transform-origin: center center;
     }
+
   }
+  @media (orientation: portrait) and (min-width: 320px) and (max-width: 484px){
+
+    .trackLeft svg {
+      position: absolute;
+      left: 20px!important;
+      top: 1px;
+    }
+  }
+
+@media (orientation: portrait) and (min-width: 768px) and (max-width: 1024px){
+  .searchMenuTop {
+    top: 20px!important;
+  }
+  .searchExpandable .searchInput {
+    left: -675px;
+  }
+  .searchOpen .searchInput {
+    left: -675px;
+  }
+  .stack3D {
+    width: 120vw;
+    margin-left: calc(-60vw + 50%);
+    -webkit-overflow-scrolling: touch;
+  }
+  .listCovers {
+    -webkit-overflow-scrolling: touch;
+  }
+  .tracksBackFloating {
+    top: -135px;
+    left: -30px;
+  }
+}
+@media (orientation: landscape) and (min-width: 1024px) {
+
+  .searchMenuTop {
+    top: 20px!important;
+  }
+  .searchExpandable .searchInput {
+    left: -675px;
+  }
+  .searchOpen .searchInput {
+    left: -675px;
+  }
+  .stack3D {
+    width: 110vw;
+    margin-left: calc(-56vw + 50%);
+  }
+  .searchExpandable .searchInput {
+    left: -965px;
+  }
+  .searchMenuTop {
+    right: 0!important;
+    top: 40px!important;
+    height: 40px!important;
+    z-index: 8!important;
+  }
+  .searchOpen .searchInput {
+    left: -965px;
+  }
+  .listCovers {
+    padding: 130px 0;
+  }
+  .tracksBackFloating {
+    position: absolute;
+    top: -80px;
+    z-index: 999999;
+  }
+  .coverItem{
+    width: 290px;
+  }
+  
+  .stack3D {
+    -webkit-overflow-scrolling: touch;
+  }
+  .listCovers {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+.stackVirtualContainer {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.album3D {
+  scroll-snap-align: center;
+}
+.coverItem.noFlip {
+  opacity: 1!important;
+}
+.stackVirtualContainer {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  touch-action: pan-x;
+}

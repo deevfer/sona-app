@@ -74,3 +74,18 @@
   .menuBottomElements.menuZoom {
     transform: scale(1.06);
   }
+  .menuBottomContent {
+    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.35s ease;
+}
+
+.menuBottomContent.menuHidden {
+    transform: translateY(100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.menuBottomContent.menuVisible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}

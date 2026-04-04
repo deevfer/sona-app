@@ -323,10 +323,10 @@ button.cover img{
     font-family: inherit;
     font-weight: 200;
 }
-.modalViewMain {
+/* .modalViewMain {
     animation: slideInLeft 0.3s ease forwards;
   }
-  
+   */
   .modalViewSub {
     animation: slideInRight 0.3s ease forwards;
   }

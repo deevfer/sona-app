@@ -8,6 +8,7 @@
     padding: 0;
     transition: background 0.3s ease;
     margin: auto;
+    z-index: 999;
 }
 .menuAlbumItem button.label {
     background: transparent;
@@ -64,9 +65,9 @@
 .sonaBody.bg-white  .switch {
     background: #0000001a;
 }
-@media (orientation: landscape) and (max-height: 520px) {
+@media (orientation: landscape) and (min-height: 401px) and (max-height:520px) {
   .menuAlbumItem {
-    margin: 0;
+    margin: auto;
     top: -20px;
     position: relative;
   }
@@ -77,13 +78,12 @@
   .searchMenuTop {
     top: 20px;
     height: auto;
-    width: 30%;
+    width: 100%;
   }
   .album3D {
     flex: 0 0 auto;
-    width: 200px!important;
-    height: 200px!important;
-    margin-left: -90px!important;
+    width: 290px!important;
+    height: 290px!important;
   }
   .stack3D {
     height: 100%!important;
@@ -104,35 +104,40 @@
   }
   .tracksBackFloating {
     position: absolute;
-    top: -40px;
+    top: -92px;
   }
   .albumColumn {
     width: 150px;
   }
 
   .albumCoverLarge img {
-    border-radius: 10px;
+    border-radius: 0px;
   }
   .albumTitleLarge {
     font-size: 12px;
   }
   .splitLayout {
-    padding: 0px 40px;
+    padding: 0 70px;
     gap: 70px;
     top: 120px;
     height: 50vh;
   }
   .searchOpen .searchInput {
-    width: 430px!important;
-    left: -430px!important;
-    
+    width: 80vw!important;
+    left: -720px;
+    background: #ffffffcf!important;
+  }
+  .searchExpandable .searchInput {
+    width: 80vw!important;
+    left: -720px;
   }
   .searchOpen button {
     background: #ffffff54;
-    border-radius: 0 20px 20px 0;
+    border-radius: 10px;
     transition: all 0.3s;
-    width: 110px!important;
-    padding: 0 0 0 60px!important;
+    padding: 0;
+    width: 40px!important;
+    left: 0px;
   }
 }
 @media (orientation: portrait) and (min-width: 768px) and (max-width: 1024px){
@@ -141,10 +146,11 @@
     position: relative;
   }
   .listCovers {
-    height: 80%;
+    height: 100%;
     max-height: 100vh;
     gap: 5px;
-    top: 10%;
+    top: 0;
+    padding: 100px 0;
   }
   .searchOpen .searchInput {
     width: 530px;
@@ -158,10 +164,11 @@
     position: relative;
   }
   .listCovers {
-    height: 80%;
+    height: 100%;
     max-height: 100vh;
-    gap: 5px;
-    top: 10%;
+    gap: 0px;
+    top: 0;
+    padding: 140px 0;
   }
   .coverItem {
     width: 130px;
@@ -179,4 +186,10 @@
     width: 110px;
     padding: 0 0 0 60px;
   }
+}
+
+.menuAlbumsTop.menuAlbumsHidden {
+  opacity: 0 !important;
+  transform: translateY(-10px) !important;
+  pointer-events: none !important;
 }

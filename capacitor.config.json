@@ -1,0 +1,13 @@
+{
+  "appId": "tech.fernandovasquez.sona",
+  "appName": "sona",
+  "webDir": "dist",
+  "server": {
+    "iosScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}
