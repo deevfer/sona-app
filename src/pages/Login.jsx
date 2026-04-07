@@ -35,6 +35,13 @@ function Login() {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
 
+  // Reset password states
+  const [resetView, setResetView] = useState(null) // null | "email" | "code" | "newPassword"
+  const [resetEmail, setResetEmail] = useState("")
+  const [resetCode, setResetCode] = useState("")
+  const [resetPassword, setResetPassword] = useState("")
+  const [resetLoading, setResetLoading] = useState(false)
+
   const [loadingArtworks, setLoadingArtworks] = useState(true)
   const [artworks, setArtworks] = useState([])
   const [loginBg, setLoginBg] = useState("")
@@ -49,6 +56,10 @@ function Login() {
     <span style={{ color: "#ff5a5f", fontWeight: 600 }}>{text}</span>
   )
 
+  const successTitle = (text) => (
+    <span style={{ color: "#32d74b", fontWeight: 600 }}>{text}</span>
+  )
+
   const toastDescription = (text) => (
     <span style={{ color: "rgba(255,255,255,0.78)" }}>{text}</span>
   )
@@ -56,6 +67,13 @@ function Login() {
   const showErrorToast = ({ title, description }) => {
     sileo.error({
       title: errorTitle(title),
+      description: toastDescription(description),
+    })
+  }
+
+  const showSuccessToast = ({ title, description }) => {
+    sileo.success({
+      title: successTitle(title),
       description: toastDescription(description),
     })
   }
@@ -257,6 +275,110 @@ function Login() {
     }
   }
 
+  const handleSendCode = async (e) => {
+    e.preventDefault()
+    if (!resetEmail) return
+    setResetLoading(true)
+
+    try {
+      const res = await fetch(`${API_BASE}/api/password/send-code`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ email: resetEmail }),
+      })
+
+      const data = await res.json().catch(() => ({}))
+
+      if (res.ok && data?.sent) {
+        showSuccessToast({ title: t("reset.codeSentTitle"), description: t("reset.codeSentDesc") })
+        setResetView("code")
+        return
+      }
+
+      if (data?.error === "USER_NOT_FOUND") {
+        showErrorToast({ title: t("reset.errorTitle"), description: t("reset.userNotFound") })
+        return
+      }
+
+      showErrorToast({ title: t("reset.errorTitle"), description: t("reset.errorDesc") })
+    } catch {
+      showErrorToast({ title: t("reset.errorTitle"), description: t("reset.errorDesc") })
+    } finally {
+      setResetLoading(false)
+    }
+  }
+
+  const handleVerifyCode = async (e) => {
+    e.preventDefault()
+    if (!resetCode || resetCode.length !== 6) return
+    setResetLoading(true)
+
+    try {
+      const res = await fetch(`${API_BASE}/api/password/verify-code`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ email: resetEmail, code: resetCode }),
+      })
+
+      const data = await res.json().catch(() => ({}))
+
+      if (res.ok && data?.verified) {
+        setResetView("newPassword")
+        return
+      }
+
+      if (data?.error === "CODE_EXPIRED") {
+        showErrorToast({ title: t("reset.errorTitle"), description: t("reset.codeExpired") })
+        return
+      }
+
+      showErrorToast({ title: t("reset.errorTitle"), description: t("reset.invalidCode") })
+    } catch {
+      showErrorToast({ title: t("reset.errorTitle"), description: t("reset.errorDesc") })
+    } finally {
+      setResetLoading(false)
+    }
+  }
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault()
+    if (!resetPassword || resetPassword.length < 8) {
+      showErrorToast({ title: t("reset.errorTitle"), description: t("reset.passwordMin") })
+      return
+    }
+    setResetLoading(true)
+
+    try {
+      const res = await fetch(`${API_BASE}/api/password/reset`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ email: resetEmail, code: resetCode, password: resetPassword }),
+      })
+
+      const data = await res.json().catch(() => ({}))
+
+      if (res.ok && data?.reset) {
+        showSuccessToast({ title: t("reset.successTitle"), description: t("reset.successDesc") })
+        setResetView(null)
+        setResetEmail("")
+        setResetCode("")
+        setResetPassword("")
+        return
+      }
+
+      if (data?.error === "CODE_EXPIRED") {
+        showErrorToast({ title: t("reset.errorTitle"), description: t("reset.codeExpired") })
+        return
+      }
+
+      showErrorToast({ title: t("reset.errorTitle"), description: t("reset.errorDesc") })
+    } catch {
+      showErrorToast({ title: t("reset.errorTitle"), description: t("reset.errorDesc") })
+    } finally {
+      setResetLoading(false)
+    }
+  }
+
   const loginStyle = loginBg
     ? {
         backgroundImage: `url(${loginBg})`,
@@ -276,51 +398,145 @@ function Login() {
 
       <div className="container">
         <div className="backButton">
-          <button onClick={() => navigate("/")}>
+          <button onClick={() => resetView ? setResetView(null) : navigate("/")}>
             <BackIcon />
           </button>
         </div>
 
         <div className="loginForm">
-          <h1>{t("login.title")}</h1>
-          <span>{t("login.subtitle")}</span>
+          {!resetView && (
+            <>
+              <h1>{t("login.title")}</h1>
+              <span>{t("login.subtitle")}</span>
 
-          <form className="material-form" onSubmit={handleSubmit}>
-            <div className="input-field">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <label>{t("login.email")}</label>
-              <span className="bar"></span>
-            </div>
+              <form className="material-form" onSubmit={handleSubmit}>
+                <div className="input-field">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                  <label>{t("login.email")}</label>
+                  <span className="bar"></span>
+                </div>
 
-            <div className="input-field">
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <label>{t("login.password")}</label>
-              <span className="bar"></span>
-            </div>
+                <div className="input-field">
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <label>{t("login.password")}</label>
+                  <span className="bar"></span>
+                </div>
 
-            <button type="submit" disabled={loading}>
-              {loading ? t("login.loading") : t("login.button")}
-            </button>
-
-            <div className="alreadyHave">
-              <p>
-                {t("login.notYet")}{" "}
-                <button type="button" onClick={() => navigate("/register")}>
-                  {t("login.register")}
+                <button type="submit" disabled={loading}>
+                  {loading ? t("login.loading") : t("login.button")}
                 </button>
-              </p>
-            </div>
-          </form>
+
+                <div className="alreadyHave">
+                  <p>
+                    <button type="button" onClick={() => setResetView("email")}>
+                      {t("login.forgotPassword")}
+                    </button>
+                  </p>
+                </div>
+
+                <div className="alreadyHave">
+                  <p>
+                    {t("login.notYet")}{" "}
+                    <button type="button" onClick={() => navigate("/register")}>
+                      {t("login.register")}
+                    </button>
+                  </p>
+                </div>
+              </form>
+            </>
+          )}
+
+          {resetView === "email" && (
+            <>
+              <h1>{t("reset.title")}</h1>
+              <span>{t("reset.enterEmail")}</span>
+
+              <form className="material-form" onSubmit={handleSendCode}>
+                <div className="input-field">
+                  <input
+                    type="email"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
+                    required
+                  />
+                  <label>{t("login.email")}</label>
+                  <span className="bar"></span>
+                </div>
+
+                <button type="submit" disabled={resetLoading}>
+                  {resetLoading ? t("login.loading") : t("reset.sendCode")}
+                </button>
+              </form>
+            </>
+          )}
+
+          {resetView === "code" && (
+            <>
+              <h1>{t("reset.verifyTitle")}</h1>
+              <span>{t("reset.enterCode")}</span>
+
+              <form className="material-form" onSubmit={handleVerifyCode}>
+                <div className="input-field">
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={6}
+                    value={resetCode}
+                    onChange={(e) => setResetCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                    required
+                  />
+                  <label>{t("reset.code")}</label>
+                  <span className="bar"></span>
+                </div>
+
+                <button type="submit" disabled={resetLoading || resetCode.length !== 6}>
+                  {resetLoading ? t("login.loading") : t("reset.verify")}
+                </button>
+
+                <div className="alreadyHave">
+                  <p>
+                    <button type="button" onClick={() => setResetView("email")}>
+                      {t("reset.resendCode")}
+                    </button>
+                  </p>
+                </div>
+              </form>
+            </>
+          )}
+
+          {resetView === "newPassword" && (
+            <>
+              <h1>{t("reset.newPasswordTitle")}</h1>
+              <span>{t("reset.enterNewPassword")}</span>
+
+              <form className="material-form" onSubmit={handleResetPassword}>
+                <div className="input-field">
+                  <input
+                    type="password"
+                    value={resetPassword}
+                    onChange={(e) => setResetPassword(e.target.value)}
+                    required
+                  />
+                  <label>{t("login.password")}</label>
+                  <span className="bar"></span>
+                </div>
+
+                <button type="submit" disabled={resetLoading}>
+                  {resetLoading ? t("login.loading") : t("reset.resetButton")}
+                </button>
+              </form>
+            </>
+          )}
         </div>
       </div>
 

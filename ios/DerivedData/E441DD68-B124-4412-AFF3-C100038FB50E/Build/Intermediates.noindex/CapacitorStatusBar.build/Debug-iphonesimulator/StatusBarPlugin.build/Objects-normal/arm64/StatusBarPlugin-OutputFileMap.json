@@ -1,0 +1,59 @@
+{
+  "" : {
+    "diagnostics" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarPlugin-primary.dia",
+    "emit-module-dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarPlugin-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarPlugin-primary-emit-module.dia",
+    "pch" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarPlugin-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarPlugin-primary.swiftdeps"
+  },
+  "/Applications/MAMP/htdocs/Nuevos/sona/node_modules/@capacitor/status-bar/ios/Sources/StatusBarPlugin/StatusBar.swift" : {
+    "const-values" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBar.swiftconstvalues",
+    "dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBar.d",
+    "diagnostics" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBar.dia",
+    "index-unit-output-path" : "/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBar.o",
+    "llvm-bc" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBar.bc",
+    "object" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBar.o",
+    "swift-dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBar.swiftdeps",
+    "swiftmodule" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBar~partial.swiftmodule"
+  },
+  "/Applications/MAMP/htdocs/Nuevos/sona/node_modules/@capacitor/status-bar/ios/Sources/StatusBarPlugin/StatusBarConfig.swift" : {
+    "const-values" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarConfig.swiftconstvalues",
+    "dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarConfig.d",
+    "diagnostics" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarConfig.dia",
+    "index-unit-output-path" : "/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarConfig.o",
+    "llvm-bc" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarConfig.bc",
+    "object" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarConfig.o",
+    "swift-dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarConfig.swiftdeps",
+    "swiftmodule" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarConfig~partial.swiftmodule"
+  },
+  "/Applications/MAMP/htdocs/Nuevos/sona/node_modules/@capacitor/status-bar/ios/Sources/StatusBarPlugin/StatusBarInfo.swift" : {
+    "const-values" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarInfo.swiftconstvalues",
+    "dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarInfo.d",
+    "diagnostics" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarInfo.dia",
+    "index-unit-output-path" : "/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarInfo.o",
+    "llvm-bc" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarInfo.bc",
+    "object" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarInfo.o",
+    "swift-dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarInfo.swiftdeps",
+    "swiftmodule" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarInfo~partial.swiftmodule"
+  },
+  "/Applications/MAMP/htdocs/Nuevos/sona/node_modules/@capacitor/status-bar/ios/Sources/StatusBarPlugin/StatusBarPlugin.swift" : {
+    "const-values" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarPlugin.swiftconstvalues",
+    "dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarPlugin.d",
+    "diagnostics" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarPlugin.dia",
+    "index-unit-output-path" : "/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarPlugin.o",
+    "llvm-bc" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarPlugin.bc",
+    "object" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarPlugin.o",
+    "swift-dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarPlugin.swiftdeps",
+    "swiftmodule" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/StatusBarPlugin~partial.swiftmodule"
+  },
+  "/Applications/MAMP/htdocs/Nuevos/sona/node_modules/@capacitor/status-bar/ios/Sources/StatusBarPlugin/UIColor.swift" : {
+    "const-values" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/UIColor.swiftconstvalues",
+    "dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/UIColor.d",
+    "diagnostics" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/UIColor.dia",
+    "index-unit-output-path" : "/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/UIColor.o",
+    "llvm-bc" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/UIColor.bc",
+    "object" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/UIColor.o",
+    "swift-dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/UIColor.swiftdeps",
+    "swiftmodule" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapacitorStatusBar.build/Debug-iphonesimulator/StatusBarPlugin.build/Objects-normal/arm64/UIColor~partial.swiftmodule"
+  }
+}

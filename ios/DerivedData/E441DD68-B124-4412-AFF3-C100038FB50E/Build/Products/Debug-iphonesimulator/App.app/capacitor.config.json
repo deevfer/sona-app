@@ -1,0 +1,17 @@
+{
+	"appId": "tech.fernandovasquez.sona",
+	"appName": "sona",
+	"webDir": "dist",
+	"server": {
+		"iosScheme": "https",
+		"url": "http://192.168.0.10:3000"
+	},
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 0
+		}
+	},
+	"packageClassList": [
+		"StatusBarPlugin"
+	]
+}

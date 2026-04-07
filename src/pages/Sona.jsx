@@ -38,7 +38,7 @@ function Sona() {
   const [alertMessage, setAlertMessage] = useState("")
   // Precargar vinyls
   useEffect(() => {
-    const vinyls = ["/vinyl-1.png", "/vinyl-2.png", "/vinyl-3.png", "/vinyl-4.png", "/vinyl-5.png", "/vinyl-6.png"]
+    const vinyls = ["/vinyl-1-1.png", "/vinyl-2-1.png", "/vinyl-2-2.png", "/vinyl-3-1.png", "/vinyl-3.png", "/vinyl-6.png"]
     vinyls.forEach(src => {
       const img = new Image()
       img.src = src
@@ -78,7 +78,7 @@ function Sona() {
   })
 
   const [selectedVinyl, setSelectedVinyl] = useState(() =>
-    localStorage.getItem(VINYL_KEY) || "/vinyl-1.png"
+    localStorage.getItem(VINYL_KEY) || "/vinyl-1-1.png"
   )
   useEffect(() => {
     localStorage.setItem(VINYL_KEY, selectedVinyl)

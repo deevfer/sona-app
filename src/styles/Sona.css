@@ -231,8 +231,8 @@
 }
 .infoAlbumApp {
     position: absolute;
-    width: 20vh;
-    height: 20vh;
+    width: 25vh;
+    height: 25vh;
     border-radius: 300px;
     pointer-events: none;
     background: #a4a4a4;
@@ -292,8 +292,8 @@
         justify-content: center;
     }
     .albumImg img {
-        width: 37vw;
-        height: 37vw;
+        width: 45vw;
+        height: 45vw;
         border-radius: 300px;
         overflow: hidden;
     }
@@ -487,8 +487,8 @@
         width: 100%;
     }
     .albumImg img {
-        width: 15vw;
-        height: 15vw;
+        width: 18vw;
+        height: 18vw;
         border-radius: 300px;
         overflow: hidden;
         z-index: 99;
@@ -586,8 +586,8 @@
         width: 100%;
     }
     .albumImg img {
-        width: 22vw;
-        height: 22vw;
+        width: 25vw;
+        height: 25vw;
         border-radius: 300px;
         overflow: hidden;
         z-index: 99;
@@ -726,8 +726,8 @@
         justify-content: center;
     }
     .albumImg img {
-        width: 35vw;
-        height: 35vw;
+        width: 40vw;
+        height: 40vw;
         border-radius: 300px;
         overflow: hidden;
     }
@@ -878,8 +878,8 @@
         transform-origin: 50% 50%;
     }
     .albumImg img {
-        width: 270px;
-        height: 270px;
+        width: 290px;
+        height: 290px;
         border-radius: 150px;
         overflow: hidden;
     }
@@ -954,8 +954,8 @@
         justify-content: center;
     }
     .albumImg img {
-        width: 36vw;
-        height: 36vw;
+        width: 42vw;
+        height: 42vw;
         border-radius: 300px;
         overflow: hidden;
         z-index: 9;

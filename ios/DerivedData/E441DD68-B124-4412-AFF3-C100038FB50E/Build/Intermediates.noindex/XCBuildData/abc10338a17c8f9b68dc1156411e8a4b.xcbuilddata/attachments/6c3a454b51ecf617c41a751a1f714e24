@@ -1,0 +1,19 @@
+{
+  "" : {
+    "diagnostics" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapApp-SPM.build/Debug-iphonesimulator/CapApp-SPM.build/Objects-normal/arm64/CapApp-SPM-primary.dia",
+    "emit-module-dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapApp-SPM.build/Debug-iphonesimulator/CapApp-SPM.build/Objects-normal/arm64/CapApp-SPM-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapApp-SPM.build/Debug-iphonesimulator/CapApp-SPM.build/Objects-normal/arm64/CapApp-SPM-primary-emit-module.dia",
+    "pch" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapApp-SPM.build/Debug-iphonesimulator/CapApp-SPM.build/Objects-normal/arm64/CapApp-SPM-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapApp-SPM.build/Debug-iphonesimulator/CapApp-SPM.build/Objects-normal/arm64/CapApp-SPM-primary.swiftdeps"
+  },
+  "/Applications/MAMP/htdocs/Nuevos/sona/ios/App/CapApp-SPM/Sources/CapApp-SPM/CapApp-SPM.swift" : {
+    "const-values" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapApp-SPM.build/Debug-iphonesimulator/CapApp-SPM.build/Objects-normal/arm64/CapApp-SPM.swiftconstvalues",
+    "dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapApp-SPM.build/Debug-iphonesimulator/CapApp-SPM.build/Objects-normal/arm64/CapApp-SPM.d",
+    "diagnostics" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapApp-SPM.build/Debug-iphonesimulator/CapApp-SPM.build/Objects-normal/arm64/CapApp-SPM.dia",
+    "index-unit-output-path" : "/CapApp-SPM.build/Debug-iphonesimulator/CapApp-SPM.build/Objects-normal/arm64/CapApp-SPM.o",
+    "llvm-bc" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapApp-SPM.build/Debug-iphonesimulator/CapApp-SPM.build/Objects-normal/arm64/CapApp-SPM.bc",
+    "object" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapApp-SPM.build/Debug-iphonesimulator/CapApp-SPM.build/Objects-normal/arm64/CapApp-SPM.o",
+    "swift-dependencies" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapApp-SPM.build/Debug-iphonesimulator/CapApp-SPM.build/Objects-normal/arm64/CapApp-SPM.swiftdeps",
+    "swiftmodule" : "/Applications/MAMP/htdocs/Nuevos/sona/ios/DerivedData/E441DD68-B124-4412-AFF3-C100038FB50E/Build/Intermediates.noindex/CapApp-SPM.build/Debug-iphonesimulator/CapApp-SPM.build/Objects-normal/arm64/CapApp-SPM~partial.swiftmodule"
+  }
+}

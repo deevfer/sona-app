@@ -31,7 +31,31 @@
         "invalidCredentialsDesc": "Please check your email and password and try again.",
 
         "errorS": "Login error",
-        "tryAgainLater": "Please try again later."
+        "tryAgainLater": "Please try again later.",
+        "forgotPassword": "Forgot your password?"
+    },
+    "reset": {
+        "title": "Reset password",
+        "enterEmail": "Enter your email address to receive a verification code.",
+        "sendCode": "Send code",
+        "verifyTitle": "Verify code",
+        "enterCode": "Enter the 6-digit code we sent to your email.",
+        "code": "Verification code",
+        "verify": "Verify",
+        "resendCode": "Resend code",
+        "newPasswordTitle": "New password",
+        "enterNewPassword": "Enter your new password (minimum 8 characters).",
+        "resetButton": "Change password",
+        "codeSentTitle": "Code sent",
+        "codeSentDesc": "Check your inbox or spam folder.",
+        "successTitle": "Password updated",
+        "successDesc": "You can now log in with your new password.",
+        "errorTitle": "Error",
+        "errorDesc": "Something went wrong. Please try again.",
+        "userNotFound": "No account found with this email.",
+        "invalidCode": "The code entered is not valid.",
+        "codeExpired": "The code has expired. Request a new one.",
+        "passwordMin": "Password must be at least 8 characters."
     },
     "register":{
         "title": "Create an account",

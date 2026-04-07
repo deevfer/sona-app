@@ -31,7 +31,31 @@
         "invalidCredentialsDesc": "Verifica tu correo y contraseña e intenta nuevamente.",
 
         "errorS": "Error al iniciar sesión",
-        "tryAgainLater": "Por favor intenta nuevamente más tarde."
+        "tryAgainLater": "Por favor intenta nuevamente más tarde.",
+        "forgotPassword": "¿Olvidaste tu contraseña?"
+    },
+    "reset": {
+        "title": "Recuperar contraseña",
+        "enterEmail": "Ingresa tu correo electrónico para recibir un código de verificación.",
+        "sendCode": "Enviar código",
+        "verifyTitle": "Verificar código",
+        "enterCode": "Ingresa el código de 6 dígitos que enviamos a tu correo.",
+        "code": "Código de verificación",
+        "verify": "Verificar",
+        "resendCode": "Reenviar código",
+        "newPasswordTitle": "Nueva contraseña",
+        "enterNewPassword": "Ingresa tu nueva contraseña (mínimo 8 caracteres).",
+        "resetButton": "Cambiar contraseña",
+        "codeSentTitle": "Código enviado",
+        "codeSentDesc": "Revisa tu bandeja de entrada o carpeta de spam.",
+        "successTitle": "Contraseña actualizada",
+        "successDesc": "Ya puedes iniciar sesión con tu nueva contraseña.",
+        "errorTitle": "Error",
+        "errorDesc": "Ocurrió un error. Intenta nuevamente.",
+        "userNotFound": "No existe una cuenta con este correo.",
+        "invalidCode": "El código ingresado no es válido.",
+        "codeExpired": "El código ha expirado. Solicita uno nuevo.",
+        "passwordMin": "La contraseña debe tener al menos 8 caracteres."
     },
     "register":{
         "title": "Crear una cuenta",

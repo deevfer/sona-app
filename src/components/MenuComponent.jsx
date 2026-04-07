@@ -52,11 +52,11 @@ function MenuComponent({
   const dropdownRef = useRef(null)
 
   const vinyls = [
-    "/vinyl-1.png",
-    "/vinyl-2.png",
+    "/vinyl-1-1.png",
+    "/vinyl-2-1.png",
+    "/vinyl-2-2.png",
+    "/vinyl-3-1.png",
     "/vinyl-3.png",
-    "/vinyl-4.png",
-    "/vinyl-5.png",
     "/vinyl-6.png",
   ]
 
