@@ -1,10 +1,11 @@
 import "../styles/Register.css"
 import "../styles/Responsive.css"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import BackIcon from "../assets/back.svg?react"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import LanguageSwitcher from "../components/LanguageSwitcher"
+import FullScreenLoader from "../components/FullScreenLoader"
 import { sileo } from "sileo"
 import { Capacitor, registerPlugin } from "@capacitor/core"
 
@@ -20,8 +21,16 @@ try {
 
 function Register() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { t } = useTranslation()
   const [purchasing, setPurchasing] = useState(false)
+  const [showTrialModal, setShowTrialModal] = useState(false)
+  const [startingTrial, setStartingTrial] = useState(false)
+  const isFreeTrialAccess = localStorage.getItem("sonaAccessMode") === "free"
+  const fromFreeTrial =
+    isFreeTrialAccess &&
+    (location.state?.fromFreeTrial ||
+      sessionStorage.getItem("sona:registerFromFreeTrial") === "true")
 
   const [formData, setFormData] = useState({
     name: "",
@@ -30,10 +39,17 @@ function Register() {
   })
 
   const formDataRef = useRef(formData)
+  const trialTimerRef = useRef(null)
 
   useEffect(() => {
     formDataRef.current = formData
   }, [formData])
+
+  useEffect(() => {
+    return () => {
+      if (trialTimerRef.current) clearTimeout(trialTimerRef.current)
+    }
+  }, [])
 
   const errorTitle = (text) => (
     <span style={{ color: "#ff5a5f", fontWeight: 600 }}>{text}</span>
@@ -59,6 +75,31 @@ function Register() {
       title: successTitle(title),
       description: toastDescription(description),
     })
+  }
+
+  const handleFreeTrial = () => {
+    if (startingTrial) return
+
+    setShowTrialModal(false)
+    setStartingTrial(true)
+    localStorage.setItem("sonaAccessMode", "free")
+    localStorage.setItem("musicProvider", "apple_music")
+    localStorage.setItem("appleMusicDemo", "true")
+    localStorage.removeItem("appleMusicConnected")
+    localStorage.removeItem("appleMusicUserToken")
+
+    trialTimerRef.current = setTimeout(() => {
+      navigate("/sona", { replace: true })
+    }, 1500)
+  }
+
+  const handleBack = () => {
+    if (fromFreeTrial) {
+      navigate("/sona", { replace: true })
+      return
+    }
+
+    navigate("/login")
   }
 
   const handlePurchase = async () => {
@@ -218,7 +259,7 @@ function Register() {
 
       <div className="container">
         <div className="backButton">
-          <button onClick={() => navigate("/login")}>
+          <button onClick={handleBack}>
             <BackIcon />
           </button>
         </div>
@@ -301,8 +342,45 @@ function Register() {
               </p>
             </div>
           </form>
+
+          {!fromFreeTrial && (
+            <div className="freeTrial">
+              <button type="button" onClick={() => setShowTrialModal(true)}>
+                  {t("register.trial")}
+              </button>
+            </div>
+          )}
         </div>
       </div>
+      {showTrialModal && (
+        <div className="modalOverlay" onClick={() => setShowTrialModal(false)}>
+            <div className="modalContent freeTrialModal" onClick={(e) => e.stopPropagation()}>
+                <button className="closeModal" onClick={() => setShowTrialModal(false)}>+</button>
+                <h2>{t("register.trialModalTitle")}</h2>
+                <p>
+                    {t("register.trialModalText")}
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <button
+                        type="button"
+                        className="freeTrialBtn"
+                        onClick={handleFreeTrial}
+                        disabled={startingTrial}
+                    >
+                        {t("register.startTrial")}
+                    </button>
+                    <button
+                        type="button"
+                        className="purchaseBtn"
+                        onClick={() => setShowTrialModal(false)}
+                    >
+                        {t("register.purchaseFreeTrial")}
+                    </button>
+                </div>
+            </div>
+        </div>
+      )}
+      <FullScreenLoader visible={startingTrial} />
     </div>
   )
 }

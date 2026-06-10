@@ -346,6 +346,7 @@
         transform: translateX(100%);
     }
 }
+
 @media (max-width: 768px) {
     .loginArtworkRowFixed {
         grid-template-columns: repeat(4, 78px);
@@ -457,5 +458,79 @@
     }
     .loginForm.connectService {
         justify-content: center;
+    }
+}
+
+
+.modalContent.freeTrialModal{
+    width: 60%;
+    height: auto;
+}
+.freeTrial {
+    max-width: 400px;
+    width: 100%;
+    padding: 10px 40px;
+}
+.freeTrial button {
+    margin: 20px auto;
+    width: 70%;
+    background: transparent;
+    border-radius: 50px;
+    color: #fff!important;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border-bottom: none; */
+    /* border-top: none; */
+    /* border-left: none; */
+    /* border-right: none; */
+    font-size: 14px;
+}
+.modalContent.freeTrialModal p {
+    color: #000!important;
+    font-size: 12px!important;
+    padding: 40px 40px 0;
+}
+.modalContent.freeTrialModal .freeTrialBtn  {
+    width: 70%;
+    padding: 10px 20px;
+    background: transparent;
+    color: #121212;
+    border-radius: 0!important;
+    border-radius: 50px!important;
+    cursor: pointer;
+    transition: .3s;
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 300;
+    margin: 20px auto 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    border: 1px solid #121212;
+}
+.modalContent.freeTrialModal .purchaseBtn  {
+    width: 70%;
+    padding: 10px 20px;
+    background: #121212;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: .3s;
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 300;
+    margin: 20px auto 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
+    .modalContent.freeTrialModal {
+        width: 100% !important;
+        max-width: 100% !important;
     }
 }

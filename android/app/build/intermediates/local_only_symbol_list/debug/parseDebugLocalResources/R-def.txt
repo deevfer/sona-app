@@ -1,0 +1,24 @@
+R_DEF: Internal format may change without notice
+local
+color colorAccent
+color colorPrimary
+color colorPrimaryDark
+color ic_launcher_background
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+drawable splash
+drawable splash_1
+layout activity_main
+mipmap ic_launcher
+mipmap ic_launcher_foreground
+mipmap ic_launcher_round
+mipmap sona
+string app_name
+string custom_url_scheme
+string package_name
+string title_activity_main
+style AppTheme
+style AppTheme.NoActionBar
+style AppTheme.NoActionBarLaunch
+xml config
+xml file_paths

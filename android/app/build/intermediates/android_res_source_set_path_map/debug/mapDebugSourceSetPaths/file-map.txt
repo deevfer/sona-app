@@ -1,0 +1,8 @@
+com.sona.app-pngs-0 /Applications/MAMP/htdocs/Nuevos/sona/android/app/build/generated/res/pngs/debug
+com.sona.app-resValues-1 /Applications/MAMP/htdocs/Nuevos/sona/android/app/build/generated/res/resValues/debug
+com.sona.app-updated_navigation_xml-2 /Applications/MAMP/htdocs/Nuevos/sona/android/app/build/generated/updated_navigation_xml/debug
+com.sona.app-packageDebugResources-3 /Applications/MAMP/htdocs/Nuevos/sona/android/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir
+com.sona.app-packageDebugResources-4 /Applications/MAMP/htdocs/Nuevos/sona/android/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir
+com.sona.app-debug-5 /Applications/MAMP/htdocs/Nuevos/sona/android/app/build/intermediates/merged_res/debug/mergeDebugResources
+com.sona.app-debug-6 /Applications/MAMP/htdocs/Nuevos/sona/android/app/src/debug/res
+com.sona.app-main-7 /Applications/MAMP/htdocs/Nuevos/sona/android/app/src/main/res

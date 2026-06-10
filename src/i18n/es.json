@@ -32,7 +32,9 @@
 
         "errorS": "Error al iniciar sesión",
         "tryAgainLater": "Por favor intenta nuevamente más tarde.",
-        "forgotPassword": "¿Olvidaste tu contraseña?"   
+        "forgotPassword": "¿Olvidaste tu contraseña?",
+        "networkErrorTitle": "Sin conexión",
+        "networkErrorDesc": "Revisa tu conexión a internet e intenta nuevamente."
     },
     "reset": {
         "title": "Recuperar contraseña",
@@ -79,12 +81,24 @@
         "registerErrorTitle": "Error de registro",
         "registerErrorDesc": "No pudimos completar tu registro. Intenta nuevamente.",
         "successTitle": "Cuenta creada correctamente",
-        "successDesc": "Tu acceso a Sona ya está activo."
+        "successDesc": "Tu acceso a Sona ya está activo.",
+        "trial": "Prueba gratuita",
+        "trialModalTitle": "Elige cómo empezar",
+        "trialModalText": "La prueba gratuita de Sona no tiene límite de uso. Durante esta etapa, podrás explorar un catálogo de álbumes y playlists preseleccionadas, junto con un preview de 30 segundos de sus canciones. Para acceder a la experiencia completa, desbloquea todas las funciones con un único pago de USD$3.99.",
+        "startTrial": "Iniciar prueba gratuita",
+        "purchaseFreeTrial": "Desbloquear acceso completo"
     },
     "sona": {
         "EmptyPlayerTitle": "Tu música está en pausa",
         "EmptyPlayer": "Reproduce una canción desde tus álbumes o playlist para visualizarla en esta sección.",
-        "appleMusicDetected": "Cambia a Apple Music en Ajustes para disfrutar de todas las funciones: álbumes, playlists, cola y más."
+        "appleMusicDetected": "Cambia a Apple Music en Ajustes para disfrutar de todas las funciones: álbumes, playlists, cola y más.",
+        "freeTrialMode": "Prueba gratuita",
+        "freeTrialText": "Estás usando la prueba gratuita de Sona. Podrás explorar álbumes y playlists seleccionadas con previews de 30 segundos.",
+        "freeTrialUpgradeMessage": "Desbloquea el acceso completo para disfrutar toda la experiencia de Sona",
+        "freeTrialUpgradeCta": "Registrarme ahora",
+        "freeTrialUpgradeLater": "Más tarde",
+        "demoMode": "Modo demo",
+        "demoText": "Las canciones en modo demo se reproducen únicamente durante 30 segundos."
     },
     "connect": {
         "title": "Conecta tu música",
@@ -92,11 +106,24 @@
         "comingSoon": "Muy pronto",
         "loading": "Conectando",
         "otherService": "Otra aplicación de música",
-        "error": "No se pudo conectar con el servicio de música."
+        "error": "No se pudo conectar con el servicio de música.",
+        "appleMusicRequired": "Se necesita una suscripción activa de Apple Music para usar Sona.",
+        "networkError": "Revisa tu conexión a internet e intenta nuevamente.",
+        "retry": "Reintentar",
+        "authDenied": "Debes permitir la conexión de Apple Music para continuar. Activa el permiso en Ajustes → Sona → Servicios multimedia y Apple Music.",
+        "openSettings": "Abrir Ajustes",
+        "serverError": "No se pudo conectar con el servidor. Intenta más tarde.",
+        "unknownError": "No pudimos completar la conexión con Apple Music en este dispositivo. Intenta nuevamente.",
+        "notAvailable": "Apple Music no está disponible en este dispositivo en este momento.",
+        "regionError": "Apple Music no está disponible en tu región o cuenta actual.",
+        "loginRequired": "Debes iniciar sesión en Apple Music para continuar.",
+        "initError": "No se pudo inicializar Apple Music en este dispositivo. Intenta nuevamente.",
+        "noAccount": "No uso ninguna"
     },
     "stylesMenu":{
         "vinyl": "Estilo del vinilo",
-        "background": "Fondo"
+        "background": "Fondo",
+        "pickStyle": "Elige tu propio estilo"
     },
     "menuAlbums":{
         "album": "Álbumes",
@@ -121,16 +148,28 @@
         "lang": "Idioma",
         "connected": "Conectado",
         "provider": "Proveedor de música",
+        "freeTrial": "Prueba gratuita",
+        "unlockFullAccess": "Desbloquea el acceso completo",
+        "unlockFullAccessText": "Desbloquea todas las funciones por un único pago de USD $3.99.",
+        "unlockFullAccessCta": "Comienza ahora",
         "support": "Apóyanos",
         "donation": "Invítanos a un café",
         "share": "Comparte Sona con tus amigos",
         "faq": "Preguntas frecuentes",
         "account": "Cuenta",
+        "backHome": "Regresar al inicio",
         "comingSoon": "Próximamente",
         "session": "Cerrar sesión",
         "developed": "Desarrollado por Devfer",
         "version": "Versión 1.0.1",
-        "shareText": "🎧 La música se vive diferente en Sona. Descarga la app en: "
+        "shareText": "🎧 La música se vive diferente en Sona. Descarga la app en: ",
+        "delete": "Eliminar mi cuenta",
+        "deleteWarning": "¡Cuidado! Por favor lee cuidadosamente antes de eliminar.",
+        "deleteWarningText": "Esta acción eliminará tus datos y la compra ligada a tu usuario. No se podrá deshacer.",
+        "deleteWarningTextConfirm": "Escribe tu correo para confirmar",
+        "deleteSecondWarning": "Se eliminará de forma definitiva.",
+        "deleteCancel": "Cancelar",
+        "deleting": "Eliminando..."
     },
     "connectDevice": {
         "noDevice": "Abre Spotify en tu teléfono o computadora e intenta de nuevo"

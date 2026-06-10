@@ -8,13 +8,14 @@
 }
   
 body {
-    background-color: #2d2d2d;
+    background-color: #000;
     font-family: 'Poppins', sans-serif;
     color: white;
     margin: 0!important;
     
 }
 html, body {
+    background-color: #000;
     touch-action: manipulation;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     padding-bottom: env(safe-area-inset-bottom);
@@ -27,6 +28,7 @@ html, body {
 .sonaBody.bg-gray  { background: #B2B1A9; }
 .sonaBody.bg-yellow{ background: #fca519; }
 .sonaBody.bg-black { background: #121212; }
+.sonaBody.bg-custom { background: var(--sona-custom-bg, #fca519); }
 
 /* cover: el background se setea por style inline */
 .sonaBody.bg-cover { background-color: #121212; }
@@ -52,6 +54,12 @@ html, body {
     transition: all 0.3s ease;
 }
 
+.sonaBody.bg-custom .overlayBackground {
+    background:
+        linear-gradient(135deg, rgb(255 255 255 / 27%), rgb(0 0 0 / 24%)),
+        var(--sona-custom-bg, #fca519);
+}
+
 /* regla actual (oscura) */
 .menuTopOptions button svg path { fill: #2d2d2d; }
 
@@ -68,6 +76,12 @@ html, body {
 }
 .sonaBody.bg-cover .menuTopOptions button svg path {
     fill: #fff;
+}
+.sonaBody.text-light .menuTopOptions button svg path {
+    fill: #fff;
+}
+.sonaBody.text-dark .menuTopOptions button svg path {
+    fill: #2d2d2d;
 }
 .sonaBody.text-light .musicInfo h1,
 .sonaBody.text-light .musicInfo p { 
@@ -230,5 +244,3 @@ html, body {
   transform: translateY(12px);
   pointer-events: none;
 }
-
-

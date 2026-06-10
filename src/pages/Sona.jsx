@@ -1,17 +1,23 @@
 import { useState, useRef, useEffect, useCallback } from "react"
+import { useNavigate } from "react-router-dom"
 import { Capacitor } from "@capacitor/core"
 import { useTranslation } from "react-i18next"
 import MediaListenerPlugin from "../plugins/mediaListener"
 import MenuComponent from "../components/MenuComponent"
+import FreeTrialUpgradeOverlay from "../components/FreeTrialUpgradeOverlay"
 import { useProvider } from "../hooks/useProvider"
 import AppleMusicPlaybackPlugin from "../plugins/appleMusicPlayback"
+import {
+  getBackgroundClass,
+  getBackgroundStyles,
+  getBackgroundTextClass,
+} from "../utils/background"
 import "../styles/Sona.css"
 import "../styles/global.css"
 import "../styles/Responsive.css"
 import { sileo } from "sileo"
 
 const API_BASE = import.meta.env.VITE_API_BASE
-
 function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n))
 }
@@ -21,12 +27,43 @@ const BG_KEY = "sona:selectedBg"
 const COVER_KEY = "sona:lastCoverUrl"
 const APPLE_LAST_TRACK_KEY = "sona:appleLastTrack"
 const CONTEXT_KEY = "sona:currentContext"
+const FREE_TRIAL_PREVIEW_COUNT_KEY = "sona:freeTrialPreviewCount"
+const FREE_TRIAL_PREVIEW_LIMIT = 4
 
 const isNativeIOS =
   Capacitor.isNativePlatform() && Capacitor.getPlatform() === "ios"
 
 function Sona() {
+  const navigate = useNavigate()
   const { t } = useTranslation()
+  const isDemoMode = localStorage.getItem("appleMusicDemo") === "true"
+  const isFreeTrial = localStorage.getItem("sonaAccessMode") === "free"
+
+  const DEMO_ALERT_SHOWN_KEY = "sona:demoAlertShown"
+  const FREE_TRIAL_ALERT_SHOWN_KEY = "sona:freeTrialAlertShown"
+  useEffect(() => {
+    const isDemoMode = localStorage.getItem("appleMusicDemo") === "true"
+    const isFreeTrial = localStorage.getItem("sonaAccessMode") === "free"
+
+    if (!isDemoMode) return
+
+    const alertKey = isFreeTrial
+      ? FREE_TRIAL_ALERT_SHOWN_KEY
+      : DEMO_ALERT_SHOWN_KEY
+
+    const alreadyShown =
+      localStorage.getItem(alertKey) === "true"
+
+    if (alreadyShown) return
+
+    showAlert({
+      title: isFreeTrial ? t("sona.freeTrialMode") : t("sona.demoMode"),
+      description: isFreeTrial ? t("sona.freeTrialText") : t("sona.demoText"),
+    })
+
+    localStorage.setItem(alertKey, "true")
+  }, [])
+
   const errorTitle = (text) => (
     <span style={{ color: "#ff5a5f", fontWeight: 600 }}>{text}</span>
   )
@@ -41,6 +78,7 @@ function Sona() {
       description: toastDescription(description),
     })
   }
+
   const {
     provider,
     ready,
@@ -53,10 +91,23 @@ function Sona() {
   const [error, setError] = useState("")
   const [nowPlaying, setNowPlaying] = useState(() => {
     try {
+      const playbackState = localStorage.getItem("sona:demoPlaybackState")
+  
+      if (playbackState) {
+        const parsed = JSON.parse(playbackState)
+        localStorage.removeItem("sona:demoPlaybackState")
+        return parsed
+      }
+  
       const raw = localStorage.getItem(APPLE_LAST_TRACK_KEY)
       if (!raw) return null
+  
       const parsed = JSON.parse(raw)
-      return { is_playing: false, progress_ms: 0, track: parsed }
+      return {
+        is_playing: false,
+        progress_ms: 0,
+        track: parsed,
+      }
     } catch {
       return null
     }
@@ -113,6 +164,18 @@ function Sona() {
   const [appleMusicAlert, setAppleMusicAlert] = useState(false)
   const appleMusicAlertShownRef = useRef(false)
 
+  const demoAudioRef = useRef(null)
+  const [showFreeTrialUpgrade, setShowFreeTrialUpgrade] = useState(false)
+  const freeTrialPreviewCountRef = useRef(0)
+  const lastCountedPreviewRef = useRef("")
+
+  useEffect(() => {
+    const storedCount = Number(localStorage.getItem(FREE_TRIAL_PREVIEW_COUNT_KEY) || 0)
+    freeTrialPreviewCountRef.current = Number.isFinite(storedCount)
+      ? storedCount
+      : 0
+  }, [])
+
   const showAlert = ({ title, description }) => {
     if (isNativeIOS && window.Capacitor?.Plugins?.Dialog) {
       window.Capacitor.Plugins.Dialog.alert({
@@ -130,6 +193,55 @@ function Sona() {
     const value = t(key)
     return !value || value === key ? fallback : value
   }
+
+  const resetFreeTrialPreviewCounter = useCallback(() => {
+    freeTrialPreviewCountRef.current = 0
+    lastCountedPreviewRef.current = ""
+    localStorage.setItem(FREE_TRIAL_PREVIEW_COUNT_KEY, "0")
+  }, [])
+
+  const maybeShowFreeTrialUpgrade = useCallback((track) => {
+    if (!isFreeTrial || !track || showFreeTrialUpgrade) return
+
+    const previewId = String(
+      track.id ||
+      track.storeId ||
+      track.previewUrl ||
+      track.name ||
+      Date.now()
+    )
+
+    if (lastCountedPreviewRef.current === previewId) return
+
+    lastCountedPreviewRef.current = previewId
+    const nextCount = freeTrialPreviewCountRef.current + 1
+    freeTrialPreviewCountRef.current = nextCount
+    localStorage.setItem(FREE_TRIAL_PREVIEW_COUNT_KEY, String(nextCount))
+
+    if (nextCount < FREE_TRIAL_PREVIEW_LIMIT) return
+
+    const audio = demoAudioRef.current
+    if (audio) audio.pause()
+
+    setIntentPlay(false)
+    setIsPlayingUI(false)
+    setNeedleDown(false)
+    setShowFreeTrialUpgrade(true)
+  }, [isFreeTrial, showFreeTrialUpgrade])
+
+  const handleFreeTrialUpgradeLater = useCallback(() => {
+    resetFreeTrialPreviewCounter()
+    setShowFreeTrialUpgrade(false)
+  }, [resetFreeTrialPreviewCounter])
+
+  const handleFreeTrialUpgradeCta = useCallback(() => {
+    resetFreeTrialPreviewCounter()
+    setShowFreeTrialUpgrade(false)
+    sessionStorage.setItem("sona:registerFromFreeTrial", "true")
+    navigate("/register", {
+      state: { fromFreeTrial: true },
+    })
+  }, [navigate, resetFreeTrialPreviewCounter])
 
   const getStoredAppleTrack = useCallback(() => {
     try {
@@ -181,18 +293,23 @@ function Sona() {
   }, [])
 
   const apiFetch = useCallback(async (url, options = {}) => {
+    const { requireAuth = true, headers: optionHeaders, ...fetchOptions } = options
     const token = localStorage.getItem("token")
-    if (!token) throw new Error("No hay token")
+    if (requireAuth && !token) throw new Error("No hay token")
 
     const finalUrl = url.startsWith("http") ? url : `${API_BASE}${url}`
+    const headers = {
+      Accept: "application/json",
+      ...(optionHeaders || {}),
+    }
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`
+    }
 
     const res = await fetch(finalUrl, {
-      ...options,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-        ...(options.headers || {}),
-      },
+      ...fetchOptions,
+      headers,
     })
 
     if (res.status === 204) return null
@@ -284,6 +401,7 @@ function Sona() {
               album: data.track.album || "",
               image: data.track.image || storedTrack?.image || "/sonaDefault.png",
               duration_ms: data.track.duration_ms || 0,
+              raw: data.track.raw || storedTrack?.raw || null,
             }
           : null,
       }
@@ -334,13 +452,233 @@ function Sona() {
     }
   }, [])
 
+  const getDemoPreviewUrl = useCallback((track) => {
+    return (
+      track?.raw?.attributes?.previews?.[0]?.url ||
+      track?.raw?.attributes?.previewAssets?.[0]?.url ||
+      track?.previewUrl ||
+      ""
+    )
+  }, [])
+  
+  // useEffect(() => {
+  //   if (!isDemoMode) return
+  
+  //   const rawState = localStorage.getItem("sona:demoPlaybackState")
+  //   const rawTrack = localStorage.getItem(APPLE_LAST_TRACK_KEY)
+  
+  //   let parsedState = null
+  //   let parsedTrack = null
+  
+  //   try {
+  //     parsedState = rawState ? JSON.parse(rawState) : null
+  //   } catch {
+  //     parsedState = null
+  //   }
+  
+  //   try {
+  //     parsedTrack = rawTrack ? JSON.parse(rawTrack) : null
+  //   } catch {
+  //     parsedTrack = null
+  //   }
+  
+  //   const finalTrack = parsedState?.track || parsedTrack
+  //   if (!finalTrack) return
+  
+  //   const previewUrl = getDemoPreviewUrl(finalTrack)
+  //   if (!previewUrl) return
+  
+  //   setNowPlaying({
+  //     is_playing: !!parsedState?.is_playing,
+  //     progress_ms: parsedState?.progress_ms || 0,
+  //     track: finalTrack,
+  //   })
+  
+  //   setIntentPlay(!!parsedState?.is_playing)
+  //   setIsPlayingUI(false)
+  
+  //   const run = async () => {
+  //     const audio = demoAudioRef.current
+  //     if (!audio) return
+  
+  //     audio.src = previewUrl
+  //     audio.currentTime = (parsedState?.progress_ms || 0) / 1000
+  
+  //     if (parsedState?.is_playing) {
+  //       try {
+  //         await audio.play()
+  //       } catch (err) {
+  //         console.error("Demo autoplay failed:", err)
+  //       }
+  //     }
+  //   }
+  
+  //   const id = requestAnimationFrame(() => {
+  //     void run()
+  //   })
+  
+  //   return () => cancelAnimationFrame(id)
+  // }, [isDemoMode, getDemoPreviewUrl])
+
+  // useEffect(() => {
+  //   if (!isDemoMode) return
+  //   if (!nowPlaying?.track) return
+  
+  //   const shouldAutoplay = localStorage.getItem("sona:autoPlayDemo") === "true"
+  //   if (!shouldAutoplay) return
+  
+  //   localStorage.removeItem("sona:autoPlayDemo")
+  
+  //   const audio = demoAudioRef.current
+  //   if (!audio) return
+  
+  //   const previewUrl = getDemoPreviewUrl(nowPlaying.track)
+  //   if (!previewUrl) return
+  
+  //   audio.src = previewUrl
+  //   audio.currentTime = 0
+  
+  //   audio.play().catch(() => {})
+  // }, [isDemoMode, nowPlaying?.track, getDemoPreviewUrl])
+  
+
+  const fetchDemoContextTracks = useCallback(async () => {
+    const context = readStoredContext()
+    if (!context?.id || !context?.type) return []
+
+    if (context.type === "album") {
+      const data = await apiFetch(`/api/apple-music/albums/${context.id}/tracks`, {
+        requireAuth: false,
+      })
+      const trackItems =
+        data?.data?.[0]?.relationships?.tracks?.data ||
+        data?.relationships?.tracks?.data ||
+        []
+
+      return trackItems.map((track) => ({
+        id: track?.id,
+        name: track?.attributes?.name || "",
+        artists: track?.attributes?.artistName ? [track.attributes.artistName] : [],
+        album: track?.attributes?.albumName || "",
+        image: track?.attributes?.artwork
+          ? resolveAppleArtwork(track.attributes.artwork, 600, 600)
+          : "/sonaDefault.png",
+        duration_ms: track?.attributes?.durationInMillis || 0,
+        raw: track,
+      }))
+    }
+
+    if (context.type === "playlist") {
+      const data = await apiFetch(`/api/apple-music/playlists/${context.id}/tracks`, {
+        requireAuth: false,
+      })
+      const trackItems =
+        data?.data?.[0]?.relationships?.tracks?.data ||
+        data?.relationships?.tracks?.data ||
+        []
+
+      return trackItems.map((track) => ({
+        id: track?.id,
+        name: track?.attributes?.name || "",
+        artists: track?.attributes?.artistName ? [track.attributes.artistName] : [],
+        album: track?.attributes?.albumName || "",
+        image: track?.attributes?.artwork
+          ? resolveAppleArtwork(track.attributes.artwork, 600, 600)
+          : "/sonaDefault.png",
+        duration_ms: track?.attributes?.durationInMillis || 0,
+        raw: track,
+      }))
+    }
+
+    return []
+  }, [apiFetch, readStoredContext, resolveAppleArtwork])
+
+  const playDemoTrack = useCallback(async (track, autoplay = true) => {
+    if (!track) return
+
+    const previewUrl = getDemoPreviewUrl(track)
+
+    setNowPlaying({
+      is_playing: false,
+      progress_ms: 0,
+      track,
+    })
+
+    saveAppleLastTrack(track)
+    updateStoredContextIndex(track?.id)
+
+    if (!previewUrl) {
+      showAlert({
+        title: t("errors.playbackFailed"),
+        description: t("errors.noTracksDesc"),
+      })
+      return
+    }
+
+    const audio = demoAudioRef.current
+    if (!audio) return
+
+    audio.src = previewUrl
+    audio.currentTime = 0
+
+    if (autoplay) {
+      try {
+        await audio.play()
+        maybeShowFreeTrialUpgrade(track)
+        setIsPlayingUI(true)
+        setIntentPlay(true)
+        needleTransitionRef.current = true
+        setNeedleDown(true)
+        setNowPlaying((prev) =>
+          prev
+            ? {
+                ...prev,
+                is_playing: true,
+                progress_ms: 0,
+              }
+            : prev
+        )
+      } catch {
+        setIsPlayingUI(false)
+        setIntentPlay(false)
+        needleTransitionRef.current = true
+        setNeedleDown(false)
+      }
+    }
+  }, [getDemoPreviewUrl, maybeShowFreeTrialUpgrade, saveAppleLastTrack, updateStoredContextIndex, showAlert, t])
+
+
+
+  const setDemoTrackAtOffset = useCallback(async (offset) => {
+    const context = readStoredContext()
+    if (!context) return
+
+    const tracks = await fetchDemoContextTracks()
+    if (!tracks.length) return
+
+    const currentIndex = Number.isInteger(context.index) ? context.index : 0
+    const nextIndex = clamp(currentIndex + offset, 0, tracks.length - 1)
+    const nextTrack = tracks[nextIndex]
+
+    localStorage.setItem(
+      CONTEXT_KEY,
+      JSON.stringify({
+        ...context,
+        index: nextIndex,
+      })
+    )
+
+    await playDemoTrack(nextTrack, true)
+  }, [fetchDemoContextTracks, playDemoTrack, readStoredContext])
+
   const fetchNowPlaying = useCallback(async () => {
+    if (isDemoMode) return null
     if (!provider) return null
     if (provider === "spotify") return spotifyNowPlaying()
     if (provider === "apple_music") return getAppleNowPlaying()
     if (provider === "other") return getOtherNowPlaying()
     return null
-  }, [provider, spotifyNowPlaying, getAppleNowPlaying, getOtherNowPlaying])
+  }, [provider, spotifyNowPlaying, getAppleNowPlaying, getOtherNowPlaying, isDemoMode])
 
   const safeAppleResume = useCallback(async (music) => {
     if (!music) return
@@ -474,6 +812,140 @@ function Sona() {
   }, [])
 
   useEffect(() => {
+    if (!isDemoMode) return
+  
+    if (!window.__sonaDemoAudio) {
+      const sharedAudio = new Audio()
+      sharedAudio.preload = "auto"
+      window.__sonaDemoAudio = sharedAudio
+    }
+  
+    demoAudioRef.current = window.__sonaDemoAudio
+  
+    const audio = demoAudioRef.current
+    if (!audio) return
+  
+    const syncFromSharedAudio = () => {
+      try {
+        const rawTrack = localStorage.getItem(APPLE_LAST_TRACK_KEY)
+        const track = rawTrack ? JSON.parse(rawTrack) : null
+        if (!track) return
+  
+        setNowPlaying({
+          is_playing: !audio.paused,
+          progress_ms: Math.floor((audio.currentTime || 0) * 1000),
+          track,
+        })
+  
+        setIsPlayingUI(!audio.paused)
+        setIntentPlay(!audio.paused)
+  
+        if (!audio.paused) {
+          maybeShowFreeTrialUpgrade(track)
+          needleTransitionRef.current = true
+          setNeedleDown(true)
+        } else {
+          needleTransitionRef.current = true
+          setNeedleDown(false)
+        }
+      } catch {}
+    }
+  
+    const onPlay = () => {
+      syncFromSharedAudio()
+    }
+  
+    const onPause = () => {
+      syncFromSharedAudio()
+    }
+  
+    const onTimeUpdate = () => {
+      try {
+        const rawTrack = localStorage.getItem(APPLE_LAST_TRACK_KEY)
+        const track = rawTrack ? JSON.parse(rawTrack) : null
+  
+        setNowPlaying((prev) =>
+          prev
+            ? {
+                ...prev,
+                is_playing: !audio.paused,
+                progress_ms: Math.floor((audio.currentTime || 0) * 1000),
+                track: track || prev.track,
+              }
+            : prev
+        )
+  
+        if (track?.duration_ms) {
+          setNeedleByProgress(
+            (audio.currentTime || 0) * 1000,
+            track.duration_ms
+          )
+        }
+      } catch {}
+    }
+  
+    const onEnded = () => {
+      syncFromSharedAudio()
+    }
+  
+    const syncFromStorage = () => {
+      try {
+        const rawTrack = localStorage.getItem(APPLE_LAST_TRACK_KEY)
+        const track = rawTrack ? JSON.parse(rawTrack) : null
+        if (!track) return
+  
+        const previewUrl = getDemoPreviewUrl(track)
+        if (!previewUrl) return
+  
+        const currentSrc = audio.src || ""
+        const sameSrc = currentSrc.includes(previewUrl)
+  
+        if (!sameSrc) {
+          audio.src = previewUrl
+          audio.currentTime = 0
+        }
+  
+        setNowPlaying({
+          is_playing: !audio.paused,
+          progress_ms: Math.floor((audio.currentTime || 0) * 1000),
+          track,
+        })
+  
+        setIsPlayingUI(!audio.paused)
+        setIntentPlay(!audio.paused)
+  
+        if (!audio.paused) {
+          maybeShowFreeTrialUpgrade(track)
+          needleTransitionRef.current = true
+          setNeedleDown(true)
+        } else {
+          needleTransitionRef.current = true
+          setNeedleDown(false)
+        }
+      } catch {}
+    }
+  
+    audio.addEventListener("play", onPlay)
+    audio.addEventListener("pause", onPause)
+    audio.addEventListener("timeupdate", onTimeUpdate)
+    audio.addEventListener("ended", onEnded)
+  
+    syncFromStorage()
+  
+    window.addEventListener("focus", syncFromStorage)
+    window.addEventListener("sona:demoTrackChanged", syncFromStorage)
+  
+    return () => {
+      audio.removeEventListener("play", onPlay)
+      audio.removeEventListener("pause", onPause)
+      audio.removeEventListener("timeupdate", onTimeUpdate)
+      audio.removeEventListener("ended", onEnded)
+  
+      window.removeEventListener("focus", syncFromStorage)
+      window.removeEventListener("sona:demoTrackChanged", syncFromStorage)
+    }
+  }, [isDemoMode, getDemoPreviewUrl, maybeShowFreeTrialUpgrade, setNeedleByProgress])
+  useEffect(() => {
     if (nowPlaying?.track) {
       lastGoodNowPlayingRef.current = nowPlaying
       window.dispatchEvent(new CustomEvent("sona:nowPlayingChanged", {
@@ -490,6 +962,126 @@ function Sona() {
     }
   }, [isPlayingUI, startSpin, stopSpinSmooth])
 
+  // useEffect(() => {
+  //   if (!isDemoMode) return
+
+  //   const audio = demoAudioRef.current
+  //   if (!audio) return
+
+  //   const onPlay = () => {
+  //     setIsPlayingUI(true)
+  //     setIntentPlay(true)
+  //     needleTransitionRef.current = true
+  //     setNeedleDown(true)
+  //     setNowPlaying((prev) =>
+  //       prev
+  //         ? {
+  //             ...prev,
+  //             is_playing: true,
+  //             progress_ms: Math.floor((audio.currentTime || 0) * 1000),
+  //           }
+  //         : prev
+  //     )
+  //   }
+
+  //   const onPause = () => {
+  //     setIsPlayingUI(false)
+  //     setIntentPlay(false)
+  //     needleTransitionRef.current = true
+  //     setNeedleDown(false)
+  //     setNowPlaying((prev) =>
+  //       prev
+  //         ? {
+  //             ...prev,
+  //             is_playing: false,
+  //             progress_ms: Math.floor((audio.currentTime || 0) * 1000),
+  //           }
+  //         : prev
+  //     )
+  //   }
+
+  //   const onTimeUpdate = () => {
+  //     setNowPlaying((prev) =>
+  //       prev
+  //         ? {
+  //             ...prev,
+  //             progress_ms: Math.floor((audio.currentTime || 0) * 1000),
+  //           }
+  //         : prev
+  //     )
+
+  //     if (nowPlaying?.track?.duration_ms) {
+  //       setNeedleByProgress((audio.currentTime || 0) * 1000, nowPlaying.track.duration_ms)
+  //     }
+  //   }
+
+  //   const onEnded = () => {
+  //     setIsPlayingUI(false)
+  //     setIntentPlay(false)
+  //     needleTransitionRef.current = true
+  //     setNeedleDown(false)
+  //     setNowPlaying((prev) =>
+  //       prev
+  //         ? {
+  //             ...prev,
+  //             is_playing: false,
+  //             progress_ms: prev.track?.duration_ms || 0,
+  //           }
+  //         : prev
+  //     )
+  //   }
+
+  //   audio.addEventListener("play", onPlay)
+  //   audio.addEventListener("pause", onPause)
+  //   audio.addEventListener("timeupdate", onTimeUpdate)
+  //   audio.addEventListener("ended", onEnded)
+
+  //   return () => {
+  //     audio.removeEventListener("play", onPlay)
+  //     audio.removeEventListener("pause", onPause)
+  //     audio.removeEventListener("timeupdate", onTimeUpdate)
+  //     audio.removeEventListener("ended", onEnded)
+  //   }
+  // }, [isDemoMode, nowPlaying?.track?.duration_ms, setNeedleByProgress])
+
+  useEffect(() => {
+    if (!isDemoMode) return
+    if (!nowPlaying?.track) return
+  
+    const previewUrl = getDemoPreviewUrl(nowPlaying.track)
+    if (!previewUrl) return
+  
+    const audio = demoAudioRef.current
+    if (!audio) return
+  
+    const currentSrc = audio.src || ""
+  
+    if (!currentSrc.includes(previewUrl)) {
+      audio.src = previewUrl
+      audio.currentTime = (nowPlaying?.progress_ms || 0) / 1000
+    }
+  }, [isDemoMode, nowPlaying?.track?.id, getDemoPreviewUrl])
+
+  useEffect(() => {
+    if (!isDemoMode) return
+    if (!nowPlaying?.track) return
+  
+    const previewUrl = getDemoPreviewUrl(nowPlaying.track)
+    if (!previewUrl) return
+  
+    const audio = demoAudioRef.current
+    if (!audio) return
+  
+    if (!audio.src || !audio.src.includes(previewUrl)) {
+      audio.src = previewUrl
+      audio.currentTime = (nowPlaying?.progress_ms || 0) / 1000
+    }
+  
+    if (intentPlay && audio.paused) {
+      audio.play().catch(() => {})
+    }
+  }, [isDemoMode, nowPlaying?.track, nowPlaying?.progress_ms, getDemoPreviewUrl, intentPlay])
+
   // Apple Music detected alert
   useEffect(() => {
     const handleAppleDetected = () => {
@@ -504,7 +1096,7 @@ function Sona() {
 
   // Apple Music web sync
   useEffect(() => {
-    if (!ready || provider !== "apple_music" || isNativeIOS) return
+    if (!ready || provider !== "apple_music" || isNativeIOS || isDemoMode) return
 
     let mounted = true
     let music = null
@@ -592,10 +1184,12 @@ function Sona() {
     saveAppleLastTrack,
     updateStoredContextIndex,
     needleDown,
+    isDemoMode,
   ])
 
   // Main polling
   useEffect(() => {
+    if (isDemoMode) return
     if (!provider) return
     if (provider !== "other" && !ready) return
 
@@ -759,11 +1353,15 @@ function Sona() {
     updateStoredContextIndex,
     isNativeIOS,
     needleDown,
+    isDemoMode,
   ])
 
   useEffect(() => {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current)
+      if (demoAudioRef.current) {
+        demoAudioRef.current.pause()
+      }
     }
   }, [])
 
@@ -774,6 +1372,40 @@ function Sona() {
     setError("")
 
     try {
+      if (isDemoMode) {
+        const audio = demoAudioRef.current
+        const track = nowPlaying?.track
+        const previewUrl = getDemoPreviewUrl(track)
+      
+        if (!audio || !track || !previewUrl) {
+          showAlert({
+            title: t("errors.playbackFailed"),
+            description: t("errors.noTracksDesc"),
+          })
+          return
+        }
+      
+        if (!audio.src || !audio.src.includes(previewUrl)) {
+          audio.src = previewUrl
+          audio.currentTime = (nowPlaying?.progress_ms || 0) / 1000
+        }
+      
+        if (audio.paused) {
+          await audio.play()
+          maybeShowFreeTrialUpgrade(track)
+          setIntentPlay(true)
+          setNeedleDown(true)
+          setIsPlayingUI(true)
+        } else {
+          audio.pause()
+          setIntentPlay(false)
+          setNeedleDown(false)
+          setIsPlayingUI(false)
+        }
+      
+        return
+      }
+
       if (!provider) return
 
       if (provider === "spotify") {
@@ -996,6 +1628,15 @@ function Sona() {
     setError("")
 
     try {
+      if (isDemoMode) {
+        await setDemoTrackAtOffset(1)
+        if (needleDown) {
+          needleTransitionRef.current = true
+          setNeedleDeg(NEEDLE_MIN)
+        }
+        return
+      }
+
       if (!provider) return
 
       if (provider === "other") {
@@ -1088,6 +1729,15 @@ function Sona() {
     setError("")
 
     try {
+      if (isDemoMode) {
+        await setDemoTrackAtOffset(-1)
+        if (needleDown) {
+          needleTransitionRef.current = true
+          setNeedleDeg(NEEDLE_MIN)
+        }
+        return
+      }
+
       if (!provider) return
 
       if (provider === "other") {
@@ -1225,83 +1875,69 @@ function Sona() {
     }
   }, [cover])
 
+  useEffect(() => {
+    if (selectedBg !== "cover" || !savedCover) return
+
+    const img = new Image()
+    img.crossOrigin = "anonymous"
+    img.onload = () => {
+      try {
+        const canvas = document.createElement("canvas")
+        canvas.width = 10
+        canvas.height = 10
+        const ctx = canvas.getContext("2d")
+        ctx.drawImage(img, 0, 0, 10, 10)
+        const data = ctx.getImageData(0, 0, 10, 10).data
+        const totalPixels = 100
+
+        let rSum = 0, gSum = 0, bSum = 0
+        for (let i = 0; i < data.length; i += 4) {
+          rSum += data[i]
+          gSum += data[i + 1]
+          bSum += data[i + 2]
+        }
+
+        const lum = ((rSum / totalPixels) * 299 + (gSum / totalPixels) * 587 + (bSum / totalPixels) * 114) / 1000
+        setCoverTextClass(lum > 200 ? "text-dark" : "text-light")
+      } catch {
+        setCoverTextClass("text-light")
+      }
+    }
+    img.onerror = () => setCoverTextClass("text-light")
+    img.src = savedCover
+  }, [selectedBg, savedCover])
+
+  const bgStyles = getBackgroundStyles(selectedBg, savedCover || cover)
+  const bgClass = getBackgroundClass(selectedBg)
+  const textClass = getBackgroundTextClass(selectedBg, coverTextClass)
 
   useEffect(() => {
-      if (selectedBg !== "cover" || !savedCover) return
+    const track = nowPlaying?.track
+    if (!track?.storeId) return
+    if (track.image && track.image !== "/sonaDefault.png" && track.image !== "") return
+    if (isDemoMode) return
 
-      const img = new Image()
-      img.crossOrigin = "anonymous"
-      img.onload = () => {
-        try {
-          const canvas = document.createElement("canvas")
-          canvas.width = 10
-          canvas.height = 10
-          const ctx = canvas.getContext("2d")
-          ctx.drawImage(img, 0, 0, 10, 10)
-          const data = ctx.getImageData(0, 0, 10, 10).data
-          const totalPixels = 100
-
-          let rSum = 0, gSum = 0, bSum = 0
-          for (let i = 0; i < data.length; i += 4) {
-            rSum += data[i]
-            gSum += data[i + 1]
-            bSum += data[i + 2]
-          }
-
-          const lum = ((rSum / totalPixels) * 299 + (gSum / totalPixels) * 587 + (bSum / totalPixels) * 114) / 1000
-          setCoverTextClass(lum > 200 ? "text-dark" : "text-light")
-        } catch {
-          setCoverTextClass("text-light")
+    const fetchArtwork = async () => {
+      try {
+        const data = await apiFetch(`/api/apple-music/songs/${track.storeId}`)
+        const artworkTemplate = data?.data?.[0]?.attributes?.artwork?.url
+        if (artworkTemplate) {
+          const resolvedUrl = artworkTemplate.replace('{w}', '600').replace('{h}', '600')
+          setNowPlaying(prev => {
+            if (!prev?.track) return prev
+            return {
+              ...prev,
+              track: { ...prev.track, image: resolvedUrl }
+            }
+          })
         }
-      }
-      img.onerror = () => setCoverTextClass("text-light")
-      img.src = savedCover
-    }, [selectedBg, savedCover])
+      } catch {}
+    }
 
+    fetchArtwork()
+  }, [nowPlaying?.track?.storeId, nowPlaying?.track?.image, apiFetch, isDemoMode])
 
-  const bgStyles =
-    selectedBg === "cover"
-      ? {
-          backgroundImage: `url(${savedCover || cover})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }
-      : {}
-
-  const bgClass = selectedBg !== "cover" ? `bg-${selectedBg}` : "bg-cover"
-  const textClass =
-  selectedBg === "cover"
-    ? coverTextClass
-    : selectedBg === "black"
-      ? "text-light"
-      : "text-dark"
-
-    useEffect(() => {
-      const track = nowPlaying?.track
-      if (!track?.storeId) return
-      if (track.image && track.image !== "/sonaDefault.png" && track.image !== "") return
-  
-      const fetchArtwork = async () => {
-        try {
-          const data = await apiFetch(`/api/apple-music/songs/${track.storeId}`)
-          const artworkTemplate = data?.data?.[0]?.attributes?.artwork?.url
-          if (artworkTemplate) {
-            const resolvedUrl = artworkTemplate.replace('{w}', '600').replace('{h}', '600')
-            setNowPlaying(prev => {
-              if (!prev?.track) return prev
-              return {
-                ...prev,
-                track: { ...prev.track, image: resolvedUrl }
-              }
-            })
-          }
-        } catch {}
-      }
-  
-      fetchArtwork()
-    }, [nowPlaying?.track?.storeId, nowPlaying?.track?.image, apiFetch])
-
-  if (!ready && provider !== "other") return (
+  if (!ready && provider !== "other" && !isDemoMode) return (
     <div className={`sonaBody ${bgClass} ${textClass}`} style={bgStyles}>
       <div className="overlayBackground"></div>
       <div className="container">
@@ -1344,6 +1980,7 @@ function Sona() {
           </div>
         </div>
       </div>
+      {/* <audio ref={demoAudioRef} preload="auto" /> */}
     </div>
   )
 
@@ -1367,6 +2004,12 @@ function Sona() {
           />
         </div>
 
+        {/* <div className="badgeDemo">
+          <div className="demoText">
+            <p>{t("sona.demoMode")}</p>
+            <span>{t("sona.demoText")}</span>
+          </div>
+        </div> */}
         <div className="vinylPlay">
           <div className="vinylContent">
             <div className="vinyl" ref={vinylRef} onClick={handlePlayPause}>
@@ -1445,6 +2088,17 @@ function Sona() {
           </div>
         </div>
       </div>
+
+      {/* <audio ref={demoAudioRef} preload="auto" /> */}
+
+      <FreeTrialUpgradeOverlay
+        visible={showFreeTrialUpgrade}
+        title={t("sona.freeTrialUpgradeMessage")}
+        cta={t("sona.freeTrialUpgradeCta")}
+        later={t("sona.freeTrialUpgradeLater")}
+        onCta={handleFreeTrialUpgradeCta}
+        onLater={handleFreeTrialUpgradeLater}
+      />
 
       {appleMusicAlert && (
         <div

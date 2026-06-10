@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:host": "vite --host 0.0.0.0",
+    "ios:targets": "cap run ios --list",
+    "ios:live": "cap run ios --live-reload --host localhost --port 5173",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"

@@ -1,7 +1,13 @@
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom"
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+  Navigate,
+} from "react-router-dom"
 import { Toaster } from "sileo"
 import { useState, useEffect, useCallback, useRef } from "react"
-import { Capacitor } from "@capacitor/core"
 
 import { ProtectedRoute, AuthRoute } from "./ProtectedRoutes"
 import Landing from "./pages/Landing"
@@ -11,12 +17,86 @@ import Home from "./pages/Home"
 import Sona from "./pages/Sona"
 import Albums from "./pages/Albums"
 import Queue from "./pages/Queue"
+
 import MenuBottomComponent from "./components/MenuBottomComponent"
+import {
+  lockPortraitOrientation,
+  unlockOrientation,
+} from "./utils/orientation"
 
 const API_BASE = import.meta.env.VITE_API_BASE
 
 const SONA_ROUTES = ["/sona", "/sona-albums", "/sona-queue"]
+const PORTRAIT_LOCKED_ROUTES = ["/", "/home", "/login", "/register"]
+const ACCESS_MODE_KEY = "sonaAccessMode"
+const ACCESS_MODE_PAID = "paid"
+const ACCESS_MODE_FREE = "free"
+const APPLE_DEMO_KEY = "appleMusicDemo"
+const MUSIC_PROVIDER_KEY = "musicProvider"
 
+const LEGACY_FREE_ROUTE_REDIRECTS = {
+  "/sona-free": "/sona",
+  "/sona-albums-free": "/sona-albums",
+  "/sona-queue-free": "/sona-queue",
+}
+
+function isFreeAccessMode() {
+  return (
+    localStorage.getItem(ACCESS_MODE_KEY) === ACCESS_MODE_FREE ||
+    localStorage.getItem(APPLE_DEMO_KEY) === "true"
+  )
+}
+
+function getAccessMode() {
+  if (localStorage.getItem("token")) return ACCESS_MODE_PAID
+  if (isFreeAccessMode()) return ACCESS_MODE_FREE
+  return ""
+}
+
+function enableFreeAccess() {
+  localStorage.setItem(ACCESS_MODE_KEY, ACCESS_MODE_FREE)
+  localStorage.setItem(MUSIC_PROVIDER_KEY, "apple_music")
+  localStorage.setItem(APPLE_DEMO_KEY, "true")
+  localStorage.removeItem("appleMusicConnected")
+  localStorage.removeItem("appleMusicUserToken")
+}
+
+function enablePaidAccess() {
+  localStorage.setItem(ACCESS_MODE_KEY, ACCESS_MODE_PAID)
+}
+
+function SonaAccessRoute({ children }) {
+  const token = localStorage.getItem("token")
+  const accessMode = getAccessMode()
+
+  useEffect(() => {
+    if (accessMode === ACCESS_MODE_FREE) {
+      enableFreeAccess()
+      return
+    }
+
+    if (token) {
+      enablePaidAccess()
+    }
+  }, [accessMode, token])
+
+  if (!token && accessMode !== ACCESS_MODE_FREE) {
+    return <Navigate to="/login" replace />
+  }
+
+  return children
+}
+
+function FreeRouteRedirect({ to }) {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    enableFreeAccess()
+    navigate(to, { replace: true })
+  }, [navigate, to])
+
+  return null
+}
 
 function SonaCarousel() {
   const location = useLocation()
@@ -44,7 +124,7 @@ function SonaCarousel() {
       if (!enabled) return
 
       const interactive = e.target.closest(
-        "button, a, input, .coverItem, .album3D, .albumFront, .albumBack, .albumSpine, .trackRow, .menuItem, .menuContent, .menuDropdown, .modalOverlay, .modalContent, .menuTopOptions, .menuBottom, .searchMenuTop, .controlers, .vinyl, .play, .backM, .nextM, .menuBottomElements, .switch, .searchExpandable"
+        "button, a, input, .coverItem, .album3D, .albumFront, .albumBack, .albumSpine, .trackRow, .menuItem, .menuContent, .menuDropdown, .modalOverlay, .modalContent, .freeTrialOverlay, .freeTrialGlass, .freeTrialLater, .menuTopOptions, .menuBottom, .searchMenuTop, .controlers, .vinyl, .play, .backM, .nextM, .menuBottomElements, .switch, .searchExpandable"
       )
       if (interactive) return
 
@@ -193,27 +273,50 @@ function AutoRedirect() {
   useEffect(() => {
     const token = localStorage.getItem("token")
     const provider = localStorage.getItem("musicProvider")
-    if (token && provider) {
+    const accessMode = getAccessMode()
+
+    if (accessMode === ACCESS_MODE_FREE) {
+      enableFreeAccess()
+      navigate("/sona", { replace: true })
+    } else if (token && provider) {
+      enablePaidAccess()
       navigate("/sona", { replace: true })
     } else if (token && !provider) {
+      enablePaidAccess()
       navigate("/home", { replace: true })
     }
   }, [navigate])
 
   const token = localStorage.getItem("token")
-  if (token) return null
+  const accessMode = getAccessMode()
+  if (token || accessMode === ACCESS_MODE_FREE) return null
 
   return <Landing />
 }
+
 function AppRoutes() {
   const location = useLocation()
+  const legacyFreeRoute = LEGACY_FREE_ROUTE_REDIRECTS[location.pathname]
   const isSonaRoute = SONA_ROUTES.includes(location.pathname)
+
+  useEffect(() => {
+    if (PORTRAIT_LOCKED_ROUTES.includes(location.pathname)) {
+      lockPortraitOrientation()
+      return
+    }
+
+    unlockOrientation()
+  }, [location.pathname])
+
+  if (legacyFreeRoute) {
+    return <FreeRouteRedirect to={legacyFreeRoute} />
+  }
 
   if (isSonaRoute) {
     return (
-      <ProtectedRoute>
+      <SonaAccessRoute>
         <SonaCarousel />
-      </ProtectedRoute>
+      </SonaAccessRoute>
     )
   }
 

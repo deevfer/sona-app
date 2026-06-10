@@ -28,6 +28,8 @@
 	<true/>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Sona needs access to Apple Music to link your account and play your library.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Sona uses your location to send you relevant notifications.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

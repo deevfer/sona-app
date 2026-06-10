@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import "../styles/Home.css"
 import "../styles/Responsive.css"
 import { useTranslation } from "react-i18next"
 import LanguageSwitcher from "../components/LanguageSwitcher"
+import FullScreenLoader from "../components/FullScreenLoader"
 import { Capacitor } from "@capacitor/core"
 import AppleMusicAuthPlugin from "../plugins/appleMusicAuth"
 
@@ -23,9 +24,31 @@ function Home() {
   const [loadingApple, setLoadingApple] = useState(false)
   const [checking, setChecking] = useState(true)
   const [error, setError] = useState("")
+  const [startingDemo, setStartingDemo] = useState(false)
+  const demoTimerRef = useRef(null)
 
   const isNativeIOS =
     Capacitor.isNativePlatform() && Capacitor.getPlatform() === "ios"
+
+  const startDemoMode = useCallback(() => {
+    setStartingDemo(true)
+    localStorage.removeItem("appleMusicConnected")
+    localStorage.removeItem("appleMusicUserToken")
+    localStorage.setItem("musicProvider", "apple_music")
+    localStorage.setItem("appleMusicDemo", "true")
+
+    if (demoTimerRef.current) clearTimeout(demoTimerRef.current)
+
+    demoTimerRef.current = setTimeout(() => {
+      navigate("/sona", { replace: true })
+    }, 1500)
+  }, [navigate])
+
+  useEffect(() => {
+    return () => {
+      if (demoTimerRef.current) clearTimeout(demoTimerRef.current)
+    }
+  }, [])
 
   useEffect(() => {
     const checkConnection = async () => {
@@ -33,6 +56,12 @@ function Home() {
         const token = localStorage.getItem("token")
         if (!token) {
           setChecking(false)
+          return
+        }
+
+        // 🔥 DEMO MODE
+        if (localStorage.getItem("appleMusicDemo") === "true") {
+          startDemoMode()
           return
         }
 
@@ -78,6 +107,7 @@ function Home() {
             if (appleData.connected) {
               localStorage.setItem("musicProvider", "apple_music")
               localStorage.setItem("appleMusicConnected", "true")
+              localStorage.removeItem("appleMusicDemo")
               navigate("/sona", { replace: true })
               return
             } else {
@@ -99,7 +129,12 @@ function Home() {
     }
 
     checkConnection()
-  }, [navigate])
+  }, [navigate, startDemoMode])
+
+  const handleDemoMode = () => {
+    if (startingDemo) return
+    startDemoMode()
+  }
 
   const handleSpotifyConnect = async () => {
     setLoadingSpotify(true)
@@ -249,6 +284,7 @@ function Home() {
       throw new Error(errorText || "No se pudo guardar la conexión de Apple Music")
     }
 
+    localStorage.removeItem("appleMusicDemo")
     localStorage.setItem("appleMusicConnected", "true")
     localStorage.setItem("appleMusicUserToken", musicUserToken)
     localStorage.setItem("musicProvider", "apple_music")
@@ -303,6 +339,7 @@ function Home() {
       throw new Error(errorText || "No se pudo guardar la conexión de Apple Music")
     }
 
+    localStorage.removeItem("appleMusicDemo")
     localStorage.setItem("appleMusicConnected", "true")
     localStorage.setItem("appleMusicUserToken", musicUserToken)
     localStorage.setItem("musicProvider", "apple_music")
@@ -323,6 +360,7 @@ function Home() {
 
       // 🔥 MOCK EN SIMULADOR
       if (isSimulator) {
+        localStorage.removeItem("appleMusicDemo")
         localStorage.setItem("musicProvider", "apple_music")
         localStorage.setItem("appleMusicConnected", "true")
 
@@ -339,67 +377,237 @@ function Home() {
         await handleAppleMusicConnectWeb(token)
       }
     } catch (err) {
-      console.error(err)
-      setError(err.message || t("connect.error"))
+      console.error("Apple Music connect error:", err)
+      console.error("Error code:", err?.code)
+      console.error("Error message:", err?.message)
+      console.error("Error errorMessage:", err?.errorMessage)
+      console.error("Error stringify:", JSON.stringify(err))
+    
+      const msg = (err?.message || err?.errorMessage || "").toLowerCase()
+    
+      const showAlert = (title, message) => {
+        if (isNativeIOS && window.Capacitor?.Plugins?.Dialog) {
+          window.Capacitor.Plugins.Dialog.alert({
+            title,
+            message,
+          }).catch(() => {
+            alert(message)
+          })
+        } else {
+          alert(message)
+        }
+      }
+    
+      // 0. Error vacío o silencioso del plugin
+      if (!msg || msg.trim() === "") {
+        showAlert("Apple Music", t("connect.unknownError"))
+        return
+      }
+    
+      // 1. Permiso denegado
+      if (
+        msg.includes("authorization denied") ||
+        msg.includes("permission denied") ||
+        msg.includes("not authorized") ||
+        msg.includes("user denied") ||
+        msg.includes("access denied")
+      ) {
+        if (isNativeIOS && window.Capacitor?.Plugins?.Dialog) {
+          window.Capacitor.Plugins.Dialog.confirm({
+            title: "Apple Music",
+            message: t("connect.authDenied"),
+            okButtonTitle: t("connect.openSettings"),
+            cancelButtonTitle: "OK",
+          }).then((result) => {
+            if (result.value) {
+              window.Capacitor.Plugins.App.openUrl({ url: "app-settings:" })
+            }
+          }).catch(() => {})
+        } else {
+          alert(t("connect.authDenied"))
+        }
+        return
+      }
+    
+      // 2. Sin suscripción / token fallido / Apple Music requerido
+      if (
+        msg.includes("skerrordomain") ||
+        msg.includes("music user token not found") ||
+        msg.includes("failed to get music user token") ||
+        msg.includes("missing developertoken") ||
+        msg.includes("cancelled") ||
+        msg.includes("canceled") ||
+        msg.includes("not subscribed") ||
+        msg.includes("subscription required") ||
+        msg.includes("no active subscription") ||
+        msg.includes("user not eligible") ||
+        msg.includes("music subscription") ||
+        msg.includes("apple music subscription")
+      ) {
+        showAlert("Apple Music", t("connect.appleMusicRequired"))
+        return
+      }
+    
+      // 3. Apple Music no disponible en el dispositivo / servicio no disponible
+      if (
+        msg.includes("apple music is not available") ||
+        msg.includes("service not available") ||
+        msg.includes("media services are not enabled") ||
+        msg.includes("not available on this device") ||
+        msg.includes("music service unavailable") ||
+        msg.includes("service unavailable")
+      ) {
+        showAlert("Apple Music", t("connect.notAvailable"))
+        return
+      }
+    
+      // 4. Error de red / timeout
+      if (
+        msg.includes("failed to fetch") ||
+        msg.includes("networkerror") ||
+        msg.includes("timeout") ||
+        msg.includes("timed out") ||
+        msg.includes("network request failed") ||
+        msg.includes("the request timed out") ||
+        msg.includes("couldn’t be completed") ||
+        msg.includes("couldn't be completed") ||
+        msg.includes("connection lost") ||
+        msg.includes("offline")
+      ) {
+        showAlert("Apple Music", t("connect.networkError"))
+        return
+      }
+    
+      // 5. Error de servidor / developer token / backend
+      if (
+        msg.includes("developer token") ||
+        msg.includes("no se recibió el developer token") ||
+        msg.includes("no se pudo obtener") ||
+        msg.includes("no se pudo guardar") ||
+        msg.includes("failed to save") ||
+        msg.includes("server error") ||
+        msg.includes("internal server error") ||
+        msg.includes("invalid developer token")
+      ) {
+        showAlert("Apple Music", t("connect.serverError"))
+        return
+      }
+    
+      // 6. Región / storefront / país no compatible
+      if (
+        msg.includes("storefront") ||
+        msg.includes("country") ||
+        msg.includes("region") ||
+        msg.includes("not allowed in this region") ||
+        msg.includes("not available in your country") ||
+        msg.includes("territory")
+      ) {
+        showAlert("Apple Music", t("connect.regionError"))
+        return
+      }
+    
+      // 7. Usuario no autenticado en Apple Music
+      if (
+        msg.includes("not logged in") ||
+        msg.includes("user token is invalid") ||
+        msg.includes("authorization failed") ||
+        msg.includes("login required") ||
+        msg.includes("authentication required") ||
+        msg.includes("invalid user token")
+      ) {
+        showAlert("Apple Music", t("connect.loginRequired"))
+        return
+      }
+    
+      // 8. MusicKit / inicialización / plugin no disponible
+      if (
+        msg.includes("musickit") ||
+        msg.includes("not configured") ||
+        msg.includes("instance not available") ||
+        msg.includes("plugin not implemented") ||
+        msg.includes("unimplemented") ||
+        msg.includes("not initialized") ||
+        msg.includes("initialization failed")
+      ) {
+        showAlert("Apple Music", t("connect.initError"))
+        return
+      }
+    
+      // 9. Error desconocido
+      const errorCode = err?.code ? ` (${err.code})` : ""
+      const errorMsg = msg || "Unknown error"
+
+      showAlert(
+        "Apple Music",
+        `${t("connect.error")}\n\n${errorMsg}${errorCode}`
+      )
     } finally {
       setLoadingApple(false)
     }
   }
 
-  if (checking) return null
+  if (checking) return <FullScreenLoader visible={startingDemo} />
 
   return (
-    <div className="landing">
-      <div className="container-lang">
-        <LanguageSwitcher />
-      </div>
+    <>
+      <div className="landing">
+        <div className="container-lang">
+          <LanguageSwitcher />
+        </div>
 
-      <div className="container">
-        <div className="loginForm connectService">
-          <h1>{t("connect.title")}</h1>
-          <span>{t("connect.subtitle")}</span>
+        <div className="container">
+          <div className="loginForm connectService">
+            <h1>{t("connect.title")}</h1>
+            <span>{t("connect.subtitle")}</span>
 
-          {error && <p className="error">{error}</p>}
+            {error && <p className="error">{error}</p>}
 
-          <div className="btnsConect">
-            <div className="btnPrimary">
-              <button
-                onClick={handleAppleMusicConnect}
-                disabled={loadingSpotify || loadingApple}
-              >
-                <img src="/AppleMusic.png" alt="Apple Music" />
-                {loadingApple ? t("connect.loading") : "Apple Music"}
-              </button>
-            </div>
+            <div className="btnsConect">
+              <div className="btnPrimary">
+                <button
+                  onClick={handleAppleMusicConnect}
+                  disabled={loadingSpotify || loadingApple || startingDemo}
+                >
+                  <img src="/AppleMusic.png" alt="Apple Music" />
+                  {loadingApple ? t("connect.loading") : "Apple Music"}
+                </button>
+              </div>
 
-            <div className="btnPrimary">
-              <button
-                onClick={handleSpotifyConnect}
-                disabled={true}
-                className="disabledProviderBtn"
-                title="Coming soon"
-              >
-                <img src="/spotify.png" alt="Spotify" />
-                Spotify
-                <span className="comingSoon">Coming soon</span>
-              </button>
+              <div className="btnPrimary">
+                <button
+                  onClick={handleSpotifyConnect}
+                  disabled={true}
+                  className="disabledProviderBtn"
+                  title="Coming soon"
+                >
+                  <img src="/spotify.png" alt="Spotify" />
+                  Spotify
+                  <span className="comingSoon">Coming soon</span>
+                </button>
+              </div>
+              <div className="btnPrimary noAccountBtn">
+                <button onClick={handleDemoMode} disabled={startingDemo}>
+                  <span>{t("connect.noAccount")}</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="vinylBottom">
-        <div className="leftVinyl">
-          <img src="/leftVinyl.svg" alt="" />
-        </div>
-        <div className="centerVinyl">
-          <img src="/centerVinyl.svg" alt="" />
-        </div>
-        <div className="rightVinyl">
-          <img src="/rightVinyl.svg" alt="" />
+        <div className="vinylBottom">
+          <div className="leftVinyl">
+            <img src="/leftVinyl.svg" alt="" />
+          </div>
+          <div className="centerVinyl">
+            <img src="/centerVinyl.svg" alt="" />
+          </div>
+          <div className="rightVinyl">
+            <img src="/rightVinyl.svg" alt="" />
+          </div>
         </div>
       </div>
-    </div>
+      <FullScreenLoader visible={startingDemo} />
+    </>
   )
 }
 

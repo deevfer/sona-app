@@ -16,11 +16,92 @@
       name="viewport" 
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" 
     />
+        <!-- Vinilos -->
+    <link rel="preload" href="/vinyl-1.png" as="image">
+    <link rel="preload" href="/vinyl-2-1.png" as="image">
+    <link rel="preload" href="/vinyl-2-2.png" as="image">
+    <link rel="preload" href="/vinyl-3.png" as="image">
+    <link rel="preload" href="/vinyl-5.png" as="image">
+    <link rel="preload" href="/vinyl-6.png" as="image">
+
+    <!-- Sona UI -->
+    <link rel="preload" href="/pin_base.svg" as="image">
+    <link rel="preload" href="/play.svg" as="image">
+    <link rel="preload" href="/pause.svg" as="image">
+    <link rel="preload" href="/back.svg" as="image">
+    <link rel="preload" href="/next.svg" as="image">
+    <link rel="preload" href="/discos.svg" as="image">
+    <link rel="preload" href="/icon-512.png" as="image">
+
+    <!-- Providers -->
+    <link rel="preload" href="/AppleMusic.png" as="image">
+    <link rel="preload" href="/spotify.png" as="image">
+
+    <!-- Share -->
+    <link rel="preload" href="/send.png" as="image">
+    <link rel="preload" href="/download.png" as="image">
     <title>Sona app</title>
-    <script type="module" crossorigin src="/assets/index-BRqwX44X.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DhGP6z66.css">
+    <style>
+      html,
+      body,
+      #root {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        background: #000;
+      }
+
+      body {
+        overflow: hidden;
+      }
+
+      .initialAppLoader {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483647;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+      }
+
+      .initialAppLoaderLogo {
+        width: min(42vw, 190px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: initialAppLoaderPulse 1.4s ease-in-out infinite;
+      }
+
+      .initialAppLoaderLogo img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      @keyframes initialAppLoaderPulse {
+        0%,
+        100% {
+          opacity: 0.72;
+          transform: scale(0.98);
+        }
+
+        50% {
+          opacity: 1;
+          transform: scale(1.02);
+        }
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-1Nufo0mO.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BPHT5zp7.css">
   <link rel="manifest" href="/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/registerSW.js"></script></head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="initialAppLoader">
+        <div class="initialAppLoaderLogo">
+          <img src="/sonaLogoAnimated.svg" alt="Sona" />
+        </div>
+      </div>
+    </div>
   </body>
 </html>

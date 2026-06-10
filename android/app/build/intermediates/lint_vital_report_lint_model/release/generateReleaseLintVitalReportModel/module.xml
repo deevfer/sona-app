@@ -1,0 +1,19 @@
+<lint-module
+    format="1"
+    dir="/Applications/MAMP/htdocs/Nuevos/sona/android/app"
+    name=":app"
+    type="APP"
+    maven="android:app:unspecified"
+    agpVersion="9.1.0"
+    buildFolder="build"
+    bootClassPath="/Users/luisfer/Library/Android/sdk/platforms/android-36/android.jar:/Users/luisfer/Library/Android/sdk/build-tools/36.0.0/core-lambda-stubs.jar"
+    javaSourceLevel="21"
+    compileTarget="android-36"
+    highlightGradualR8Api="false">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>

@@ -1,0 +1,4 @@
+#Fri Apr 03 19:36:49 CST 2026
+base.0=/Applications/MAMP/htdocs/Nuevos/sona/android/app/build/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

@@ -32,7 +32,9 @@
 
         "errorS": "Login error",
         "tryAgainLater": "Please try again later.",
-        "forgotPassword": "Forgot your password?"
+        "forgotPassword": "Forgot your password?",
+        "networkErrorTitle": "No connection",
+        "networkErrorDesc": "Check your internet connection and try again."   
     },
     "reset": {
         "title": "Reset password",
@@ -79,24 +81,49 @@
         "registerErrorTitle": "Registration error",
         "registerErrorDesc": "We couldn't complete your registration. Please try again.",
         "successTitle": "Account created successfully",
-        "successDesc": "Your Sona access is now active."
+        "successDesc": "Your Sona access is now active.",
+        "trial": "Free trial",
+        "trialModalTitle": "Choose how to start",
+        "trialModalText": "The Sona free trial has no usage limits. During this period, you can explore a catalog of curated albums and playlists, along with 30-second previews of their songs. To access the full experience, unlock all features with a one-time payment of USD$3.99.",
+        "startTrial": "Start free trial",
+        "purchaseFreeTrial": "Unlock full access"
     },
-    "connect":{
+    "connect": {
         "title": "Connect your music",
-        "subtitle": "Allow Sona to access your library to control the current track in the app.",
+        "subtitle": "Allow Sona to access your library so it can control your current track in the app.",
         "comingSoon": "Coming soon",
         "loading": "Connecting",
         "otherService": "Another music app",
-        "error": "Could not connect to the music service."  
+        "error": "We couldn’t connect to the music service.",
+        "appleMusicRequired": "An active Apple Music subscription is required to use Sona.",
+        "networkError": "Please check your internet connection and try again.",
+        "retry": "Retry",
+        "authDenied": "You need to allow Apple Music access to continue. Enable it in Settings → Sona → Media & Apple Music.",
+        "openSettings": "Open Settings",
+        "serverError": "We couldn’t connect to the server. Please try again later.",
+        "unknownError": "We couldn’t complete the Apple Music connection on this device. Please try again.",
+        "notAvailable": "Apple Music is not available on this device at the moment.",
+        "regionError": "Apple Music is not available in your current region or account.",
+        "loginRequired": "You need to sign in to Apple Music to continue.",
+        "initError": "Apple Music could not be initialized on this device. Please try again.",
+        "noAccount": "I don't use any"
     },
     "sona":{
         "EmptyPlayerTitle":"Your music is on pause",
         "EmptyPlayer": "Play a song from your albums or playlists to view it in this section.",
-        "appleMusicDetected": "Switch to Apple Music in Settings to unlock full features: albums, playlists, queue, and more."
+        "appleMusicDetected": "Switch to Apple Music in Settings to unlock full features: albums, playlists, queue, and more.",
+        "freeTrialMode": "Free trial",
+        "freeTrialText": "You are using the Sona free trial. You can explore selected albums and playlists with 30-second previews.",
+        "freeTrialUpgradeMessage": "Unlock full access to enjoy the complete Sona experience",
+        "freeTrialUpgradeCta": "Sign up now",
+        "freeTrialUpgradeLater": "Later",
+        "demoMode": "Demo mode",
+        "demoText": "Songs in demo mode play for only 30 seconds."
     },
     "stylesMenu":{
         "vinyl": "Vinyl Styles",
-        "background": "Background"
+        "background": "Background",
+        "pickStyle": "Pick your own style"
     },
     "menuAlbums":{
         "album": "Albums",
@@ -121,16 +148,28 @@
         "lang": "Language",
         "connected": "Connected",
         "provider": "Music Provider",
+        "freeTrial": "Free Trial",
+        "unlockFullAccess": "Unlock full access",
+        "unlockFullAccessText": "Unlock every feature with a single USD $3.99 payment.",
+        "unlockFullAccessCta": "Start now",
         "support": "Support us",
         "donation": "Buy us a coffee",
         "share": "Share with your friends",
         "faq": "FAQ",
         "account": "Account",
+        "backHome": "Back to home",
         "session": "Logout",
         "comingSoon": "Coming soon",
         "developed": "Developed by Devfer",
         "version": "Version 1.0.1",
-        "shareText": "🎧 Music is experienced differently at Sona. Download the app here:"
+        "shareText": "🎧 Music is experienced differently at Sona. Download the app here:",
+        "delete": "Delete my account",
+        "deleteWarning": "Warning! Please read carefully before deleting.",
+        "deleteWarningText": "This action will delete your data and the purchase associated with your account. It cannot be undone.",
+        "deleteWarningTextConfirm": "Enter your email address to confirm",
+        "deleteSecondWarning": "Permanent deletion ahead.",
+        "deleteCancel": "Cancel",
+        "deleting": "Deleting..."
     },
     "connectDevice": {
         "noDevice": "Open Spotify on your phone or computer and try again"

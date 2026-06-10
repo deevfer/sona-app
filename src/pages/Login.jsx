@@ -210,13 +210,22 @@ function Login() {
 
       if (data?.error === "INVALID_CREDENTIALS") {
         showErrorToast({ title: t("login.invalidCredentials"), description: t("login.invalidCredentialsDesc") })
+        setEmail("")
+        setPassword("")
         return
       }
 
       showErrorToast({ title: t("login.errorS"), description: t("login.tryAgainLater") })
     } catch (err) {
       console.error(err)
-      showErrorToast({ title: t("login.errorS"), description: t("login.tryAgainLater") })
+
+      const msg = err?.message || ""
+
+      if (msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("timeout")) {
+        showErrorToast({ title: t("login.networkErrorTitle"), description: t("login.networkErrorDesc") })
+      } else {
+        showErrorToast({ title: t("login.errorS"), description: t("login.tryAgainLater") })
+      }
     } finally {
       setLoading(false)
     }

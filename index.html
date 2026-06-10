@@ -41,9 +41,66 @@
     <link rel="preload" href="/send.png" as="image">
     <link rel="preload" href="/download.png" as="image">
     <title>Sona app</title>
+    <style>
+      html,
+      body,
+      #root {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        background: #000;
+      }
+
+      body {
+        overflow: hidden;
+      }
+
+      .initialAppLoader {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483647;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+      }
+
+      .initialAppLoaderLogo {
+        width: min(42vw, 190px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: initialAppLoaderPulse 1.4s ease-in-out infinite;
+      }
+
+      .initialAppLoaderLogo img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      @keyframes initialAppLoaderPulse {
+        0%,
+        100% {
+          opacity: 0.72;
+          transform: scale(0.98);
+        }
+
+        50% {
+          opacity: 1;
+          transform: scale(1.02);
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="initialAppLoader">
+        <div class="initialAppLoaderLogo">
+          <img src="/sonaLogoAnimated.svg" alt="Sona" />
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

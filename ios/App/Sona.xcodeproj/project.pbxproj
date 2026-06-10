@@ -23,6 +23,7 @@
 		BCA31D6D2F7C5A6200C364D7 /* OneSignalFramework in Frameworks */ = {isa = PBXBuildFile; productRef = BCA31D6C2F7C5A6200C364D7 /* OneSignalFramework */; };
 		BCA31D6F2F7C5A6200C364D7 /* OneSignalInAppMessages in Frameworks */ = {isa = PBXBuildFile; productRef = BCA31D6E2F7C5A6200C364D7 /* OneSignalInAppMessages */; };
 		BCA31D772F7F719300C364D7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BCA31D762F7F719300C364D7 /* Main.storyboard */; };
+		BCA31D7A2F80000100C364D7 /* SonaOrientationPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA31D792F80000100C364D7 /* SonaOrientationPlugin.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		BCA31D6A2F7C545300C364D7 /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
 		BCA31D752F7F70FB00C364D7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		BCA31D762F7F719300C364D7 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		BCA31D792F80000100C364D7 /* SonaOrientationPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SonaOrientationPlugin.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 				BCA31D662F750B2600C364D7 /* AppleMusicPlaybackPlugin.swift */,
 				BCA31D642F75015700C364D7 /* AppleMusicAuthPlugin.swift */,
 				BCA31D5F2F74DC7700C364D7 /* StoreKitPlugin.swift */,
+				BCA31D792F80000100C364D7 /* SonaOrientationPlugin.swift */,
 				BCA31D5C2F74D35800C364D7 /* ViewController.swift */,
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
@@ -197,6 +200,7 @@
 				BCA31D652F75016100C364D7 /* AppleMusicAuthPlugin.swift in Sources */,
 				BCA31D672F750B2D00C364D7 /* AppleMusicPlaybackPlugin.swift in Sources */,
 				BCA31D602F74DC7F00C364D7 /* StoreKitPlugin.swift in Sources */,
+				BCA31D7A2F80000100C364D7 /* SonaOrientationPlugin.swift in Sources */,
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

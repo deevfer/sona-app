@@ -1,0 +1,33 @@
+.fullScreenLoader {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+}
+
+.fullScreenLoaderLogo {
+    width: min(42vw, 190px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fullScreenLoaderPulse 1.4s ease-in-out infinite;
+}
+
+.fullScreenLoaderLogo svg {
+    width: 100%;
+    height: auto;
+}
+
+@keyframes fullScreenLoaderPulse {
+    0%, 100% {
+        opacity: 0.72;
+        transform: scale(0.98);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.02);
+    }
+}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react"
+import { useState, useEffect, useRef, useMemo, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import { Capacitor, registerPlugin } from "@capacitor/core"
 import "../styles/Queue.css"
@@ -6,6 +6,11 @@ import "../styles/Responsive.css"
 import { useTranslation } from "react-i18next"
 import { useProvider } from "../hooks/useProvider"
 import AudioBars from "../components/AudioBars"
+import {
+  getBackgroundClass,
+  getBackgroundStyles,
+  getBackgroundTextClass,
+} from "../utils/background"
 
 import SonaLogo from "../assets/sonaAnimated.svg?react"
 
@@ -30,6 +35,7 @@ try {
 function Queue() {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const isDemoMode = localStorage.getItem("appleMusicDemo") === "true"
 
   const {
     provider,
@@ -51,6 +57,7 @@ function Queue() {
     window.addEventListener("sona:bgChanged", onBgChange)
     return () => window.removeEventListener("sona:bgChanged", onBgChange)
   }, [])
+
   const [storedCover, setStoredCover] = useState(
     () => localStorage.getItem(COVER_KEY) || ""
   )
@@ -59,37 +66,41 @@ function Queue() {
   const [coverTextClass, setCoverTextClass] = useState("text-light")
 
   useEffect(() => {
-      if (selectedBg !== "cover" || !storedCover) return
+    if (selectedBg !== "cover" || !storedCover) return
 
-      const img = new Image()
-      img.crossOrigin = "anonymous"
-      img.onload = () => {
-        try {
-          const canvas = document.createElement("canvas")
-          canvas.width = 10
-          canvas.height = 10
-          const ctx = canvas.getContext("2d")
-          ctx.drawImage(img, 0, 0, 10, 10)
-          const data = ctx.getImageData(0, 0, 10, 10).data
-          const totalPixels = 100
+    const img = new Image()
+    img.crossOrigin = "anonymous"
+    img.onload = () => {
+      try {
+        const canvas = document.createElement("canvas")
+        canvas.width = 10
+        canvas.height = 10
+        const ctx = canvas.getContext("2d")
+        ctx.drawImage(img, 0, 0, 10, 10)
+        const data = ctx.getImageData(0, 0, 10, 10).data
+        const totalPixels = 100
 
-          let rSum = 0, gSum = 0, bSum = 0
-          for (let i = 0; i < data.length; i += 4) {
-            rSum += data[i]
-            gSum += data[i + 1]
-            bSum += data[i + 2]
-          }
-
-          const lum = ((rSum / totalPixels) * 299 + (gSum / totalPixels) * 587 + (bSum / totalPixels) * 114) / 1000
-          setCoverTextClass(lum > 200 ? "text-dark" : "text-light")
-        } catch {
-          setCoverTextClass("text-light")
+        let rSum = 0, gSum = 0, bSum = 0
+        for (let i = 0; i < data.length; i += 4) {
+          rSum += data[i]
+          gSum += data[i + 1]
+          bSum += data[i + 2]
         }
-      }
-      img.onerror = () => setCoverTextClass("text-light")
-      img.src = storedCover
-    }, [selectedBg, storedCover])
 
+        const lum =
+          ((rSum / totalPixels) * 299 +
+            (gSum / totalPixels) * 587 +
+            (bSum / totalPixels) * 114) /
+          1000
+
+        setCoverTextClass(lum > 200 ? "text-dark" : "text-light")
+      } catch {
+        setCoverTextClass("text-light")
+      }
+    }
+    img.onerror = () => setCoverTextClass("text-light")
+    img.src = storedCover
+  }, [selectedBg, storedCover])
 
   const [currentTrack, setCurrentTrack] = useState(null)
   const [queue, setQueue] = useState([])
@@ -97,15 +108,16 @@ function Queue() {
   const [skipping, setSkipping] = useState(false)
   const [activeTrackId, setActiveTrackId] = useState("")
   const [isPlayingNow, setIsPlayingNow] = useState(false)
-  
+
   useEffect(() => {
-      const handler = (e) => {
-        setActiveTrackId(String(e.detail?.trackId || ""))
-        setIsPlayingNow(!!e.detail?.isPlaying)
-      }
-      window.addEventListener("sona:nowPlayingChanged", handler)
-      return () => window.removeEventListener("sona:nowPlayingChanged", handler)
-    }, [])
+    const handler = (e) => {
+      setActiveTrackId(String(e.detail?.trackId || ""))
+      setIsPlayingNow(!!e.detail?.isPlaying)
+    }
+    window.addEventListener("sona:nowPlayingChanged", handler)
+    return () => window.removeEventListener("sona:nowPlayingChanged", handler)
+  }, [])
+
   const [appleCurrentTrack, setAppleCurrentTrack] = useState(() => {
     try {
       const raw = localStorage.getItem(APPLE_LAST_TRACK_KEY)
@@ -117,16 +129,16 @@ function Queue() {
   const [appleQueue, setAppleQueue] = useState([])
   const [appleContext, setAppleContext] = useState(null)
 
-  const readStoredContext = () => {
+  const readStoredContext = useCallback(() => {
     try {
       const raw = localStorage.getItem(CONTEXT_KEY)
       return raw ? JSON.parse(raw) : null
     } catch {
       return null
     }
-  }
+  }, [])
 
-  const saveAppleLastTrack = (track) => {
+  const saveAppleLastTrack = useCallback((track) => {
     try {
       if (track) {
         localStorage.setItem(APPLE_LAST_TRACK_KEY, JSON.stringify(track))
@@ -134,30 +146,36 @@ function Queue() {
     } catch {
       // noop
     }
-  }
+  }, [])
 
   const translateOrFallback = (key, fallback) => {
     const value = t(key)
     return !value || value === key ? fallback : value
   }
 
-  const apiFetch = async (url, options = {}) => {
+  const apiFetch = useCallback(async (url, options = {}) => {
+    const { requireAuth = true, headers: optionHeaders, ...fetchOptions } = options
     const token = localStorage.getItem("token")
-    if (!token) throw new Error("No hay token")
+    if (requireAuth && !token) throw new Error("No hay token")
+
+    const headers = {
+      Accept: "application/json",
+      ...(optionHeaders || {}),
+    }
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`
+    }
 
     const res = await fetch(`${API_BASE}${url}`, {
-      ...options,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-        ...(options.headers || {}),
-      },
+      ...fetchOptions,
+      headers,
     })
 
     const data = await res.json().catch(() => ({}))
     if (!res.ok) throw data
     return data
-  }
+  }, [])
 
   const getSpotifyImage = (track) =>
     track?.album?.images?.[0]?.url || "/sonaDefault.png"
@@ -165,7 +183,7 @@ function Queue() {
   const getSpotifyArtists = (track) =>
     (track?.artists || []).map((a) => a.name).join(", ")
 
-  const normalizeAppleTrack = (track) => ({
+  const normalizeAppleTrack = useCallback((track) => ({
     id: track?.id,
     name: track?.attributes?.name || "",
     artists: track?.attributes?.artistName ? [track.attributes.artistName] : [],
@@ -174,7 +192,7 @@ function Queue() {
       : "/sonaDefault.png",
     duration_ms: track?.attributes?.durationInMillis || 0,
     raw: track,
-  })
+  }), [resolveAppleArtwork])
 
   const normalizeNativeAppleNowPlaying = (data) => {
     if (!data?.track) return null
@@ -217,27 +235,27 @@ function Queue() {
 
   const currentAppleQueueIndex = useMemo(() => {
     if (!appleQueue.length) return -1
-  
+
     const currentIds = getAppleTrackMatchIds(appleCurrentTrack)
     if (currentIds.length) {
       const found = appleQueue.findIndex((track) => {
         const queueIds = getAppleTrackMatchIds(track)
         return queueIds.some((id) => currentIds.includes(id))
       })
-  
+
       if (found >= 0) return found
     }
-  
+
     if (typeof appleContext?.index === "number" && appleContext.index >= 0) {
       return Math.min(appleContext.index, appleQueue.length - 1)
     }
-  
+
     return -1
   }, [appleQueue, appleCurrentTrack, appleContext])
 
   const visibleAppleQueue = useMemo(() => {
     if (!appleQueue.length) return []
-  
+
     return appleQueue.map((track, index) => ({
       track,
       actualIndex: index,
@@ -245,12 +263,174 @@ function Queue() {
     }))
   }, [appleQueue, currentAppleQueueIndex])
 
+  const fetchDemoContextTracks = useCallback(async () => {
+    const context = readStoredContext()
+    if (!context?.id || !context?.type) return []
+
+    if (context.type === "album") {
+      const data = await apiFetch(`/api/apple-music/albums/${context.id}/tracks`, {
+        requireAuth: false,
+      })
+      const trackItems =
+        data?.data?.[0]?.relationships?.tracks?.data ||
+        data?.relationships?.tracks?.data ||
+        []
+
+      return trackItems.map(normalizeAppleTrack).filter(Boolean)
+    }
+
+    if (context.type === "playlist") {
+      const data = await apiFetch(`/api/apple-music/playlists/${context.id}/tracks`, {
+        requireAuth: false,
+      })
+      const trackItems =
+        data?.data?.[0]?.relationships?.tracks?.data ||
+        data?.relationships?.tracks?.data ||
+        []
+
+      return trackItems.map(normalizeAppleTrack).filter(Boolean)
+    }
+
+    return []
+  }, [apiFetch, normalizeAppleTrack, readStoredContext])
+
+  const getDemoPreviewUrl = useCallback((track) => {
+    return (
+      track?.raw?.attributes?.previews?.[0]?.url ||
+      track?.raw?.attributes?.previewAssets?.[0]?.url ||
+      track?.previewUrl ||
+      ""
+    )
+  }, [])
+
+  const refreshDemoQueue = useCallback(async () => {
+    try {
+      const context = readStoredContext()
+      setAppleContext(context || null)
+
+      try {
+        const rawTrack = localStorage.getItem(APPLE_LAST_TRACK_KEY)
+        const current = rawTrack ? JSON.parse(rawTrack) : null
+        setAppleCurrentTrack(current || null)
+
+        const currentIds = [
+          String(current?.id || ""),
+          String(current?.raw?.id || ""),
+          String(current?.raw?.attributes?.playParams?.catalogId || ""),
+          String(current?.raw?.attributes?.playParams?.id || ""),
+        ].filter(Boolean)
+
+        setActiveTrackId(currentIds[0] || "")
+      } catch {
+        setAppleCurrentTrack(null)
+        setActiveTrackId("")
+      }
+
+      const tracks = await fetchDemoContextTracks()
+      setAppleQueue(Array.isArray(tracks) ? tracks : [])
+
+      const audio = window.__sonaDemoAudio
+      if (audio) {
+        setIsPlayingNow(!audio.paused)
+      } else {
+        setIsPlayingNow(false)
+      }
+    } catch (err) {
+      console.error(
+        "Error refreshing demo queue:",
+        err?.message || err?.error?.message || JSON.stringify(err)
+      )
+    }
+  }, [fetchDemoContextTracks, readStoredContext])
+
+  const playDemoTrack = useCallback(async (track, actualIndex = 0) => {
+    if (!track) return
+
+    const previewUrl = getDemoPreviewUrl(track)
+    if (!previewUrl) return
+
+    if (!window.__sonaDemoAudio) {
+      const sharedAudio = new Audio()
+      sharedAudio.preload = "auto"
+      window.__sonaDemoAudio = sharedAudio
+    }
+
+    const audio = window.__sonaDemoAudio
+    if (!audio) return
+
+    audio.src = previewUrl
+    audio.currentTime = 0
+    await audio.play()
+
+    saveAppleLastTrack(track)
+
+    try {
+      const context = readStoredContext()
+      if (context) {
+        localStorage.setItem(
+          CONTEXT_KEY,
+          JSON.stringify({
+            ...context,
+            index: actualIndex,
+            trackIds:
+              Array.isArray(context?.trackIds) && context.trackIds.length
+                ? context.trackIds
+                : getAppleCatalogTrackIds(appleQueue),
+          })
+        )
+      }
+
+      localStorage.setItem(
+        "sona:demoPlaybackState",
+        JSON.stringify({
+          track,
+          is_playing: true,
+          progress_ms: 0,
+        })
+      )
+    } catch {}
+
+    const trackId = String(
+      track?.id ||
+      track?.raw?.id ||
+      track?.raw?.attributes?.playParams?.catalogId ||
+      track?.raw?.attributes?.playParams?.id ||
+      ""
+    )
+
+    window.dispatchEvent(new CustomEvent("sona:demoTrackChanged"))
+    window.dispatchEvent(
+      new CustomEvent("sona:nowPlayingChanged", {
+        detail: {
+          trackId,
+          isPlaying: true,
+        },
+      })
+    )
+
+    setAppleCurrentTrack(track)
+    setActiveTrackId(trackId)
+    setIsPlayingNow(true)
+
+    navigate("/sona")
+  }, [appleQueue, getDemoPreviewUrl, navigate, readStoredContext, saveAppleLastTrack])
+
   useEffect(() => {
-    if (!ready || !provider) return
+    if ((!ready && !isDemoMode) || (!provider && !isDemoMode)) return
     if (selectedBg !== "cover") return
 
     const fetchCurrentCover = async () => {
       try {
+        if (isDemoMode) {
+          const coverUrl = appleCurrentTrack?.image || ""
+          if (coverUrl && coverUrl !== lastCoverRef.current) {
+            lastCoverRef.current = coverUrl
+            setStoredCover(coverUrl)
+            localStorage.setItem(COVER_KEY, coverUrl)
+          }
+          return
+        }
+
         if (isSpotify) {
           const token = localStorage.getItem("token")
           if (!token) return
@@ -313,6 +493,7 @@ function Queue() {
     selectedBg,
     ready,
     provider,
+    isDemoMode,
     isSpotify,
     isAppleMusic,
     getMusicInstance,
@@ -320,25 +501,12 @@ function Queue() {
     appleCurrentTrack,
   ])
 
-  const bgClass = selectedBg !== "cover" ? `bg-${selectedBg}` : "bg-cover"
-  const textClass =
-    selectedBg === "cover"
-      ? coverTextClass
-      : selectedBg === "black"
-        ? "text-light"
-        : "text-dark"
-
-  const bgStyles =
-    selectedBg === "cover" && storedCover
-      ? {
-          backgroundImage: `url(${storedCover})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }
-      : {}
+  const bgClass = getBackgroundClass(selectedBg)
+  const textClass = getBackgroundTextClass(selectedBg, coverTextClass)
+  const bgStyles = getBackgroundStyles(selectedBg, storedCover)
 
   useEffect(() => {
-    if (!ready) return
+    if (!ready && !isDemoMode) return
 
     let intervalId = null
     let cancelled = false
@@ -448,14 +616,62 @@ function Queue() {
       }
     }
 
+    const fetchDemoQueue = async () => {
+      try {
+        const context = readStoredContext()
+
+        if (cancelled) return
+
+        setAppleContext(context || null)
+
+        try {
+          const rawTrack = localStorage.getItem(APPLE_LAST_TRACK_KEY)
+          const current = rawTrack ? JSON.parse(rawTrack) : null
+          setAppleCurrentTrack(current || null)
+
+          const currentIds = [
+            String(current?.id || ""),
+            String(current?.raw?.id || ""),
+            String(current?.raw?.attributes?.playParams?.catalogId || ""),
+            String(current?.raw?.attributes?.playParams?.id || ""),
+          ].filter(Boolean)
+
+          setActiveTrackId(currentIds[0] || "")
+        } catch {
+          setAppleCurrentTrack(null)
+          setActiveTrackId("")
+        }
+
+        const tracks = await fetchDemoContextTracks()
+
+        if (!cancelled) {
+          setAppleQueue(Array.isArray(tracks) ? tracks : [])
+        }
+
+        const audio = window.__sonaDemoAudio
+        if (!cancelled) {
+          setIsPlayingNow(audio ? !audio.paused : false)
+        }
+      } catch (err) {
+        console.error(
+          "Error fetching demo queue:",
+          err?.message || err?.error?.message || JSON.stringify(err)
+        )
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
     setLoading(true)
 
-    if (!provider) {
+    if (!provider && !isDemoMode) {
       setLoading(false)
       return
     }
 
-    if (isSpotify) {
+    if (isDemoMode) {
+      fetchDemoQueue()
+    } else if (isSpotify) {
       fetchSpotifyQueue()
       intervalId = setInterval(fetchSpotifyQueue, 5000)
     } else if (isAppleMusic) {
@@ -469,7 +685,38 @@ function Queue() {
       cancelled = true
       if (intervalId) clearInterval(intervalId)
     }
-  }, [ready, provider, isSpotify, isAppleMusic, getMusicInstance, resolveAppleArtwork])
+  }, [
+    ready,
+    provider,
+    isDemoMode,
+    isSpotify,
+    isAppleMusic,
+    getMusicInstance,
+    resolveAppleArtwork,
+    apiFetch,
+    fetchDemoContextTracks,
+    normalizeAppleTrack,
+    readStoredContext,
+    saveAppleLastTrack,
+  ])
+
+  useEffect(() => {
+    if (!isDemoMode) return
+
+    const syncDemoNowPlaying = () => {
+      refreshDemoQueue()
+    }
+
+    syncDemoNowPlaying()
+
+    window.addEventListener("focus", syncDemoNowPlaying)
+    window.addEventListener("sona:demoTrackChanged", syncDemoNowPlaying)
+
+    return () => {
+      window.removeEventListener("focus", syncDemoNowPlaying)
+      window.removeEventListener("sona:demoTrackChanged", syncDemoNowPlaying)
+    }
+  }, [isDemoMode, refreshDemoQueue])
 
   const playSpotifyTrack = async (index) => {
     if (skipping || !isSpotify) return
@@ -521,14 +768,14 @@ function Queue() {
         const initialized = localStorage.getItem(APPLE_QUEUE_INITIALIZED)
 
         if (initialized === "true") {
-          const trackIds =
+          const idsToUse =
             Array.isArray(appleContext?.trackIds) && appleContext.trackIds.length
               ? appleContext.trackIds
               : getAppleCatalogTrackIds(appleQueue)
-          
+
           await AppleMusicPlaybackPlugin.changeToIndex({
             index: actualIndex,
-            trackIds,
+            trackIds: idsToUse,
           })
         } else {
           await AppleMusicPlaybackPlugin.setQueueAndPlay({
@@ -601,6 +848,24 @@ function Queue() {
     }
   }
 
+  const playDemoQueueTrack = async (actualIndex) => {
+    if (skipping || !isDemoMode) return
+    setSkipping(true)
+
+    try {
+      const track = appleQueue[actualIndex]
+      if (!track) {
+        setSkipping(false)
+        return
+      }
+
+      await playDemoTrack(track, actualIndex)
+    } catch (err) {
+      console.error("Error reproduciendo demo:", err)
+      setSkipping(false)
+    }
+  }
+
   const formatDuration = (ms) => {
     const min = Math.floor((ms || 0) / 60000)
     const sec = Math.floor(((ms || 0) % 60000) / 1000)
@@ -609,7 +874,7 @@ function Queue() {
     return `${min}:${sec}`
   }
 
-  if (!ready) return null
+  if (!ready && !isDemoMode) return null
 
   const appleTitle = appleCurrentTrack?.name || appleContext?.name || "Apple Music"
 
@@ -631,7 +896,7 @@ function Queue() {
       )
 
   const hasSpotifyTrack = isSpotify && !!currentTrack
-  const hasAppleTrack = isAppleMusic && !!appleCurrentTrack
+  const hasAppleTrack = (isAppleMusic || isDemoMode) && !!appleCurrentTrack
   const hasActiveTrack = hasSpotifyTrack || hasAppleTrack
 
   const emptyQueueTitle = translateOrFallback(
@@ -726,29 +991,29 @@ function Queue() {
                       </div>
                     ) : (
                       <div className="tracksList">
-                        {queue.map((track, idx) => (
-                          <div
-                            className={`trackRow ${isActive ? "active" : ""}`}
-                          
-                            key={`${track.id}-${idx}`}
-                            onClick={() => playSpotifyTrack(idx)}
-                          >
-                            <div className="trackLeft">
-                              <span className="trackIndex">
-                                  {(idx + 1).toString().padStart(2, "0")}.
-                              </span>
-                              {activeTrackId === String(track?.id || "") && isPlayingNow
-                                  ? <AudioBars size={14} />
-                                  : null
-                              }
-                              <span className="trackName">{track.name}</span>
-                            </div>
+                        {queue.map((track, idx) => {
+                          const isActive =
+                            activeTrackId === String(track?.id || "") && isPlayingNow
 
-                            <span className="trackDuration">
-                              {formatDuration(track.duration_ms)}
-                            </span>
-                          </div>
-                        ))}
+                          return (
+                              <div
+                                className={`trackRow ${isActive ? "active" : ""}`}
+                                key={`${track.id}-${idx}`}
+                              >
+                              <div className="trackLeft">
+                                <span className="trackIndex">
+                                  {(idx + 1).toString().padStart(2, "0")}.
+                                </span>
+                                {isActive ? <AudioBars size={14} /> : null}
+                                <span className="trackName">{track.name}</span>
+                              </div>
+
+                              <span className="trackDuration">
+                                {formatDuration(track.duration_ms)}
+                              </span>
+                            </div>
+                          )
+                        })}
 
                         <div className="warn">
                           <p>
@@ -764,7 +1029,7 @@ function Queue() {
                 </div>
               )}
 
-              {isAppleMusic && (
+              {(isAppleMusic || isDemoMode) && (
                 <div className="tracksView splitLayout fadeIn">
                   <div className="albumColumn">
                     <div className="albumCoverLarge">
@@ -807,33 +1072,38 @@ function Queue() {
                       </div>
                     ) : visibleAppleQueue.length > 0 ? (
                       <div className="tracksList">
-                        {visibleAppleQueue.map(({ track, actualIndex, isActive }) => (
+                        {visibleAppleQueue.map(({ track, actualIndex }) => {
+                          const trackIds = [
+                            String(track?.id || ""),
+                            String(track?.raw?.id || ""),
+                            String(track?.raw?.attributes?.playParams?.catalogId || ""),
+                            String(track?.raw?.attributes?.playParams?.id || ""),
+                          ].filter(Boolean)
+
+                          const rowIsActive =
+                            activeTrackId &&
+                            trackIds.includes(activeTrackId) &&
+                            isPlayingNow
+
+                          return (
                             <div
-                              className={`trackRow ${isActive ? "active" : ""}`}
+                              className={`trackRow ${rowIsActive ? "active" : ""}`}
                               key={`${track.id}-${actualIndex}`}
                             >
-                            <div className="trackLeft">
-                              <span className="trackIndex">
+                              <div className="trackLeft">
+                                <span className="trackIndex">
                                   {(actualIndex + 1).toString().padStart(2, "0")}.
-                              </span>
-                              {(() => {
-                                  const trackIds = [
-                                    String(track?.id || ""),
-                                    String(track?.raw?.id || ""),
-                                    String(track?.raw?.attributes?.playParams?.catalogId || ""),
-                                    String(track?.raw?.attributes?.playParams?.id || ""),
-                                  ].filter(Boolean)
-                                  const isActive = activeTrackId && trackIds.includes(activeTrackId) && isPlayingNow
-                                  return isActive ? <AudioBars size={14} /> : null
-                                })()}
-                              <span className="trackName">{track.name}</span>
-                            </div>
+                                </span>
+                                {rowIsActive ? <AudioBars size={14} /> : null}
+                                <span className="trackName">{track.name}</span>
+                              </div>
 
-                            <span className="trackDuration">
-                              {formatDuration(track.duration_ms)}
-                            </span>
-                          </div>
-                        ))}
+                              <span className="trackDuration">
+                                {formatDuration(track.duration_ms)}
+                              </span>
+                            </div>
+                          )
+                        })}
                       </div>
                     ) : (
                       <div className="queueAppleMessage">
@@ -844,7 +1114,7 @@ function Queue() {
                 </div>
               )}
 
-              {!isSpotify && !isAppleMusic && !loading && (
+              {!isSpotify && !isAppleMusic && !isDemoMode && !loading && (
                 <div className="queueAppleMessage">
                   <p>
                     {translateOrFallback(

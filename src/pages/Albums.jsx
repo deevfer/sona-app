@@ -12,6 +12,11 @@ import AppleMusicPlaybackPlugin from "../plugins/appleMusicPlayback"
 import AudioBars from "../components/AudioBars"
 import { sileo } from "sileo"
 import { useTranslation } from "react-i18next"
+import {
+  getBackgroundClass,
+  getBackgroundStyles,
+  getBackgroundTextClass,
+} from "../utils/background"
 
 const API_BASE = import.meta.env.VITE_API_BASE
 
@@ -35,6 +40,7 @@ const GRID_HAPTIC_STEP = 255
 function Albums() {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const isDemoMode = localStorage.getItem("appleMusicDemo") === "true"
 
   const showAlert = ({ title, description }) => {
     if (isNativeIOS && window.Capacitor?.Plugins?.Dialog) {
@@ -173,9 +179,9 @@ function Albums() {
   const [visibleRange, setVisibleRange] = useState({ start: 0, end: 15 })
 
   const cacheKey = useMemo(() => {
-    if (!provider) return ""
-    return `sona:albumsCache:${provider}:${tab}`
-  }, [provider, tab])
+    if (!provider && !isDemoMode) return ""
+    return `sona:albumsCache:${isDemoMode ? "apple_music_demo" : provider}:${tab}:${isDemoMode ? "demo" : "real"}`
+  }, [provider, tab, isDemoMode])
 
   const getItemCover = useCallback(
     (item, size = 600) => {
@@ -515,15 +521,20 @@ function Albums() {
     }
   }, [])
 
-  const apiFetch = async (url) => {
+  const apiFetch = async (url, { requireAuth = true } = {}) => {
     const token = localStorage.getItem("token")
-    if (!token) throw new Error("No hay token")
+    if (requireAuth && !token) throw new Error("No hay token")
+
+    const headers = {
+      Accept: "application/json",
+    }
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`
+    }
 
     const res = await fetch(`${API_BASE}${url}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
+      headers,
     })
 
     const data = await res.json().catch(() => ({}))
@@ -532,12 +543,16 @@ function Albums() {
   }
 
   useEffect(() => {
-    if (!ready) return
+    if (!ready && !isDemoMode) return
     if (selectedBg !== "cover") return
-    if (!provider) return
+    if (!provider && !isDemoMode) return
 
     const fetchCurrentCover = async () => {
       try {
+        if (isDemoMode) {
+          return
+        }
+
         if (isSpotify) {
           const token = localStorage.getItem("token")
           if (!token) return
@@ -607,35 +622,18 @@ function Albums() {
     isAppleMusic,
     getMusicInstance,
     resolveAppleArtwork,
+    isDemoMode,
   ])
 
-  const bgClass = selectedBg !== "cover" ? `bg-${selectedBg}` : "bg-cover"
-  const textClass =
-    selectedBg === "cover"
-      ? coverTextClass
-      : selectedBg === "black"
-        ? "text-light"
-        : "text-dark"
-
-  const bgStyles =
-    selectedBg === "cover" && storedCover
-      ? {
-          backgroundImage: `url(${storedCover})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }
-      : {}
+  const bgClass = getBackgroundClass(selectedBg)
+  const textClass = getBackgroundTextClass(selectedBg, coverTextClass)
+  const bgStyles = getBackgroundStyles(selectedBg, storedCover)
 
   const fetchSpotifyAlbums = async () => {
     const data = await apiFetch("/api/spotify/albums")
     return (data?.items || [])
       .map((x) => normalizeSpotifyAlbum(x?.album))
       .filter(Boolean)
-  }
-
-  const fetchSpotifyPlaylists = async () => {
-    const data = await apiFetch("/api/spotify/playlists")
-    return (data?.items || []).map(normalizeSpotifyPlaylist).filter(Boolean)
   }
 
   const fetchSpotifyAlbumTracks = async (id) => {
@@ -655,8 +653,27 @@ function Albums() {
     return (data?.data || []).map(normalizeAppleCollection).filter(Boolean)
   }
 
+  const fetchSpotifyPlaylists = async () => {
+    const data = await apiFetch("/api/spotify/playlists")
+    return (data?.items || []).map(normalizeSpotifyPlaylist).filter(Boolean)
+  }
+
   const fetchApplePlaylists = async () => {
     const data = await apiFetch("/api/apple-music/me/library/playlists")
+    return (data?.data || []).map(normalizeAppleCollection).filter(Boolean)
+  }
+
+  const fetchDemoAppleAlbums = async () => {
+    const data = await apiFetch("/api/apple-music/demo/albums", {
+      requireAuth: false,
+    })
+    return (data?.data || []).map(normalizeAppleCollection).filter(Boolean)
+  }
+
+  const fetchDemoApplePlaylists = async () => {
+    const data = await apiFetch("/api/apple-music/demo/playlists", {
+      requireAuth: false,
+    })
     return (data?.data || []).map(normalizeAppleCollection).filter(Boolean)
   }
 
@@ -680,8 +697,32 @@ function Albums() {
     return trackItems.map(normalizeAppleTrack).filter(Boolean)
   }
 
+  const fetchDemoAppleAlbumTracks = async (id) => {
+    const data = await apiFetch(`/api/apple-music/albums/${id}/tracks`, {
+      requireAuth: false,
+    })
+    const trackItems =
+      data?.data?.[0]?.relationships?.tracks?.data ||
+      data?.relationships?.tracks?.data ||
+      []
+
+    return trackItems.map(normalizeAppleTrack).filter(Boolean)
+  }
+
+  const fetchDemoApplePlaylistTracks = async (id) => {
+    const data = await apiFetch(`/api/apple-music/playlists/${id}/tracks`, {
+      requireAuth: false,
+    })
+    const trackItems =
+      data?.data?.[0]?.relationships?.tracks?.data ||
+      data?.relationships?.tracks?.data ||
+      []
+
+    return trackItems.map(normalizeAppleTrack).filter(Boolean)
+  }
+
   useEffect(() => {
-    if (!ready) return
+    if (!ready && !isDemoMode) return
 
     setMode("grid")
     setSelectedItem(null)
@@ -689,7 +730,7 @@ function Albums() {
     setLoadingTracks(false)
 
     const load = async () => {
-      if (!provider) {
+      if (!provider && !isDemoMode) {
         setItems([])
         setLoading(false)
         setError("No hay servicio de música conectado")
@@ -731,6 +772,11 @@ function Albums() {
             tab === "albums"
               ? await fetchAppleAlbums()
               : await fetchApplePlaylists()
+        } else if (isDemoMode) {
+          result =
+            tab === "albums"
+              ? await fetchDemoAppleAlbums()
+              : await fetchDemoApplePlaylists()
         }
 
         setItems(result)
@@ -757,10 +803,11 @@ function Albums() {
     isAppleMusic,
     cacheKey,
     preloadImages,
+    isDemoMode,
   ])
 
   const onOpenItem = async (item) => {
-    if (!item?.id || !provider) return
+    if (!item?.id || (!provider && !isDemoMode)) return
 
     setSelectedItem(item)
     setTracks([])
@@ -781,6 +828,11 @@ function Albums() {
           tab === "albums"
             ? await fetchAppleAlbumTracks(item.id)
             : await fetchApplePlaylistTracks(item.id)
+      } else if (isDemoMode) {
+        result =
+          tab === "albums"
+            ? await fetchDemoAppleAlbumTracks(item.id)
+            : await fetchDemoApplePlaylistTracks(item.id)
       }
 
       setTracks(result)
@@ -800,18 +852,19 @@ function Albums() {
   }
 
   const saveCurrentContext = (index = 0) => {
-    if (!selectedItem?.id || !provider) return
+    if (!selectedItem?.id || (!provider && !isDemoMode)) return
     localStorage.removeItem("sona:appleQueueInitialized")
     localStorage.setItem(
       CONTEXT_KEY,
       JSON.stringify({
-        provider,
+        provider: isDemoMode ? "apple_music_demo" : provider,
         type: tab === "albums" ? "album" : "playlist",
         id: selectedItem.id,
         name: selectedItem.name,
         image: getItemCover(selectedItem, 600),
         index,
-        trackIds: isAppleMusic
+        isDemoMode,
+        trackIds: isAppleMusic || isDemoMode
           ? tracks
               .map((track) =>
                 track?.raw?.attributes?.playParams?.catalogId ||
@@ -827,18 +880,66 @@ function Albums() {
 
   const playTrack = async (index) => {
     try {
-      if (!selectedItem?.id || !provider) return
-
+      if (!selectedItem?.id || (!provider && !isDemoMode)) return
+  
       saveCurrentContext(index)
-
+  
+      if (isDemoMode) {
+        const selectedTrack = tracks[index]
+        if (!selectedTrack) return
+  
+        const previewUrl =
+          selectedTrack?.raw?.attributes?.previews?.[0]?.url ||
+          selectedTrack?.raw?.attributes?.previewAssets?.[0]?.url ||
+          selectedTrack?.previewUrl ||
+          ""
+  
+        if (!previewUrl) {
+          throw new Error("No preview available")
+        }
+  
+        let sharedAudio = window.__sonaDemoAudio
+  
+        if (!sharedAudio) {
+          sharedAudio = new Audio()
+          sharedAudio.preload = "auto"
+          window.__sonaDemoAudio = sharedAudio
+        }
+  
+        sharedAudio.pause()
+        sharedAudio.src = previewUrl
+        sharedAudio.currentTime = 0
+  
+        localStorage.setItem(
+          APPLE_LAST_TRACK_KEY,
+          JSON.stringify(selectedTrack)
+        )
+  
+        localStorage.setItem(
+          "sona:demoPlaybackState",
+          JSON.stringify({
+            track: selectedTrack,
+            is_playing: true,
+            progress_ms: 0,
+          })
+        )
+  
+        window.dispatchEvent(new Event("sona:demoTrackChanged"))
+  
+        await sharedAudio.play()
+  
+        navigate("/sona")
+        return
+      }
+  
       if (isSpotify) {
         const token = localStorage.getItem("token")
         if (!token) return
-
+  
         const contextUri = `spotify:${
           tab === "albums" ? "album" : "playlist"
         }:${selectedItem.id}`
-
+  
         await fetch(`${API_BASE}/api/spotify/play-from-context`, {
           method: "PUT",
           headers: {
@@ -850,19 +951,19 @@ function Albums() {
             position: index,
           }),
         })
-
+  
         navigate("/sona")
         return
       }
-
+  
       if (isAppleMusic) {
         if (isNativeIOS) {
           const storeIds = getAppleStoreIds(tracks)
-
+  
           if (!storeIds.length) {
             throw new Error("No Apple Music storeIds found")
           }
-
+  
           await AppleMusicPlaybackPlugin.setQueueAndPlay({
             entries: storeIds.map((id) => ({
               id,
@@ -870,53 +971,57 @@ function Albums() {
             })),
             index,
           })
-
+  
           try {
             localStorage.setItem(
               APPLE_LAST_TRACK_KEY,
               JSON.stringify(tracks[index] || null)
             )
           } catch {}
-
+  
           navigate("/sona")
           return
         }
-
+  
         const music = await getMusicInstance()
         if (!music) {
           throw new Error("Apple Music instance not available")
         }
-
+  
         await music.setQueue(
           tab === "albums"
             ? { album: selectedItem.id }
             : { playlist: selectedItem.id }
         )
-
+  
         if (typeof music.changeToMediaAtIndex === "function") {
           await music.changeToMediaAtIndex(index)
         }
-
+  
         try {
           localStorage.setItem(
             APPLE_LAST_TRACK_KEY,
             JSON.stringify(tracks[index] || null)
           )
         } catch {}
-
+  
         navigate("/sona")
       }
     } catch (err) {
       console.error("Error reproduciendo:", err)
-
+  
       const msg = err?.message || err?.errorMessage || ""
-
+  
       if (msg.includes("error 6")) {
         showAlert({
           title: t("errors.playbackRestricted"),
           description: t("errors.playbackRestrictedDesc"),
         })
-      } else if (msg.includes("No Apple Music storeIds") || msg.includes("No playable")) {
+      } else if (
+        msg.includes("No Apple Music storeIds") ||
+        msg.includes("No playable") ||
+        msg.includes("No preview available")
+      ) {
         showAlert({
           title: t("errors.noTracks"),
           description: t("errors.noTracksDesc"),
@@ -951,17 +1056,9 @@ function Albums() {
     return result
   }, [filteredItems, visibleRange])
 
-  if (!ready) {
+  if (!ready && !isDemoMode) {
     return (
-      <div
-        className={`sonaBody ${
-          selectedBg !== "cover" ? `bg-${selectedBg}` : "bg-cover"
-        } ${
-          selectedBg === "black" || selectedBg === "cover"
-            ? "text-light"
-            : "text-dark"
-        }`}
-      >
+      <div className={`sonaBody ${bgClass} ${textClass}`} style={bgStyles}>
         <div className="overlayBackground"></div>
         <div className="container">
           <div className="albumsStage" />
